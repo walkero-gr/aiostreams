@@ -56,21 +56,35 @@ class twitchAPIHandler:
 	def getChannelInfoByName(self, channelName):
 		endpoint = "kraken/channels/%s.json" % (channelName)
 		retData = self.call(endpoint)
-		print retData
+		# print retData
 
 		return retData
 
 	def getStreamsByChannel(self, channelName):
 		endpoint = "kraken/streams/%s.json" % (channelName)
 		retData = self.call(endpoint)
-		print retData
+		# print retData
 
 		return retData
 
 	def getAccessTokenByChannel(self, channelName):
 		endpoint = "api/channels/%s/access_token.json" % (channelName)
 		retData = self.call(endpoint)
-		print retData
+		# print retData
+
+		return retData
+
+	def getVideoInfoByID(self, videoId):
+		endpoint = "kraken/videos/%s.json" % (videoId)
+		retData = self.call(endpoint)
+		# print retData
+
+		return retData
+
+	def getAccessTokenByVideo(self, videoId):
+		endpoint = "api/vods/%s/access_token.json" % (videoId)
+		retData = self.call(endpoint)
+		# print retData
 
 		return retData
 
@@ -113,6 +127,24 @@ class usherHandler:
 
 		return # retData
 
+	def getVideoStreams(self, videoId, sig, token):
+		endpoint = "vod/%s" % (videoId)
+		query = {
+			"player": "twitchweb",
+			"type": "any",
+			"allow_source": "true",
+			"allow_audio_only": "true",
+			"allow_spectre": "false",
+			"p": int(random() * 999999),
+			"nauthsig": sig,
+			"nauth": token
+		}
+		retData = self.call(endpoint, query)
+		print retData
+
+		return # retData
+
+
 class helpersHandler:
 
 	def parseURL(self, url):
@@ -154,6 +186,17 @@ def main(argv):
 				# usherApi.getChannelStreams(channelName, accessToken['sig'], accessToken['token'])
 		else:
 			print "There is no Live stream for the channel: %s" % (channelName)
+
+
+	if (video['type'] == 'video'):
+		videoId = video['id']
+
+		streams = twitchApi.getVideoInfoByID(videoId)
+		if (streams['viewable'] == 'public'):
+			accessToken = twitchApi.getAccessTokenByVideo(videoId)
+			usherApi.getVideoStreams(videoId, accessToken['sig'], accessToken['token'])
+
+
 
 
 	# # TODO: The following list is temporary for tests. This will be removed
