@@ -1,6 +1,6 @@
 #!python
 
-import urllib, urllib2, sys, subprocess, textwrap, datetime, time, argparse
+import urllib, urllib2, sys, subprocess, textwrap, datetime, time, argparse, re
 import simplejson as json
 # from pprint import pprint
 from urllib2 import Request, urlopen, URLError
@@ -9,6 +9,28 @@ from random import random
 
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
 
+_url_re = re.compile(r"""
+    http(s)?://
+    (?:
+        (?P<subdomain>[\w\-]+)
+        \.
+    )?
+    twitch.tv/
+    (?:
+        videos/(?P<videos_id>\d+)|
+        (?P<channel>[^/]+)
+    )
+    (?:
+        /
+        (?P<video_type>[bcv])(?:ideo)?
+        /
+        (?P<video_id>\d+)
+    )?
+    (?:
+        /(?:clip/)?
+        (?P<clip_name>[\w]+)
+    )?
+""", re.VERBOSE)
 
 class twitchAPIHandler:
 	def __init__(self):
@@ -34,21 +56,21 @@ class twitchAPIHandler:
 	def getChannelInfoByName(self, channelName):
 		endpoint = "kraken/channels/%s.json" % (channelName)
 		retData = self.call(endpoint)
-		# print retData
+		print retData
 
 		return retData
 
 	def getStreamsByChannel(self, channelName):
 		endpoint = "kraken/streams/%s.json" % (channelName)
 		retData = self.call(endpoint)
-		# print retData
+		print retData
 
 		return retData
 
 	def getAccessTokenByChannel(self, channelName):
 		endpoint = "api/channels/%s/access_token.json" % (channelName)
 		retData = self.call(endpoint)
-		# print retData
+		print retData
 
 		return retData
 
@@ -91,21 +113,61 @@ class usherHandler:
 
 		return # retData
 
+class helpersHandler:
+
+	def parseURL(self, url):
+		return _url_re.match(url).groupdict()
+
+	def getVideoType(self, url):
+		types = self.parseURL(url)
+
+		if (types['channel']):
+			return {'type': 'channel', 'id': types['channel']}
+
+		if (types['videos_id']):
+			return {'type': 'video', 'id': types['videos_id']}
+
+		return 
+
 def main(argv):
 	twitchApi = twitchAPIHandler()
 	usherApi = usherHandler()
-
-	# TODO: Replace this with code to parse a twitch url 
-	channelName = "riotgamesoce"
+	helpers = helpersHandler()
+	video = {'type': ''}
 
 	# Parse the arguments
 	argParser = argparse.ArgumentParser(description='This is a python script that uses twitch.tv API to get information about channels/videos for AmigaOS 4.1 and above.')
-	#argParser.add_argument('-p', '--project', action='store', dest='project_name', help='set the project name')
+	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from twitch.tv')
 	args = argParser.parse_args()
-	
-	# twitchApi.getStreamsByChannel(channelName)
-	accessToken = twitchApi.getAccessTokenByChannel(channelName)
-	usherApi.getChannelStreams(channelName, accessToken['sig'], accessToken['token'])
+
+	if (args.url):
+		twitchURL = args.url
+		video = helpers.getVideoType(args.url)
+
+	if (video['type'] == 'channel'):
+		channelName = video['id']
+			
+		streams = twitchApi.getStreamsByChannel(channelName)
+		if (streams['stream']):
+			if (streams['stream']['stream_type'] == 'live'):
+				accessToken = twitchApi.getAccessTokenByChannel(channelName)
+				# usherApi.getChannelStreams(channelName, accessToken['sig'], accessToken['token'])
+		else:
+			print "There is no Live stream for the channel: %s" % (channelName)
+
+
+	# # TODO: The following list is temporary for tests. This will be removed
+	# # https://www.twitch.tv/bnepac
+	# # https://www.twitch.tv/videos/464055415
+	# channels = [
+	# 	"riotgamesoce",
+	# 	"amigabill",
+	# 	"haysmaker64",
+	# 	"overwatchleague"
+	# ]
+	# channelName = channels[1]
+
+
 	
 	sys.exit()
 
