@@ -1,16 +1,17 @@
 #!python
 
-import urllib, urllib2, sys, subprocess, textwrap, datetime, time, argparse, re
+import urllib, urllib2, sys, argparse, re
 import simplejson as json
-# from pprint import pprint
 from urllib2 import Request, urlopen, URLError
 from random import random
 import m3u8
 
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
-
+autoplay = True
 videoPlayer = "APPDIR:ffmpeg"
+videoPlayerParams = ""
 streamPlayer = "APPDIR:ffplay"
+streamPlayer = ""
 
 qualityWeight = [
 	"480p30",
@@ -51,8 +52,12 @@ class twitchAPIHandler:
 
 		return
 
-	def call(self, endpoint):
-		url = "%s/%s" % (self.baseurl, endpoint)
+	def call(self, endpoint, query = None):
+		queryArgs = None
+		if (query):
+			queryArgs = urllib.urlencode(query)
+		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+		
 		request = urllib2.Request(url)
 		request.add_header('Accept', 'application/vnd.twitchtv.v4+json')
 		request.add_header('Client-ID', clientId)
@@ -101,17 +106,28 @@ class twitchAPIHandler:
 
 		return retData
 
+	def searchByGameTitle(self, title):
+		endpoint = "kraken/search/streams"
+		query = {
+			"query": title
+		}
+		retData = self.call(endpoint, query)
+
+		return retData
+
 class usherHandler:
 	def __init__(self):
 		self.baseurl = 'https://usher.ttvnw.net'
 
 		return None
 
-	def call(self, endpoint, query):
-		query_args = urllib.urlencode(query)
-		url = "%s/%s" % (self.baseurl, endpoint)
+	def call(self, endpoint, query = None):
+		queryArgs = None
+		if (query):
+			queryArgs = urllib.urlencode(query)
+		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
 		print(url)
-		request = urllib2.Request(url, query_args)
+		request = urllib2.Request(url)
 
 		try:
 			response = urllib2.urlopen(request)
@@ -208,11 +224,13 @@ def main(argv):
 	usherApi = usherHandler()
 	helpers = helpersHandler()
 	video = {'type': ''}
+	searchMode = False
 
 	# Parse the arguments
 	argParser = argparse.ArgumentParser(description='This is a python script that uses twitch.tv API to get information about channels/videos for AmigaOS 4.1 and above.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from twitch.tv')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
+	argParser.add_argument('-s', '--search', action='store', dest='search', help='Search for available streams based on game title')
 	args = argParser.parse_args()
 
 	if (args.url):
@@ -220,7 +238,9 @@ def main(argv):
 		video = helpers.getVideoType(args.url)
 	if (args.quality):
 		qualityWeight.insert(0, args.quality)
-
+	if (args.search):
+		gameTitle = args.search
+		searchMode = True
 
 	if (video['type'] == 'channel'):
 		channelName = video['id']
@@ -246,6 +266,11 @@ def main(argv):
 		else:
 			print "There is no video available with ID: %s" % (videoId)
 
+	if (searchMode):
+		streamList = twitchApi.searchByGameTitle(gameTitle)
+		for stream in streamList['streams']:
+			channel = stream['channel']
+			print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'], stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'], channel['status'])
 
 	# TODO: The following code is for testing the m3u8 parser with the demo files
 	# f = open("demoLives.m3u8", "r")
