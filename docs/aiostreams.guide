@@ -1,65 +1,127 @@
 @database "aiostreams.guide"
+@author "George (walkero) Sokianos"
+@$VER: 1.0 (19.8.2019)   
+@wordwrap
+@font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
-@{jcenter}@{b}All In One streams
-(aiostreams)@{ub}
+@next "Requirements"
+@{jcenter}
+    _    ___ ___      _                                
+   / \\  |_ _/ _ \\ ___| |_ _ __ ___  __ _ _ __ ___  ___ 
+  / _ \\  | | | | / __| __| '__/ _ \\/ _` | '_ ` _ \\/ __|
+ / ___ \\ | | |_| \\__ \\ |_| | |  __/ (_| | | | | | \\__ \\
+/_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
-@{jcenter}@{i}v0.1 (2019-08-18)@{ui}
+@{b}All In One streams@{ub}
+@{i}v1.0 (2019-08-18)@{ui}
+@{jleft}@{lindent 3}@{rindent 3}
+All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
-@{lindent 15}@{jleft}
-@{"Overview" LINK "Overview"}
-@{"Installation" LINK "Installation"}
+These can be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically.
+
+Some of these networks support search, where you can find available streams and videos. Under the Usage section you can find the available features of each script and how to use them.
+
+@{lindent 15}@{settabs 10}
 @{"Requirements" LINK "Requirements"}
-@{"Usage" LINK "Usage"}
+@{"Installation" LINK "Installation"}
+@{"Configure" LINK "Configure"}
+@{"Shell usage" LINK "Usage"}
+	@{"Twitch.tv" LINK "Twitch.tv"}
 @{"Todo List" LINK "Todo"}
+@{"Changelog" LINK "Changelog"}
 @{"Author" LINK "Author"}
-
-
-
-
-
-
 
 
 @endnode
 @node "Requirements" "Requirements"
-
-
-
-
-
+@prev "MAIN"
+@next "Installation"
+@{jleft}@{lindent 3}
+@{b}Requirements@{ub}
 @endnode
 @node "Installation" "Installation"
-
-
+@prev "Requirements"
+@next "Configure"
+@{jleft}@{lindent 3}
+@{b}Installation@{ub}
 @endnode
-@node "Overview" "Overview"
-
-
-
-
-
-
+@node "Configure" "Configure"
+@prev "Installation"
+@next "Usage"
+@{jleft}@{lindent 3}
+@{b}Configure@{ub}
 @endnode
-@node "Usage" "Usage"
-@{jleft}@{pard}@{lindent 3}
-@{par}Every script has a common way to use it, and I am trying to keep it that way. But there might be different features on each script that some others might lack. You can find specific usage info in the following sections, separated by network.@{line}
-@{par}
-@{lindent 10}@{jleft}
+@node "Usage" "Shell usage"
+@prev "Configure"
+@next "Twitch.tv"
+@{jleft}@{lindent 3}
+@{b}Shell usage@{ub}
+
+All the scripts have a common way to use them, and I am trying to keep it that way. But there might be different features on each script that some others might lack. You can find specific usage information in the following sections, separated by network.
+
+@{lindent 10}
 @{"Twitch.tv" LINK "Twitch.tv"}
-
 @endnode
 @node "Twitch.tv" "Twitch.tv"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Twitch.tv@{ub}
 
+With this script you can watch live streams or recorded videos from Twitch.tv website.
 
+If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-s, --search@{ub}.
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video/channel url from twitch.tv
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+  -s SEARCH, --search SEARCH
+                        Search for available streams based on game title
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+	chunked			Usually this is the original video 
+				quality or 1080p (1920x1080)
+	720p60			1280x720 60fps
+	720p30			1280x720 30fps
+	480p30			720x480 30fps
+	360p30			480x360 30fps
+	160p30			284x160 30fps
+	audio_only		no video, audio only
+
+@{u}Examples:@{uu}
+View the a live channel streaming, like below
+@{b}python twitch.py -u https://www.twitch.tv/channelname@{ub}
+
+View the a recorded video, like below
+@{b}https://www.twitch.tv/videos/1234567890@{ub}
+
+View the a live channel streaming at specific video quality, if this is available, like below
+@{b}python twitch.py -u https://www.twitch.tv/channelname -q 720p30@{ub}
+
+Search for a keyword or a game title. Include the value in double quotes, like below:
+@{b}python twitch.py -s "game title"@{ub}
 
 @endnode
 @node "Todo" "Todo"
-
-
-
+@prev "Usage"
+@next "Changelog"
+@{jleft}@{lindent 3}
+@{b}Todo list@{ub}
+@endnode
+@node "Changelog" "Changelog"
+@prev "Todo"
+@next "Author"
+@{jleft}@{lindent 3}
+@{b}Changelog@{ub}
 @endnode
 @node "Author" "Author"
-
-
+@prev "Changelog"
+@{jleft}@{lindent 3}
+@{b}Author@{ub}
 
 @endnode
