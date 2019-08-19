@@ -1,0 +1,65 @@
+@database "aiostreams.guide"
+@node "MAIN" "aiostreams"
+@{jcenter}@{b}All In One streams
+(aiostreams)@{ub}
+
+@{jcenter}@{i}v0.1 (2019-08-18)@{ui}
+
+@{lindent 15}@{jleft}
+@{"Overview" LINK "Overview"}
+@{"Installation" LINK "Installation"}
+@{"Requirements" LINK "Requirements"}
+@{"Usage" LINK "Usage"}
+@{"Todo List" LINK "Todo"}
+@{"Author" LINK "Author"}
+
+
+
+
+
+
+
+
+@endnode
+@node "Requirements" "Requirements"
+
+
+
+
+
+@endnode
+@node "Installation" "Installation"
+
+
+@endnode
+@node "Overview" "Overview"
+
+
+
+
+
+
+@endnode
+@node "Usage" "Usage"
+@{jleft}@{pard}@{lindent 3}
+@{par}Every script has a common way to use it, and I am trying to keep it that way. But there might be different features on each script that some others might lack. You can find specific usage info in the following sections, separated by network.@{line}
+@{par}
+@{lindent 10}@{jleft}
+@{"Twitch.tv" LINK "Twitch.tv"}
+
+@endnode
+@node "Twitch.tv" "Twitch.tv"
+
+
+
+@endnode
+@node "Todo" "Todo"
+
+
+
+@endnode
+@node "Author" "Author"
+
+
+
+@endnode
