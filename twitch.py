@@ -5,10 +5,10 @@ try:
 except:
 	pass
 import urllib, urllib2, sys, argparse, re, string
+import simpleM3U8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-#from pprint import pprint
 import cfg
 
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
@@ -35,8 +35,6 @@ _url_re = re.compile(r"""
         (?P<clip_name>[\w]+)
     )?
 """, re.VERBOSE)
-
-ATTRIBUTELISTPATTERN = re.compile(r'''((?:[^,"']|"[^"]*"|'[^']*')+)''')
 
 class twitchAPIHandler:
 	def __init__(self):
@@ -66,35 +64,30 @@ class twitchAPIHandler:
 	def getChannelInfoByName(self, channelName):
 		endpoint = "kraken/channels/%s.json" % (channelName)
 		retData = self.call(endpoint)
-		# print retData
 
 		return retData
 
 	def getStreamsByChannel(self, channelName):
 		endpoint = "kraken/streams/%s.json" % (channelName)
 		retData = self.call(endpoint)
-		# print retData
 
 		return retData
 
 	def getAccessTokenByChannel(self, channelName):
 		endpoint = "api/channels/%s/access_token.json" % (channelName)
 		retData = self.call(endpoint)
-		# print retData
 
 		return retData
 
 	def getVideoInfoByID(self, videoId):
 		endpoint = "kraken/videos/%s.json" % (videoId)
 		retData = self.call(endpoint)
-		# print retData
 
 		return retData
 
 	def getAccessTokenByVideo(self, videoId):
 		endpoint = "api/vods/%s/access_token.json" % (videoId)
 		retData = self.call(endpoint)
-		# print retData
 
 		return retData
 
@@ -118,7 +111,6 @@ class usherHandler:
 		if (query):
 			queryArgs = urllib.urlencode(query)
 		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
-		#print(url)
 		request = urllib2.Request(url)
 
 		try:
@@ -144,7 +136,6 @@ class usherHandler:
 			"nauth": token
 		}
 		retData = self.call(endpoint, query)
-		#print retData
 
 		return retData
 
@@ -161,7 +152,6 @@ class usherHandler:
 			"nauth": token
 		}
 		retData = self.call(endpoint, query)
-		#print retData
 
 		return retData
 
@@ -188,29 +178,22 @@ class helpersHandler:
 	
 	def m3u8GetPlaylists(self, data):
 		m3u8Model = self.m3u8GetModel(data)
-		# print m3u8Model['playlists']
+
 		return m3u8Model['playlists']
 	
 	def m3u8GetMedia(self, data):
 		m3u8Model = self.m3u8GetModel(data)
-		# print m3u8Model['media']
+		
 		return m3u8Model['media']
 
 	def getPrefferedVideoURL(self, data):
-		print "Find preffered URL"
-		#playlists = self.m3u8GetPlaylists(data)
-		playlists = self.simpleM3U8Parser(data)
-		
-		#pprint(playlists)
-		weightCnt = 0
+		sm3u8Parser = sm3u8.parseHandler()
+		# playlists = self.simpleM3U8Parser(data)
+		playlists = sm3u8Parser.parse(data)
+	
 		for quality in cfg.twitchQualityWeight:
 			for idx in playlists:
 				if (quality == playlists[idx]['video']):
-					#print quality
-					#print playlists[idx]['video']
-					# print playlist['uri']
-					# print "---------------------------"
-					# break
 					return playlists[idx]['uri']
 		
 		return None
@@ -221,94 +204,6 @@ class helpersHandler:
 		encToken = string.replace(encToken, "}", "%7D")
 
 		return encToken
-	
-	# TODO: split to smaller methods
-	def simpleM3U8Parser(self, m3u8Data):
-		lineNum = 0
-		listCnt = None
-		retList = {}
-		listDict = dict()
-		#print m3u8Data
-		#print "###########################################################"
-		
-		for line in m3u8Data.splitlines():
-			#print "%d - %s" % (lineNum, line)
-
-			if (line.startswith("#EXT-X-MEDIA:")):
-				extMedia = line.replace("#EXT-X-MEDIA:", "")
-				extMedia = extMedia.replace("\n", "")
-				extMedia = extMedia.replace("'", "")
-				extMedia = extMedia.replace('"', "")
-			
-			
-				#print extMedia
-				param, value = line.split(":", 1)
-				params = ATTRIBUTELISTPATTERN.split(extMedia)[1::2]
-				#print "PARAM: %s \nVALUE: %s" % (param, value)
-				#print params
-				#extMediaDict = dict(item.split("=") for item in extMedia.split(","))
-				if (listCnt == None):
-					listCnt = 0
-					#retList[listCnt] = {}
-				else:
-					#print "-------------------------"
-					#print listCnt
-					#print listDict
-					#pprint(retList)
-					#retList[listCnt] = listDict
-					#retData.append(listDict)
-					#retData.update({ listCnt: listDict })
-					#pprint(retData)
-					#listDict.clear()
-					#pprint(listDict)
-					listCnt += 1
-					#retList[listCnt] = {}
-				
-				retList[listCnt] = {}
-				
-				for attribute in params:
-					attr, val = attribute.split("=")
-					#print "%d -> %s - %s" % (listCnt, attr.lower(), val.lower())
-					#listDict[attr.lower()] = val.lower()
-					retList[listCnt][attr.lower()] = val.lower()
-					
-				#playlists[listCnt] = extMediaDict
-				#print extMediaDict
-
-			if (line.startswith("#EXT-X-STREAM-INF:")):
-				#print "%d - %s" % (lineNum, line)
-				extStream = line.replace("#EXT-X-STREAM-INF:", "")
-				extStream = extStream.replace("\n", "")
-				#extStream = extStream.replace("'", "")
-				#extStream = extStream.replace('"', "")
-			
-				params = ATTRIBUTELISTPATTERN.split(extStream)[1::2]
-			
-				for attribute in params:
-					#print attribute
-					attr, val = attribute.split("=")
-					val = val.replace('"', "")
-					#print "%d -> %s - %s" % (listCnt, attr.lower(), val.lower())
-					#listDict[attr.lower()] = val.lower()
-					retList[listCnt][attr.lower()] = val.lower()
-			
-				#print extStream
-				#print params
-				#extStreamDict = dict(item.split("=") for item in extStream.split(","))
-				#for item in extStream.split(","):
-				#	print item.split("=")
-					#playlists[listCnt].append(item.split("="))
-				#playlists[listCnt] = extStreamDict
-		
-			if (line.startswith(('https://', 'http://'))):
-				#listDict['uri'] = line
-				retList[listCnt]['uri'] = line
-		
-			lineNum += 1
-		#print "--------------------------------------------------"
-		#print "--------------------------------------------------"
-		#pprint(retList)
-		return retList
 
 def main(argv):
 	twitchApi = twitchAPIHandler()
@@ -343,10 +238,19 @@ def main(argv):
 				if (streams['stream']['stream_type'] == 'live'):
 					accessToken = twitchApi.getAccessTokenByChannel(channelName)
 					m3u8Response = usherApi.getChannelStreams(channelName, accessToken['sig'], accessToken['token'])
-					uri = helpers.getPrefferedVideoURL(m3u8Response)
-					if uri and cfg.autoplay:
-						print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-						amiga.system( "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+					if (m3u8Response):
+						uri = helpers.getPrefferedVideoURL(m3u8Response)
+						if uri:
+							if cfg.verbose:
+								print "%s" % (uri)
+							if cfg.autoplay:
+								# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
+								if amigaMode:
+									amiga.system( "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+						else:
+							print "Not valid stream found"
+					else:
+						print "There was an error with the usherApi"
 			else:
 				print "There is no Live stream for the channel: %s" % (channelName)
 
@@ -374,13 +278,6 @@ def main(argv):
 			print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
 			#print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t " % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'])
 
-	# TODO: The following code is for testing the m3u8 parser with the demo files
-	#f = open("demoLives.m3u8", "r")
-	#playlists = helpers.simpleM3U8Parser(f)
-	#print(f.readline())
-	#uri = helpers.getPrefferedVideoURL(f.read())
-	#f.close()
-	#print playlists
 
 	# TODO: The following list is temporary for tests. This will be removed
 	# https://www.twitch.tv/bnepac
