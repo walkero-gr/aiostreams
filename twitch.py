@@ -1,27 +1,17 @@
 #!python
-import amiga
+try:
+	import amiga
+	amigaMode = True
+except:
+	pass
 import urllib, urllib2, sys, argparse, re, string
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
 #from pprint import pprint
+import cfg
 
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
-autoplay = True
-vPlayer = "Applications:Video/MickJT-Mplayer/mplayer"
-vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
-sPlayer = "APPDIR:ffplay"
-sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"
-
-qualityWeight = [
-	"480p30",
-	"360p30",
-	"160p30",
-	"audio_only",
-	"chunked",
-	"720p60",
-	"720p30"
-]
 
 _url_re = re.compile(r"""
     http(s)?://
@@ -213,7 +203,7 @@ class helpersHandler:
 		
 		#pprint(playlists)
 		weightCnt = 0
-		for quality in qualityWeight:
+		for quality in cfg.twitchQualityWeight:
 			for idx in playlists:
 				if (quality == playlists[idx]['video']):
 					#print quality
@@ -339,7 +329,7 @@ def main(argv):
 		twitchURL = args.url
 		video = helpers.getVideoType(args.url)
 	if (args.quality):
-		qualityWeight.insert(0, args.quality)
+		cfg.twitchQualityWeight.insert(0, args.quality)
 	if (args.search):
 		gameTitle = args.search
 		searchMode = True
@@ -354,9 +344,9 @@ def main(argv):
 					accessToken = twitchApi.getAccessTokenByChannel(channelName)
 					m3u8Response = usherApi.getChannelStreams(channelName, accessToken['sig'], accessToken['token'])
 					uri = helpers.getPrefferedVideoURL(m3u8Response)
-					if uri and autoplay:
-						print "%s %s %s" % (sPlayer, uri, sPlayerArgs)
-						amiga.system( "%s %s %s" % (sPlayer, uri, sPlayerArgs) )
+					if uri and cfg.autoplay:
+						print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
+						amiga.system( "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 			else:
 				print "There is no Live stream for the channel: %s" % (channelName)
 
@@ -370,9 +360,9 @@ def main(argv):
 				accessToken = twitchApi.getAccessTokenByVideo(videoId)
 				m3u8Response = usherApi.getVideoStreams(videoId, accessToken['sig'], accessToken['token'])
 				uri = helpers.getPrefferedVideoURL(m3u8Response)
-				if uri and autoplay:
-					print "%s %s %s" % (vPlayer, uri, vPlayerArgs)
-					amiga.system( "%s %s %s" % (vPlayer, uri, vPlayerArgs) )
+				if uri and cfg.autoplay:
+					print "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs)
+					amiga.system( "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
 				
 		else:
 			print "There is no video available with ID: %s" % (videoId)
