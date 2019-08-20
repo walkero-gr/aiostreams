@@ -3,7 +3,7 @@ try:
 	import amiga
 	amigaMode = True
 except:
-	pass
+	amigaMode = False
 import urllib, urllib2, sys, argparse, re, string
 import simpleM3U8 as sm3u8
 import simplejson as json
@@ -102,7 +102,8 @@ class twitchAPIHandler:
 
 class usherHandler:
 	def __init__(self):
-		self.baseurl = 'https://usher.ttvnw.net'
+		# self.baseurl = 'https://usher.ttvnw.net'
+		self.baseurl = 'https://usher.twitch.tv'
 
 		return None
 
@@ -132,8 +133,8 @@ class usherHandler:
 			"allow_audio_only": "true",
 			"allow_spectre": "false",
 			"p": int(random() * 999999),
-			"nauthsig": sig,
-			"nauth": token
+			"sig": sig,
+			"token": token
 		}
 		retData = self.call(endpoint, query)
 
@@ -148,8 +149,8 @@ class usherHandler:
 			"allow_audio_only": "true",
 			"allow_spectre": "false",
 			"p": int(random() * 999999),
-			"nauthsig": sig,
-			"nauth": token
+			"sig": sig,
+			"token": token
 		}
 		retData = self.call(endpoint, query)
 
