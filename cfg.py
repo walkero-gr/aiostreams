@@ -1,7 +1,7 @@
 #!python
 autoplay = True
 verbose = True
-vPlayer = "Applications:Video/MickJT-Mplayer/mplayer"
+vPlayer = "APPDIR:mplayer"
 vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
 sPlayer = "APPDIR:ffplay"
 sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"

@@ -5,7 +5,7 @@ try:
 except:
 	amigaMode = False
 import urllib, urllib2, sys, argparse, re, string
-import simpleM3U8 as sm3u8
+import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
@@ -120,7 +120,7 @@ class usherHandler:
 			response.close()
 			return retData
 		except URLError, e:
-			print e.reason
+			print e
 		
 		return None
 
@@ -205,6 +205,9 @@ class helpersHandler:
 		encToken = string.replace(encToken, "}", "%7D")
 
 		return encToken
+		
+	def uniStrip(self, text):
+		return re.sub(r'[^\x00-\x7f]',r'', text)
 
 def main(argv):
 	twitchApi = twitchAPIHandler()
