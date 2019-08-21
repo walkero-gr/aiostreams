@@ -125,8 +125,7 @@ class usherHandler:
 		
 		return None
 
-	def getChannelStreams(self, channelName, sig, token):
-		endpoint = "api/channel/hls/%s" % (channelName)
+	def getStreams(self, endpoint, sig, token):
 		query = {
 			"player": "twitchweb",
 			"type": "any",
@@ -137,26 +136,17 @@ class usherHandler:
 			"sig": sig,
 			"token": token
 		}
-		retData = self.call(endpoint, query)
+		return self.call(endpoint, query)
 
-		return retData
+	def getChannelStreams(self, channelName, sig, token):
+		endpoint = "api/channel/hls/%s" % (channelName)
+
+		return self.getStreams(endpoint, sig, token)
 
 	def getVideoStreams(self, videoId, sig, token):
 		endpoint = "vod/%s" % (videoId)
-		query = {
-			"player": "twitchweb",
-			"type": "any",
-			"allow_source": "true",
-			"allow_audio_only": "true",
-			"allow_spectre": "false",
-			"p": int(random() * 999999),
-			"sig": sig,
-			"token": token
-		}
-		retData = self.call(endpoint, query)
-
-		return retData
-
+		
+		return self.getStreams(endpoint, sig, token)
 
 class helpersHandler:
 	def introText(self):
