@@ -12,6 +12,7 @@ from random import random
 import cfg
 
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
+ver = "1.0"
 
 _url_re = re.compile(r"""
     http(s)?://
@@ -57,7 +58,7 @@ class twitchAPIHandler:
 			response.close()
 			return retData
 		except URLError, e:
-			print e.reason
+			print e
 		
 		return None
 
@@ -158,7 +159,9 @@ class usherHandler:
 
 
 class helpersHandler:
-
+	def introText(self):
+		print "twitch.py v%s - Created by George Sokianos\n" % (ver)
+	
 	def parseURL(self, url):
 		return _url_re.match(url).groupdict()
 
@@ -189,7 +192,6 @@ class helpersHandler:
 
 	def getPrefferedVideoURL(self, data):
 		sm3u8Parser = sm3u8.parseHandler()
-		# playlists = self.simpleM3U8Parser(data)
 		playlists = sm3u8Parser.parse(data)
 	
 		for quality in cfg.twitchQualityWeight:
@@ -210,20 +212,26 @@ class helpersHandler:
 		return re.sub(r'[^\x00-\x7f]',r'', text)
 
 def main(argv):
+		
 	twitchApi = twitchAPIHandler()
 	usherApi = usherHandler()
 	helpers = helpersHandler()
 	video = {'type': ''}
 	searchMode = False
 	playlists = dict()
-
+	
+	helpers.introText()
+	if len(argv) == 0:
+		print "No arguments given. Use twitch.py -h for more info.\nThe script is used from the shell."
+		sys.exit()
+		
 	# Parse the arguments
 	argParser = argparse.ArgumentParser(description='This is a python script that uses twitch.tv API to get information about channels/videos for AmigaOS 4.1 and above.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from twitch.tv')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
 	argParser.add_argument('-s', '--search', action='store', dest='search', help='Search for available streams based on game title')
 	args = argParser.parse_args()
-
+	
 	if (args.url):
 		twitchURL = args.url
 		video = helpers.getVideoType(args.url)
@@ -282,7 +290,6 @@ def main(argv):
 			print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
 			#print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t " % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'])
 
-
 	# TODO: The following list is temporary for tests. This will be removed
 	# https://www.twitch.tv/bnepac
 	# https://www.twitch.tv/videos/464055415
@@ -293,8 +300,6 @@ def main(argv):
 	# 	"overwatchleague"
 	# ]
 	# channelName = channels[1]
-
-
 	
 	sys.exit()
 
