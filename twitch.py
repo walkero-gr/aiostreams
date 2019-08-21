@@ -100,6 +100,10 @@ class twitchAPIHandler:
 		retData = self.call(endpoint, query)
 
 		return retData
+	
+	def getVideosByChannel(self, channelName):
+		endpoint = "kraken/channels/%s/videos" % (channelName)
+		return self.call(endpoint)
 
 class usherHandler:
 	def __init__(self):
@@ -220,6 +224,7 @@ def main(argv):
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from twitch.tv')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
 	argParser.add_argument('-s', '--search', action='store', dest='search', help='Search for available streams based on game title')
+	argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
 	args = argParser.parse_args()
 	
 	if (args.url):
@@ -230,6 +235,8 @@ def main(argv):
 	if (args.search):
 		gameTitle = args.search
 		searchMode = True
+	#if (args.channelvideos):
+	#	getVideosMode = True
 
 	if (video['type'] == 'channel'):
 		channelName = video['id']
@@ -279,6 +286,14 @@ def main(argv):
 			channel = stream['channel']
 			print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
 			#print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t " % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'])
+		
+		sys.exit()
+		
+	if (args.channelvideos):
+		channelName = video['id']
+		streamList = twitchApi.getVideosByChannel(channelName)
+		for stream in streamList['videos']:
+			print "%-40s\t %-20s\t %s" % (stream['url'], stream['recorded_at'], helpers.uniStrip(stream['title']))
 
 	# TODO: The following list is temporary for tests. This will be removed
 	# https://www.twitch.tv/bnepac
