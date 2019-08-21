@@ -95,16 +95,16 @@ The following list includes all the available video qualities. At the configurat
 
 @{u}Examples:@{uu}
 View the a live channel streaming, like below
-@{b}python twitch.py -u https://www.twitch.tv/channelname@{ub}
+@{b}twitch.py -u https://www.twitch.tv/channelname@{ub}
 
 View the a recorded video, like below
-@{b}https://www.twitch.tv/videos/1234567890@{ub}
+@{b}twitch.py -u https://www.twitch.tv/videos/1234567890@{ub}
 
 View the a live channel streaming at specific video quality, if this is available, like below
-@{b}python twitch.py -u https://www.twitch.tv/channelname -q 720p30@{ub}
+@{b}twitch.py -u https://www.twitch.tv/channelname -q 720p30@{ub}
 
 Search for a keyword or a game title. Include the value in double quotes, like below:
-@{b}python twitch.py -s "game title"@{ub}
+@{b}twitch.py -s "game title"@{ub}
 
 @endnode
 @node "Todo" "Todo"
