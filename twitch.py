@@ -1,9 +1,5 @@
 #!python
-try:
-	import amiga
-	amigaMode = True
-except:
-	amigaMode = False
+
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -11,8 +7,16 @@ from urllib2 import Request, urlopen, URLError
 from random import random
 import cfg
 
-clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
 ver = "1.0"
+clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
+userOS = sys.platform
+
+try:
+	import amiga
+	userOS = "os4"
+except:
+	pass	
+
 
 _url_re = re.compile(r"""
     http(s)?://
@@ -266,7 +270,7 @@ def main(argv):
 								print "%s" % (uri)
 							if cfg.autoplay:
 								# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-								if amigaMode:
+								if (userOS == 'os4'):
 									amiga.system( "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 						else:
 							print "Not valid stream found"
@@ -285,10 +289,19 @@ def main(argv):
 			if (streams['viewable'] == 'public'):
 				accessToken = twitchApi.getAccessTokenByVideo(videoId)
 				m3u8Response = usherApi.getVideoStreams(videoId, accessToken['sig'], accessToken['token'])
-				uri = helpers.getPrefferedVideoURL(m3u8Response)
-				if uri and cfg.autoplay:
-					print "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs)
-					amiga.system( "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
+				if (m3u8Response):
+					uri = helpers.getPrefferedVideoURL(m3u8Response)
+					if uri:
+						if cfg.verbose:
+							print "%s" % (uri)
+						if cfg.autoplay:
+							# print "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs)
+							if (userOS == 'os4'):
+								amiga.system( "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
+					else:
+						print "Not valid video found"
+				else:
+					print "There was an error with the usherApi"
 				
 		else:
 			print "There is no video available with ID: %s" % (videoId)
