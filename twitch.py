@@ -103,7 +103,10 @@ class twitchAPIHandler:
 	
 	def getVideosByChannel(self, channelName):
 		endpoint = "kraken/channels/%s/videos" % (channelName)
-		return self.call(endpoint)
+		query = {
+			"limit": 50
+		}
+		return self.call(endpoint, query)
 
 class usherHandler:
 	def __init__(self):
@@ -216,7 +219,7 @@ def main(argv):
 	
 	helpers.introText()
 	if len(argv) == 0:
-		print "No arguments given. Use twitch.py -h for more info.\nThe script is used from the shell."
+		print "No arguments given. Use twitch.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
 		
 	# Parse the arguments
@@ -235,8 +238,17 @@ def main(argv):
 	if (args.search):
 		gameTitle = args.search
 		searchMode = True
-	#if (args.channelvideos):
-	#	getVideosMode = True
+
+	if (args.channelvideos):
+		channelName = video['id']
+		streamList = twitchApi.getVideosByChannel(channelName)
+		print "%-36s\t %-20s\t %-50s\t %s" % ('URL', 'Recorded at', 'Available resolutions', 'Title')
+		print "%s" % ('-'*200)
+		for stream in streamList['videos']:
+			resolutions = ', '.join(stream['resolutions'])
+			print "%-36s\t %-20s\t %-50s\t %s" % (stream['url'], stream['recorded_at'], resolutions, helpers.uniStrip(stream['title']))
+
+		sys.exit()
 
 	if (video['type'] == 'channel'):
 		channelName = video['id']
@@ -263,6 +275,7 @@ def main(argv):
 			else:
 				print "There is no Live stream for the channel: %s" % (channelName)
 
+		sys.exit()
 
 	if (video['type'] == 'video'):
 		videoId = video['id']
@@ -280,6 +293,8 @@ def main(argv):
 		else:
 			print "There is no video available with ID: %s" % (videoId)
 
+		sys.exit()
+
 	if (searchMode):
 		streamList = twitchApi.searchByGameTitle(gameTitle)
 		for stream in streamList['streams']:
@@ -289,12 +304,6 @@ def main(argv):
 		
 		sys.exit()
 		
-	if (args.channelvideos):
-		channelName = video['id']
-		streamList = twitchApi.getVideosByChannel(channelName)
-		for stream in streamList['videos']:
-			print "%-40s\t %-20s\t %s" % (stream['url'], stream['recorded_at'], helpers.uniStrip(stream['title']))
-
 	# TODO: The following list is temporary for tests. This will be removed
 	# https://www.twitch.tv/bnepac
 	# https://www.twitch.tv/videos/464055415
