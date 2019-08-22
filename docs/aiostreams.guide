@@ -166,10 +166,13 @@ The script uses HTTPS URLs to access the Twitch.tv API and shares with the netwo
 @{jleft}@{lindent 3}
 @{b}Todo list@{ub}
 
+You can find the todo list and the status of them at:
+https://github.com/walkero-gr/aiostreams/projects/1
+
 Many things:
 * MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
-* Mixer.com support.
-* Vimeo.com support.
+* Mixer.com API support.
+* Vimeo.com API support.
 * AmigaOS 3 and AROS support.
 * A way to get a notification on which of your favorite channels are currently streaming.
 
