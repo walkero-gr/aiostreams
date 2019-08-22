@@ -310,9 +310,11 @@ def main(argv):
 
 	if (searchMode):
 		streamList = twitchApi.searchByGameTitle(gameTitle)
+		print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - %-s" % ("Channel name", "Viewers", "Type", "Language", "Channel URL", "Game name", "Channel status")
+		print "%s" % ('-'*200)
 		for stream in streamList['streams']:
 			channel = stream['channel']
-			print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
+			print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
 			#print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t " % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'])
 		
 		sys.exit()
