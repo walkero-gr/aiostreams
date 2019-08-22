@@ -10,8 +10,8 @@ twitchQualityWeight = [
 	"480p30",
 	"360p30",
 	"160p30",
-	"audio_only",
-	"chunked",
 	"720p60",
-	"720p30"
+	"720p30",
+	"chunked",
+	"audio_only"
 ]
