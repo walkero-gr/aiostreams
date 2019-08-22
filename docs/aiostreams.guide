@@ -156,7 +156,7 @@ List the last 50 videos of a channel, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname -cv@{ub}
 
 @{u}Privacy:@{uu}
-The script shares with the network the following personal info:
+The script uses HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
 * Your public IP
 
 @endnode
