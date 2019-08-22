@@ -31,25 +31,55 @@ Some of these networks support search, where you can find available streams and 
 @{"Changelog" LINK "Changelog"}
 @{"Author" LINK "Author"}
 
-
 @endnode
 @node "Requirements" "Requirements"
 @prev "MAIN"
 @next "Installation"
 @{jleft}@{lindent 3}
 @{b}Requirements@{ub}
+
+The scripts are based on Python v2.5, so this is absolutely necessary to be installed at your system.
+
+They are developed and fully tested under AmigaOS 4.1 FE. There will be support for other systems in the future, like MorphOS, AmigaOS 3 and AROS, as long as Python is supported. 
+
+The scripts might work under Linux and MacOS X, but those systems are not the target of this project. There are other solution that might do better work.
+
+A full list:
+* Python 2.5
+* The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation
+* ffplay for the online live streaming videos, or something equivalent
+* mplayer for the online recorded videos, or something equivalent
+* internet access
+
 @endnode
 @node "Installation" "Installation"
 @prev "Requirements"
 @next "Configure"
 @{jleft}@{lindent 3}
 @{b}Installation@{ub}
+
+Unarchive the file wherever you want. It will work even from temporary mounted storage, i.e. USB, CDRom or RAM.
+
+The scripts do not write anything to the disks, so they don't need the storage to be writable.
+
 @endnode
 @node "Configure" "Configure"
 @prev "Installation"
 @next "Usage"
 @{jleft}@{lindent 3}
 @{b}Configure@{ub}
+
+In aiostreams folder you will find a configuration file named @{b}cfg.py@{ub}. You can edit it and change a few parameters, so that it will be suitable for you.
+
+The available parameters are:
+* @{b}autoplay:@{ub} Set this to @{i}True@{ui} to enable autoplay of the video with your preffered video player. Set it to @{i}False@{ui} to disable it.
+* @{b}verbose:@{ub} Set this to @{i}True@{ui} to get more info from the script during the execution. Set it to @{i}False@{ui} to disable it.
+* @{b}vPlayer:@{ub} Set the path to your preffered video player for recorded streams and not live streams. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
+* @{b}vPlayerArgs:@{ub} Set the arguments that are going to be used with your preffered video player. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
+* @{b}sPlayer:@{ub} Set the path to your preffered streaming player for live or recorded streams. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
+* @{b}sPlayerArgs:@{ub} Set the arguments that are going to be used with your preffered streaming player. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
+* @{b}twitchQualityWeight:@{ub} Set the preffered sort of video qualities for the Twitch.tv network. This means that the first available will be served.
+
 @endnode
 @node "Usage" "Shell usage"
 @prev "Configure"
@@ -57,19 +87,32 @@ Some of these networks support search, where you can find available streams and 
 @{jleft}@{lindent 3}
 @{b}Shell usage@{ub}
 
-All the scripts have a common way to use them, and I am trying to keep it that way. But there might be different features on each script that some others might lack. You can find specific usage information in the following sections, separated by network.
+All the scripts have a common way of usage, and I am trying to keep it that way, so there can be a consistency. But scripts might have different features depending the suported network. 
+
+You can find usage information in the following sections, separated by network.
 
 @{lindent 10}
 @{"Twitch.tv" LINK "Twitch.tv"}
+
+The scripts are developed to be used in shell, but some of their feature can be used inside a browser, if you would like to, by adding actions to link menus that would use those scripts with the link URL. 
+
+The problem right now is that the supported networks, like Twitch.tv, do not render right with the available browsers.
+
 @endnode
 @node "Twitch.tv" "Twitch.tv"
 @prev "Usage"
 @{jleft}@{lindent 3}
 @{b}Twitch.tv@{ub}
 
-With this script you can watch live streams or recorded videos from Twitch.tv website.
-
+This script works with Twitch.tv website and it's available API. 
 If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-s, --search@{ub}.
+
+With this script you can: 
+* watch live streams
+* watch channels' recorded videos
+* search channels by game title that are live and streaming
+* list available recorded videos by channel
+* autoplay videos with ffplay or mplayer
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
@@ -80,6 +123,9 @@ If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not
                         weight will be used.
   -s SEARCH, --search SEARCH
                         Search for available streams based on game title
+  -cv, --channel-videos
+                        Request the recorded videos of a channel. The -u
+                        argument is mandatory.
 
 @{u}Available video qualities:@{uu}
 The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
@@ -106,22 +152,61 @@ View the a live channel streaming at specific video quality, if this is availabl
 Search for a keyword or a game title. Include the value in double quotes, like below:
 @{b}twitch.py -s "game title"@{ub}
 
+List the last 50 videos of a channel, like below
+@{b}twitch.py -u https://www.twitch.tv/channelname -cv@{ub}
+
+@{u}Privacy:@{uu}
+The script shares with the network the following personal info:
+* Your public IP
+
 @endnode
 @node "Todo" "Todo"
 @prev "Usage"
 @next "Changelog"
 @{jleft}@{lindent 3}
 @{b}Todo list@{ub}
+
+Many things:
+* MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
+* Mixer.com support.
+* Vimeo.com support.
+* AmigaOS 3 and AROS support.
+* A way to get a notification on which of your favorite channels are currently streaming.
+
+If you have any websites that you would like to see the supported, please contact me and I will check if this possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used out of their websites.
+
 @endnode
 @node "Changelog" "Changelog"
 @prev "Todo"
 @next "Author"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.0
+* Initial version
+* Twitch.tv script added
+* Simple m3u8 parser created
+
 @endnode
 @node "Author" "Author"
 @prev "Changelog"
 @{jleft}@{lindent 3}
 @{b}Author@{ub}
+My name is George Sokianos and you can reach me at Amiga forums under the username @{b}walkero{ub}.
+
+The project is open source and you can find the code at:
+https://github.com/walkero-gr/aiostreams
+
+If you have any requests or you would like to report any problems you found, you can do that at:
+https://github.com/walkero-gr/aiostreams/issues
+
+You can read my blog at:
+https://walkero.gr/
+
+My Twitter account is:
+https://twitter.com/gsokianos
+
+If you would like to support me and this project, you can donate at:
+https://www.paypal.me/gsokianos
 
 @endnode
