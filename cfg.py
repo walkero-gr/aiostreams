@@ -1,6 +1,6 @@
 #!python
 autoplay = True
-verbose = False
+verbose = True
 vPlayer = "APPDIR:mplayer"
 vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
 sPlayer = "APPDIR:ffplay"
@@ -14,4 +14,12 @@ twitchQualityWeight = [
 	"720p30",
 	"chunked",
 	"audio_only"
+]
+
+mixerQualityWeight = [
+	"480p",
+	"320p",
+	"160p",
+	"720p",
+	"1080p"
 ]
