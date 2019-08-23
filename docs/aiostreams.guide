@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.0 (19.8.2019)   
+@$VER: 1.0 (22.8.2019)    
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -13,7 +13,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.0 (2019-08-18)@{ui}
+@{i}v1.0 (2019-08-22)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -90,11 +90,10 @@ The available parameters are:
 All the scripts have a common way of usage, and I am trying to keep it that way, so there can be a consistency. But scripts might have different features depending the suported network. 
 
 You can find usage information in the following sections, separated by network.
-
 @{lindent 10}
 @{"Twitch.tv" LINK "Twitch.tv"}
-
-The scripts are developed to be used in shell, but some of their feature can be used inside a browser, if you would like to, by adding actions to link menus that would use those scripts with the link URL. 
+@{lindent 3}
+The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
 The problem right now is that the supported networks, like Twitch.tv, do not render right with the available browsers.
 
@@ -195,7 +194,7 @@ v1.0
 @prev "Changelog"
 @{jleft}@{lindent 3}
 @{b}Author@{ub}
-My name is George Sokianos and you can reach me at Amiga forums under the username @{b}walkero{ub}.
+My name is George Sokianos and you can reach me at Amiga forums under the username @{b}walkero@{ub}.
 
 The project is open source and you can find the code at:
 https://github.com/walkero-gr/aiostreams

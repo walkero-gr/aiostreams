@@ -315,20 +315,8 @@ def main(argv):
 		for stream in streamList['streams']:
 			channel = stream['channel']
 			print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
-			#print "%-20s\t %10s\t %-s\t %-10s\t %-50s\t " % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'])
 		
 		sys.exit()
-		
-	# TODO: The following list is temporary for tests. This will be removed
-	# https://www.twitch.tv/bnepac
-	# https://www.twitch.tv/videos/464055415
-	# channels = [
-	# 	"riotgamesoce",
-	# 	"amigabill",
-	# 	"haysmaker64",
-	# 	"overwatchleague"
-	# ]
-	# channelName = channels[1]
 	
 	sys.exit()
 

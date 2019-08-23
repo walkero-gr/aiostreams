@@ -1,6 +1,6 @@
 #!python
 autoplay = True
-verbose = True
+verbose = False
 vPlayer = "APPDIR:mplayer"
 vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
 sPlayer = "APPDIR:ffplay"
