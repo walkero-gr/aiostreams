@@ -1,5 +1,4 @@
 #!python
-
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -7,7 +6,7 @@ from urllib2 import Request, urlopen, URLError
 from random import random
 import cfg
 
-ver = "1.0"
+ver = "1.1"
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
 userOS = sys.platform
 
@@ -74,36 +73,26 @@ class twitchAPIHandler:
 
 	def getStreamsByChannel(self, channelName):
 		endpoint = "kraken/streams/%s.json" % (channelName)
-		retData = self.call(endpoint)
-
-		return retData
+		return self.call(endpoint)
 
 	def getAccessTokenByChannel(self, channelName):
 		endpoint = "api/channels/%s/access_token.json" % (channelName)
-		retData = self.call(endpoint)
-
-		return retData
+		return self.call(endpoint)
 
 	def getVideoInfoByID(self, videoId):
 		endpoint = "kraken/videos/%s.json" % (videoId)
-		retData = self.call(endpoint)
-
-		return retData
+		return self.call(endpoint)
 
 	def getAccessTokenByVideo(self, videoId):
 		endpoint = "api/vods/%s/access_token.json" % (videoId)
-		retData = self.call(endpoint)
-
-		return retData
+		return self.call(endpoint)
 
 	def searchByGameTitle(self, title):
 		endpoint = "kraken/search/streams"
 		query = {
 			"query": title
 		}
-		retData = self.call(endpoint, query)
-
-		return retData
+		return self.call(endpoint, query)
 	
 	def getVideosByChannel(self, channelName):
 		endpoint = "kraken/channels/%s/videos" % (channelName)
@@ -177,20 +166,6 @@ class helpersHandler:
 
 		return None
 
-	def m3u8GetModel(self, data):
-		m3u8Data = m3u8.loads(data)
-		return m3u8Data.data
-	
-	def m3u8GetPlaylists(self, data):
-		m3u8Model = self.m3u8GetModel(data)
-
-		return m3u8Model['playlists']
-	
-	def m3u8GetMedia(self, data):
-		m3u8Model = self.m3u8GetModel(data)
-		
-		return m3u8Model['media']
-
 	def getPrefferedVideoURL(self, data):
 		sm3u8Parser = sm3u8.parseHandler()
 		playlists = sm3u8Parser.parse(data)
@@ -201,13 +176,6 @@ class helpersHandler:
 					return playlists[idx]['uri']
 		
 		return None
-
-	def encodeToken(self, token):
-		encToken = string.replace(token, '"', "%22")
-		encToken = string.replace(encToken, "{", "%7B")
-		encToken = string.replace(encToken, "}", "%7D")
-
-		return encToken
 		
 	def uniStrip(self, text):
 		return re.sub(r'[^\x00-\x7f]',r'', text)
@@ -218,7 +186,6 @@ def main(argv):
 	usherApi = usherHandler()
 	helpers = helpersHandler()
 	video = {'type': ''}
-	searchMode = False
 	playlists = dict()
 	
 	helpers.introText()
@@ -239,9 +206,6 @@ def main(argv):
 		video = helpers.getVideoType(args.url)
 	if (args.quality):
 		cfg.twitchQualityWeight.insert(0, args.quality)
-	if (args.search):
-		gameTitle = args.search
-		searchMode = True
 
 	if (args.channelvideos):
 		channelName = video['id']
@@ -252,6 +216,17 @@ def main(argv):
 			resolutions = ', '.join(stream['resolutions'])
 			print "%-36s\t %-20s\t %-50s\t %s" % (stream['url'], stream['recorded_at'], resolutions, helpers.uniStrip(stream['title']))
 
+		sys.exit()
+
+	if (args.search):
+		gameTitle = args.search
+		streamList = twitchApi.searchByGameTitle(gameTitle)
+		print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - %-s" % ("Channel name", "Viewers", "Type", "Language", "Channel URL", "Game name", "Channel status")
+		print "%s" % ('-'*200)
+		for stream in streamList['streams']:
+			channel = stream['channel']
+			print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
+		
 		sys.exit()
 
 	if (video['type'] == 'channel'):
@@ -306,16 +281,6 @@ def main(argv):
 		else:
 			print "There is no video available with ID: %s" % (videoId)
 
-		sys.exit()
-
-	if (searchMode):
-		streamList = twitchApi.searchByGameTitle(gameTitle)
-		print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - %-s" % ("Channel name", "Viewers", "Type", "Language", "Channel URL", "Game name", "Channel status")
-		print "%s" % ('-'*200)
-		for stream in streamList['streams']:
-			channel = stream['channel']
-			print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
-		
 		sys.exit()
 	
 	sys.exit()
