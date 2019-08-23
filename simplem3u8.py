@@ -4,19 +4,13 @@ ATTRIBUTELISTPATTERN = re.compile(r'''((?:[^,"']|"[^"]*"|'[^']*')+)''')
 
 class parseHandler:
     def parse(self, m3u8Data):
-        listCnt = None
+        listCnt = 0
         retList = {}
+        retList[listCnt] = {}
 
         for line in m3u8Data.splitlines():
             if (line.startswith("#EXT-X-MEDIA:")):
                 params = self.parseXMedia(line)
-
-                if (listCnt == None):
-                    listCnt = 0
-                else:
-                    listCnt += 1
-                
-                retList[listCnt] = {}
                 
                 for attribute in params:
                     attr, val = attribute.split("=")
@@ -32,6 +26,8 @@ class parseHandler:
 
             if (line.startswith(('https://', 'http://'))):
                 retList[listCnt]['uri'] = line
+                listCnt += 1
+                retList[listCnt] = {}
 
         return retList
     
