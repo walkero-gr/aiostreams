@@ -185,7 +185,7 @@ If you have any websites that you would like to see the supported, please contac
 @{b}Changelog@{ub}
 
 v1.0
-* Initial version
+* Initial release
 * Twitch.tv script added
 * Simple m3u8 parser created
 

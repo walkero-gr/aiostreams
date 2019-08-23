@@ -1,8 +1,22 @@
 # aiostreams
-All In One streams is a pack of Python scripts that help users to stream video from various sources on AmigaOS 4.1 systems.
+All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
-Currently there is only a script for Twitch.tv but more will be added in the future.
+These can be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically.
 
+Some of these networks support search, where you can find available streams and videos.
+
+The scripts are based on Python v2.5, so this is absolutely necessary to be installed at your system.
+
+They are developed and fully tested under AmigaOS 4.1 FE. There will be support for other systems in the future, like MorphOS, AmigaOS 3 and AROS, as long as Python is supported. 
+
+The scripts might work under Linux and MacOS X, but those systems are not the target of this project. There are other solution that might work better.
+
+A full list:
+* Python 2.5
+* The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation
+* ffplay for the online live streaming videos, or something equivalent
+* mplayer for the online recorded videos, or something equivalent
+* internet access
 
 #### Docker
 To run the script in a docker container with Python 2.7 installed, use the following on different shells, from the script folder.
