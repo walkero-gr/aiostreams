@@ -155,7 +155,7 @@ def main(argv):
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from mixer.com')
 	argParser.add_argument('-ts', '--top-streams', action='store_true', default=False, dest='topstreams', help='Get a list of the current Top Streams that are live')
 	argParser.add_argument('-tg', '--top-games', action='store_true', default=False, dest='topgames', help='Get a list of the current Top Games that are live, based on their viewers')
-	# argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
+	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
 	argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Search for available streams based on game title')
 	# argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
 	args = argParser.parse_args()
@@ -163,8 +163,8 @@ def main(argv):
 	if (args.url):
 		mixerURL = args.url
 		video = helpers.getVideoType(args.url)
-	# if (args.quality):
-	# 	cfg.twitchQualityWeight.insert(0, args.quality)
+	if (args.quality):
+		cfg.mixerQualityWeight.insert(0, args.quality)
 	# if (args.search):
 	# 	gameTitle = args.search
 	# 	searchMode = True
