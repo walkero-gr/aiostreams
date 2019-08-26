@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.0 (22.8.2019)    
+@$VER: 1.1 (27.8.2019)    
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -13,7 +13,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.0 (2019-08-22)@{ui}
+@{i}v1.1 (2019-08-27)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -27,6 +27,7 @@ Some of these networks support search, where you can find available streams and 
 @{"Configure" LINK "Configure"}
 @{"Shell usage" LINK "Usage"}
 	@{"Twitch.tv" LINK "Twitch.tv"}
+	@{"Mixer.com" LINK "Mixer.com"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Author" LINK "Author"}
@@ -46,9 +47,10 @@ The scripts might work under Linux and MacOS X, but those systems are not the ta
 
 A full list:
 * Python 2.5
-* The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation
-* ffplay for the online live streaming videos, or something equivalent
-* mplayer for the online recorded videos, or something equivalent
+* Pythonssl (http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha)
+* The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation.
+* ffplay for the online live streaming videos, or something equivalent. (http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha)
+* mplayer for the online recorded videos, or something equivalent. (http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer)
 * internet access
 
 @endnode
@@ -79,6 +81,7 @@ The available parameters are:
 * @{b}sPlayer:@{ub} Set the path to your preffered streaming player for live or recorded streams. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
 * @{b}sPlayerArgs:@{ub} Set the arguments that are going to be used with your preffered streaming player. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
 * @{b}twitchQualityWeight:@{ub} Set the preffered sort of video qualities for the Twitch.tv network. This means that the first available will be served.
+* @{b}mixerQualityWeight:@{ub} Set the preffered sort of video qualities for the Mixer.com network. This means that the first available will be served.
 
 @endnode
 @node "Usage" "Shell usage"
@@ -92,6 +95,7 @@ All the scripts have a common way of usage, and I am trying to keep it that way,
 You can find usage information in the following sections, separated by network.
 @{lindent 10}
 @{"Twitch.tv" LINK "Twitch.tv"}
+@{"Mixer.com" LINK "Mixer.com"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -104,7 +108,7 @@ The problem right now is that the supported networks, like Twitch.tv, do not ren
 @{b}Twitch.tv@{ub}
 
 This script works with Twitch.tv website and it's available API. 
-If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-s, --search@{ub}.
+If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-sg, --search-game@{ub}.
 
 With this script you can: 
 * watch live streams
@@ -120,7 +124,7 @@ With this script you can:
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
-  -s SEARCH, --search SEARCH
+  -sg SEARCHGAME, --search-game SEARCHGAME
                         Search for available streams based on game title
   -cv, --channel-videos
                         Request the recorded videos of a channel. The -u
@@ -139,17 +143,17 @@ The following list includes all the available video qualities. At the configurat
 	audio_only		no video, audio only
 
 @{u}Examples:@{uu}
-View the a live channel streaming, like below
+View a live channel streaming, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname@{ub}
 
-View the a recorded video, like below
+View a recorded video, like below
 @{b}twitch.py -u https://www.twitch.tv/videos/1234567890@{ub}
 
-View the a live channel streaming at specific video quality, if this is available, like below
+View a live channel streaming at specific video quality, if this is available, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname -q 720p30@{ub}
 
 Search for a keyword or a game title. Include the value in double quotes, like below:
-@{b}twitch.py -s "game title"@{ub}
+@{b}twitch.py -sg "game title"@{ub}
 
 List the last 50 videos of a channel, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname -cv@{ub}
@@ -157,6 +161,69 @@ List the last 50 videos of a channel, like below
 @{u}Privacy:@{uu}
 The script uses HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
 * Your public IP
+
+@endnode
+@node "Mixer.com" "Mixer.com"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Mixer.com@{ub}
+
+This script works with Mixer.com website and it's available API. 
+If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-sg, --search-game@{ub}.
+
+With this script you can: 
+* watch live streams
+* watch channels' recorded videos
+* search channels by game title that are live and streaming
+* get a list of the available recorded videos by channel
+* get a list of the Top Streams and Top Games, based on the viewers
+* autoplay videos with ffplay or mplayer
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video/channel url from mixer.com
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+  -ts, --top-streams    Get a list of the current Top Streams that are live
+  -tg, --top-games      Get a list of the current Top Games that are live,
+                        based on their viewers
+  -sg SEARCHGAME, --search-game SEARCHGAME
+                        Search for available streams based on game title
+  -cv, --channel-videos
+                        Request the recorded videos of a channel. The -u
+                        argument is mandatory.
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+Usually, the recorded videos are available only on 720p resolution.
+
+	1080p		  1920x1080 
+	720p		  1280x720
+	480p			720x480
+	320p			480x320
+	160p			284x160
+
+@{u}Examples:@{uu}
+View a live channel streaming, like below
+@{b}mixer.py -u https://mixer.com/channelname@{ub}
+
+View a recorded video, like below
+@{b}mixer.py -u https://mixer.com/channelname?vod=1234567890@{ub}
+
+View a live channel streaming at specific video quality, if this is available, like below
+@{b}mixer.py -u https://mixer.com/channelname -q 720p@{ub}
+
+Search for a keyword or a game title. Include the value in double quotes, like below:
+@{b}mixer.py -sg "game title"@{ub}
+
+List the last 50 videos of a channel, like below
+@{b}mixer.py -u https://mixer.com/channelname -cv@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to Mixer.com API.
 
 @endnode
 @node "Todo" "Todo"
@@ -170,12 +237,13 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Many things:
 * MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
-* Mixer.com API support.
-* Vimeo.com API support.
+* Vimeo.com support.
+* Reuters.tv support
+* Support Emotion player, if possible.
 * AmigaOS 3 and AROS support.
 * A way to get a notification on which of your favorite channels are currently streaming.
 
-If you have any websites that you would like to see the supported, please contact me and I will check if this possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used out of their websites.
+If you have any websites that you would like to be supported, please contact me and I will check if this possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used out of their websites.
 
 @endnode
 @node "Changelog" "Changelog"
@@ -183,6 +251,11 @@ If you have any websites that you would like to see the supported, please contac
 @next "Author"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.1
+* Mixer.com script added
+* Cleared a lot of code in twitch.py script
+* Documentation updated
 
 v1.0
 * Initial release
