@@ -197,7 +197,7 @@ def main(argv):
 	argParser = argparse.ArgumentParser(description='This is a python script that uses twitch.tv API to get information about channels/videos for AmigaOS 4.1 and above.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from twitch.tv')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
-	argParser.add_argument('-s', '--search', action='store', dest='search', help='Search for available streams based on game title')
+	argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Search for available streams based on game title')
 	argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
 	args = argParser.parse_args()
 	
@@ -218,14 +218,14 @@ def main(argv):
 
 		sys.exit()
 
-	if (args.search):
-		gameTitle = args.search
+	if (args.searchgame):
+		gameTitle = args.searchgame
 		streamList = twitchApi.searchByGameTitle(gameTitle)
-		print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - %-s" % ("Channel name", "Viewers", "Type", "Language", "Channel URL", "Game name", "Channel status")
+		print "%-30s\t %10s\t %-s\t %-6s\t %-50s\t %-s - %-s" % ("Channel name", "Viewers", "Type", "Lang", "Channel URL", "Game name", "Channel status")
 		print "%s" % ('-'*200)
 		for stream in streamList['streams']:
 			channel = stream['channel']
-			print "%-30s\t %10s\t %-s\t %-10s\t %-50s\t %-s - \"%-s\"" % (channel['display_name'].encode('unicode_escape'), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], stream['game'].encode('unicode_escape'), channel['status'].encode('unicode_escape'))
+			print "%-30s\t %10d\t %-s\t %-6s\t %-50s\t %-s - \"%-s\"" % (helpers.uniStrip(channel['display_name']), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], helpers.uniStrip(stream['game']), helpers.uniStrip(channel['status']))
 		
 		sys.exit()
 
