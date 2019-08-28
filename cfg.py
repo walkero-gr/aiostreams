@@ -23,3 +23,12 @@ mixerQualityWeight = [
 	"720p",
 	"1080p"
 ]
+
+vimeoQualityWeight = [
+	"540p",
+	"480p",
+	"360p",
+	"240p",
+	"720p",
+	"1080p"
+]
