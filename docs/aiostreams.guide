@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.2 (30.8.2019)    
+@$VER: 1.2 (30.8.2019)     
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -33,6 +33,7 @@ Some of these networks support search, where you can find available streams and 
 @{"Changelog" LINK "Changelog"}
 @{"Author" LINK "Author"}
 
+
 @endnode
 @node "Requirements" "Requirements"
 @prev "MAIN"
@@ -48,11 +49,17 @@ The scripts might work under Linux and MacOS X, but those systems are not the ta
 
 A full list:
 * Python 2.5
-* Pythonssl (http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha)
+* Pythonssl @{" 1 " SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha"}
 * The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation.
-* ffplay for the online live streaming videos, or something equivalent. (http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha)
-* mplayer for the online recorded videos, or something equivalent. (http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer)
+* ffplay for the online live streaming videos, or something equivalent. @{" 2 " SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha"}
+* mplayer for the online recorded videos, or something equivalent. @{" 3 " SYSTEM "c:URLOpen http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer"}
 * internet access
+
+Links
+[1] http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha
+[2] http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha
+[3] http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer
+
 
 @endnode
 @node "Installation" "Installation"
@@ -83,6 +90,8 @@ The available parameters are:
 * @{b}sPlayerArgs:@{ub} Set the arguments that are going to be used with your preffered streaming player. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
 * @{b}twitchQualityWeight:@{ub} Set the preffered sort of video qualities for the Twitch.tv network. This means that the first available will be served.
 * @{b}mixerQualityWeight:@{ub} Set the preffered sort of video qualities for the Mixer.com network. This means that the first available will be served.
+* @{b}vimeoQualityWeight:@{ub} Set the preffered sort of video qualities for the Vimeo.com network. This means that the first available will be served.
+
 
 @endnode
 @node "Usage" "Shell usage"
@@ -164,6 +173,7 @@ List the last 50 videos of a channel, like below
 The script uses HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
 * Your public IP
 
+
 @endnode
 @node "Mixer.com" "Mixer.com"
 @prev "Usage"
@@ -202,11 +212,11 @@ The following list includes all the available video qualities. At the configurat
 
 Usually, the recorded videos are available only on 720p resolution.
 
-	1080p		  1920x1080 
-	720p		  1280x720
-	480p			720x480
-	320p			480x320
-	160p			284x160
+	1080p		1920x1080 
+	720p		1280x720
+	480p		720x480
+	320p		480x320
+	160p		284x160
 
 @{u}Examples:@{uu}
 View a live channel streaming, like below
@@ -252,12 +262,12 @@ The following list includes all the available video qualities. At the configurat
 
 Usually, the recorded videos are available only on 720p resolution.
 
-	1080p		  1920x1080 
-	720p		   1280x720
-	540p			960x540
-	480p			720x480
-	360p			480x360
-	240p			284x160
+	1080p		1920x1080 
+	720p		1280x720
+	540p		960x540
+	480p		720x480
+	360p		480x360
+	240p		284x160
 
 @{u}Examples:@{uu}
 View a recorded video, like below
@@ -280,11 +290,13 @@ https://github.com/walkero-gr/aiostreams/projects/1
 Many things:
 * MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
 * Reuters.tv support
+* Dailymotion support
 * Support Emotion player, if possible.
 * AmigaOS 3 and AROS support.
 * A way to get a notification on which of your favorite channels are currently streaming.
 
 If you have any websites that you would like to be supported, please contact me and I will check if this possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used out of their websites.
+
 
 @endnode
 @node "Changelog" "Changelog"
@@ -296,6 +308,7 @@ If you have any websites that you would like to be supported, please contact me 
 v1.2
 * Vimeo.com script added
 * simplem3u8 parser updated
+* Added links in the AmigaGuide file, that use URLOpen
 
 v1.1
 * Mixer.com script added
@@ -307,6 +320,9 @@ v1.0
 * Twitch.tv script added
 * Simple m3u8 parser created
 
+
+
+
 @endnode
 @node "Author" "Author"
 @prev "Changelog"
@@ -315,18 +331,21 @@ v1.0
 My name is George Sokianos and you can reach me at Amiga forums under the username @{b}walkero@{ub}.
 
 The project is open source and you can find the code at:
-https://github.com/walkero-gr/aiostreams
+https://github.com/walkero-gr/aiostreams @{"github" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams"}
 
 If you have any requests or you would like to report any problems you found, you can do that at:
-https://github.com/walkero-gr/aiostreams/issues
+https://github.com/walkero-gr/aiostreams/issues @{"issues" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/issues"}
 
 You can read my blog at:
-https://walkero.gr/
+https://walkero.gr @{"open" SYSTEM "c:URLOpen https://walkero.gr"}
 
 My Twitter account is:
-https://twitter.com/gsokianos
+https://twitter.com/gsokianos @{"open" SYSTEM "c:URLOpen https://twitter.com/gsokianos"}
 
 If you would like to support me and this project, you can donate at:
-https://www.paypal.me/gsokianos
+https://www.paypal.me/gsokianos @{"Donate" SYSTEM "c:URLOpen https://www.paypal.me/gsokianos"}
+
+
+
 
 @endnode
