@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.1 (27.8.2019)    
+@$VER: 1.2 (30.8.2019)    
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -13,7 +13,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.1 (2019-08-27)@{ui}
+@{i}v1.2 (2019-08-30)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -28,6 +28,7 @@ Some of these networks support search, where you can find available streams and 
 @{"Shell usage" LINK "Usage"}
 	@{"Twitch.tv" LINK "Twitch.tv"}
 	@{"Mixer.com" LINK "Mixer.com"}
+	@{"Vimeo.com" LINK "Vimeo.com"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Author" LINK "Author"}
@@ -96,6 +97,7 @@ You can find usage information in the following sections, separated by network.
 @{lindent 10}
 @{"Twitch.tv" LINK "Twitch.tv"}
 @{"Mixer.com" LINK "Mixer.com"}
+@{"Vimeo.com" LINK "Vimeo.com"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -226,6 +228,46 @@ List the last 50 videos of a channel, like below
 No private info is sent by this script to Mixer.com API.
 
 @endnode
+@node "Vimeo.com" "Vimeo.com"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Vimeo.com@{ub}
+
+This script works with Vimeo.com website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch recorded videos
+* autoplay videos with ffplay or mplayer
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video url from vimeo.com
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+Usually, the recorded videos are available only on 720p resolution.
+
+	1080p		  1920x1080 
+	720p		   1280x720
+	540p			960x540
+	480p			720x480
+	360p			480x360
+	240p			284x160
+
+@{u}Examples:@{uu}
+View a recorded video, like below
+@{b}vimeo.py -u https://vimeo.com/categoty/channelname/1234567890@{ub}
+@{b}vimeo.py -u https://vimeo.com/1234567890@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to Vimeo.com.
+
+@endnode
 @node "Todo" "Todo"
 @prev "Usage"
 @next "Changelog"
@@ -237,7 +279,6 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Many things:
 * MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
-* Vimeo.com support.
 * Reuters.tv support
 * Support Emotion player, if possible.
 * AmigaOS 3 and AROS support.
@@ -251,6 +292,10 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Author"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.2
+* Vimeo.com script added
+* simplem3u8 parser updated
 
 v1.1
 * Mixer.com script added
