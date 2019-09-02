@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.2 (30.8.2019)     
+@$VER: 1.2 (05.09.2019)     
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -13,7 +13,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.2 (2019-08-30)@{ui}
+@{i}v1.2 (2019-09-05)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -26,13 +26,13 @@ Some of these networks support search, where you can find available streams and 
 @{"Installation" LINK "Installation"}
 @{"Configure" LINK "Configure"}
 @{"Shell usage" LINK "Usage"}
-	@{"Twitch.tv" LINK "Twitch.tv"}
-	@{"Mixer.com" LINK "Mixer.com"}
-	@{"Vimeo.com" LINK "Vimeo.com"}
+@{tab}@{"Twitch.tv" LINK "Twitch.tv"}
+@{tab}@{"Mixer.com" LINK "Mixer.com"}
+@{tab}@{"Vimeo.com" LINK "Vimeo.com"}
+@{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Author" LINK "Author"}
-
 
 @endnode
 @node "Requirements" "Requirements"
@@ -91,6 +91,7 @@ The available parameters are:
 * @{b}twitchQualityWeight:@{ub} Set the preffered sort of video qualities for the Twitch.tv network. This means that the first available will be served.
 * @{b}mixerQualityWeight:@{ub} Set the preffered sort of video qualities for the Mixer.com network. This means that the first available will be served.
 * @{b}vimeoQualityWeight:@{ub} Set the preffered sort of video qualities for the Vimeo.com network. This means that the first available will be served.
+* @{b}dailymotionQualityWeight:@{ub} Set the preffered sort of video qualities for the Dailymotion.com network. This means that the first available will be served.
 
 
 @endnode
@@ -107,6 +108,7 @@ You can find usage information in the following sections, separated by network.
 @{"Twitch.tv" LINK "Twitch.tv"}
 @{"Mixer.com" LINK "Mixer.com"}
 @{"Vimeo.com" LINK "Vimeo.com"}
+@{"Dailymotion.com" LINK "Dailymotion.com"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -144,23 +146,27 @@ With this script you can:
 @{u}Available video qualities:@{uu}
 The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
 
-	chunked			Usually this is the original video 
-				quality or 1080p (1920x1080)
-	720p60			1280x720 60fps
-	720p30			1280x720 30fps
-	480p30			720x480 30fps
-	360p30			480x360 30fps
-	160p30			284x160 30fps
-	audio_only		no video, audio only
+@{lindent 10}
+Value @{tab} Resolution (may vary)
+----------------------------------
+chunked @{tab}@{tab} Usually this is the original video 
+ @{tab}@{tab} quality or 1080p (1920x1080)
+720p60 @{tab}@{tab} 1280x720 60fps
+720p30 @{tab}@{tab} 1280x720 30fps
+480p30 @{tab}@{tab} 720x480 30fps
+360p30 @{tab}@{tab} 480x360 30fps
+160p30 @{tab}@{tab} 284x160 30fps
+audio_only @{tab}no video, audio only
 
+@{lindent 3}
 @{u}Examples:@{uu}
-View a live channel streaming, like below
+Watch a live channel streaming, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname@{ub}
 
-View a recorded video, like below
+Watch a recorded video, like below
 @{b}twitch.py -u https://www.twitch.tv/videos/1234567890@{ub}
 
-View a live channel streaming at specific video quality, if this is available, like below
+Watch a live channel streaming at specific video quality, if this is available, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname -q 720p30@{ub}
 
 Search for a keyword or a game title. Include the value in double quotes, like below:
@@ -172,7 +178,6 @@ List the last 50 videos of a channel, like below
 @{u}Privacy:@{uu}
 The script uses HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
 * Your public IP
-
 
 @endnode
 @node "Mixer.com" "Mixer.com"
@@ -212,20 +217,24 @@ The following list includes all the available video qualities. At the configurat
 
 Usually, the recorded videos are available only on 720p resolution.
 
-	1080p		1920x1080 
-	720p		1280x720
-	480p		720x480
-	320p		480x320
-	160p		284x160
+@{lindent 10}
+Value @{tab} Resolution (may vary)
+----------------------------------
+1080p @{tab} 1920x1080 
+720p @{tab} 1280x720
+480p @{tab} 720x480
+320p @{tab} 480x320
+160p @{tab} 284x160
 
+@{lindent 3}
 @{u}Examples:@{uu}
-View a live channel streaming, like below
+Watch a live channel streaming, like below
 @{b}mixer.py -u https://mixer.com/channelname@{ub}
 
-View a recorded video, like below
+Watch a recorded video, like below
 @{b}mixer.py -u https://mixer.com/channelname?vod=1234567890@{ub}
 
-View a live channel streaming at specific video quality, if this is available, like below
+Watch a live channel streaming at specific video quality, if this is available, like below
 @{b}mixer.py -u https://mixer.com/channelname -q 720p@{ub}
 
 Search for a keyword or a game title. Include the value in double quotes, like below:
@@ -262,20 +271,73 @@ The following list includes all the available video qualities. At the configurat
 
 Usually, the recorded videos are available only on 720p resolution.
 
-	1080p		1920x1080 
-	720p		1280x720
-	540p		960x540
-	480p		720x480
-	360p		480x360
-	240p		284x160
+@{lindent 10}
+Value @{tab} Resolution (may vary)
+----------------------------------
+1080p @{tab} 1920x1080 
+720p @{tab} 1280x720
+540p @{tab} 960x540
+480p @{tab} 720x480
+360p @{tab} 480x360
+240p @{tab} 284x160
 
+@{lindent 3}
 @{u}Examples:@{uu}
-View a recorded video, like below
+Watch a recorded video, like below
 @{b}vimeo.py -u https://vimeo.com/categoty/channelname/1234567890@{ub}
 @{b}vimeo.py -u https://vimeo.com/1234567890@{ub}
 
+Watch a recorded video at specific video quality, if this is available, like below
+@{b}mixer.py -u https://vimeo.com/1234567890 -q 720p@{ub}
+
 @{u}Privacy:@{uu}
 No private info is sent by this script to Vimeo.com.
+
+@endnode
+@node "Dailymotion.com" "Dailymotion.com"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Dailymotion.com@{ub}
+
+This script works with Dailymotion.com website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch recorded videos
+* autoplay videos with ffplay or mplayer
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video url from Dailymotion.com
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+Usually, the recorded videos are available only on 720p resolution.
+
+@{lindent 10}
+Value @{tab} Resolution (may vary)
+----------------------------------
+1080 @{tab} 1920x1080 
+720 @{tab} 1280x720
+480 @{tab} 720x480
+380 @{tab} 512x288
+240 @{tab} 320x184
+144 @{tab} 192x112
+
+@{lindent 3}
+@{u}Examples:@{uu}
+Watch a recorded video, like below
+@{b}dailymotion.py -u https://www.dailymotion.com/video/x7iifgh@{ub}
+
+Watch a recorded video at specific video quality, if this is available, like below
+@{b}mixer.py -u https://www.dailymotion.com/video/x7iifgh -q 720@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to dailymotion.com.
 
 @endnode
 @node "Todo" "Todo"
@@ -284,19 +346,18 @@ No private info is sent by this script to Vimeo.com.
 @{jleft}@{lindent 3}
 @{b}Todo list@{ub}
 
-You can find the todo list and the status of them at:
+The todo list is something that might change a lot between the version releases. You can find the up to date todo list and the status of things I am working on, at:
 https://github.com/walkero-gr/aiostreams/projects/1
 
 Many things:
 * MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
 * Reuters.tv support
-* Dailymotion support
 * Support Emotion player, if possible.
 * AmigaOS 3 and AROS support.
 * A way to get a notification on which of your favorite channels are currently streaming.
+* Add silence mode
 
-If you have any websites that you would like to be supported, please contact me and I will check if this possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used out of their websites.
-
+If you have any websites that you would like to be supported, please contact me and I will check if this is possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used outside their websites.
 
 @endnode
 @node "Changelog" "Changelog"
@@ -307,6 +368,7 @@ If you have any websites that you would like to be supported, please contact me 
 
 v1.2
 * Vimeo.com script added
+* Dailymotion.com script added
 * simplem3u8 parser updated
 * Added links in the AmigaGuide file, that use URLOpen
 
@@ -319,9 +381,6 @@ v1.0
 * Initial release
 * Twitch.tv script added
 * Simple m3u8 parser created
-
-
-
 
 @endnode
 @node "Author" "Author"
@@ -344,8 +403,5 @@ https://twitter.com/gsokianos @{"open" SYSTEM "c:URLOpen https://twitter.com/gso
 
 If you would like to support me and this project, you can donate at:
 https://www.paypal.me/gsokianos @{"Donate" SYSTEM "c:URLOpen https://www.paypal.me/gsokianos"}
-
-
-
 
 @endnode
