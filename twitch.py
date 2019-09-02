@@ -248,7 +248,7 @@ def main(argv):
 							if cfg.autoplay:
 								# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
 								if (userOS == 'os4'):
-									amiga.system( "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+									amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 						else:
 							print "Not valid stream found"
 					else:
@@ -274,7 +274,7 @@ def main(argv):
 						if cfg.autoplay:
 							# print "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs)
 							if (userOS == 'os4'):
-								amiga.system( "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
+								amiga.system( "Run <>NIL: %s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
 					else:
 						print "Not valid video found"
 				else:

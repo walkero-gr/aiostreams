@@ -68,8 +68,8 @@ class helpersHandler:
 		if (types['video_id']):
 			return {'type': 'video', 'id': types['video_id']}
 
-		if (types['videos_id']):
-			return {'type': 'video', 'id': types['videos_id'], 'channel': types['channel']}
+		#if (types['videos_id']):
+		#	return {'type': 'video', 'id': types['videos_id'], 'channel': types['channel']}
 
 		return None
 
@@ -88,6 +88,10 @@ class helpersHandler:
 		
 	def uniStrip(self, text):
 		return re.sub(r'[^\x00-\x7f]',r'', text)
+		
+	def clearUri(self, uri):
+		uriSplit = uri.split('#')
+		return uriSplit[0]
 
 def main(argv):
 	dailymotionApi = dailymotionAPIHandler()
@@ -127,13 +131,14 @@ def main(argv):
 
 			if (m3u8Response):
 				uri = helpers.getPrefferedVideoURL(m3u8Response)
+				uri = helpers.clearUri(uri)
 				if uri:
 					if cfg.verbose and (args.silence != True):
 						print "%s" % (uri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
 						if (userOS == 'os4'):
-							amiga.system( "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 				else:
 					print "Not valid video found"
 		else:
