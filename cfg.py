@@ -32,3 +32,12 @@ vimeoQualityWeight = [
 	"720p",
 	"1080p"
 ]
+
+dailymotionQualityWeight = [
+	"480",
+	"380",
+	"240",
+	"144"
+	"720",
+	"1080"
+]
