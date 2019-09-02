@@ -123,7 +123,6 @@ def main(argv):
 	helpers = helpersHandler()
 	global videoQualities
 
-	helpers.introText()
 	if len(argv) == 0:
 		print "No arguments given. Use vimeo.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
@@ -132,8 +131,11 @@ def main(argv):
 	argParser = argparse.ArgumentParser(description='This is a python script that uses vimeo.com to get information about videos for AmigaOS 4.1 and above.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from vimeo.com')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
+	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
 	args = argParser.parse_args()
 
+	if (args.silence != True):
+		helpers.introText()
 	if (args.url):
 		vimeoURL = args.url
 		video = helpers.getVideoType(args.url)
@@ -158,7 +160,7 @@ def main(argv):
 				uri = helpers.getPrefferedVideoURL(m3u8Response)
 				if uri:
 					playlistUri = helpers.buildUri(cdns[idx]['url'], uri)
-					if cfg.verbose:
+					if cfg.verbose and (args.silence != True):
 						print "%s" % (playlistUri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, playlistUri, cfg.sPlayerArgs)

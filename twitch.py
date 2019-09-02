@@ -188,7 +188,6 @@ def main(argv):
 	video = {'type': ''}
 	playlists = dict()
 	
-	helpers.introText()
 	if len(argv) == 0:
 		print "No arguments given. Use twitch.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
@@ -199,8 +198,11 @@ def main(argv):
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
 	argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Search for available streams based on game title')
 	argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
+	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
 	args = argParser.parse_args()
 	
+	if (args.silence != True):
+		helpers.introText()
 	if (args.url):
 		twitchURL = args.url
 		video = helpers.getVideoType(args.url)
@@ -241,7 +243,7 @@ def main(argv):
 					if (m3u8Response):
 						uri = helpers.getPrefferedVideoURL(m3u8Response)
 						if uri:
-							if cfg.verbose:
+							if cfg.verbose and (args.silence != True):
 								print "%s" % (uri)
 							if cfg.autoplay:
 								# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
@@ -267,7 +269,7 @@ def main(argv):
 				if (m3u8Response):
 					uri = helpers.getPrefferedVideoURL(m3u8Response)
 					if uri:
-						if cfg.verbose:
+						if cfg.verbose and (args.silence != True):
 							print "%s" % (uri)
 						if cfg.autoplay:
 							# print "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs)

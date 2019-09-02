@@ -142,6 +142,8 @@ With this script you can:
   -cv, --channel-videos
                         Request the recorded videos of a channel. The -u
                         argument is mandatory.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
 
 @{u}Available video qualities:@{uu}
 The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
@@ -211,6 +213,8 @@ With this script you can:
   -cv, --channel-videos
                         Request the recorded videos of a channel. The -u
                         argument is mandatory.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
 
 @{u}Available video qualities:@{uu}
 The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
@@ -265,6 +269,8 @@ With this script you can:
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
 
 @{u}Available video qualities:@{uu}
 The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
@@ -312,6 +318,8 @@ With this script you can:
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
 
 @{u}Available video qualities:@{uu}
 The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
@@ -371,6 +379,7 @@ v1.2
 * Dailymotion.com script added
 * simplem3u8 parser updated
 * Added links in the AmigaGuide file, that use URLOpen
+* Added the silence parameter, that prevents the script to output anything, except the errors or the results of a search
 
 v1.1
 * Mixer.com script added

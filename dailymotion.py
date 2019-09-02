@@ -94,7 +94,6 @@ def main(argv):
 	helpers = helpersHandler()
 	global videoQualities
 
-	helpers.introText()
 	if len(argv) == 0:
 		print "No arguments given. Use dailymotion.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
@@ -103,8 +102,11 @@ def main(argv):
 	argParser = argparse.ArgumentParser(description='This is a python script that uses dailymotion.com to get information about videos for AmigaOS 4.1 and above.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from dailymotion.com')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
+	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
 	args = argParser.parse_args()
 
+	if (args.silence != True):
+		helpers.introText()
 	if (args.url):
 		dailymotionURL = args.url
 		video = helpers.getVideoType(args.url)
@@ -126,7 +128,7 @@ def main(argv):
 			if (m3u8Response):
 				uri = helpers.getPrefferedVideoURL(m3u8Response)
 				if uri:
-					if cfg.verbose:
+					if cfg.verbose and (args.silence != True):
 						print "%s" % (uri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)

@@ -162,7 +162,6 @@ def main(argv):
 	helpers = helpersHandler()
 	playlists = dict()
 	
-	helpers.introText()
 	if len(argv) == 0:
 		print "No arguments given. Use mixer.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
@@ -175,8 +174,11 @@ def main(argv):
 	argParser.add_argument('-tg', '--top-games', action='store_true', default=False, dest='topgames', help='Get a list of the current Top Games that are live, based on their viewers')
 	argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Search for available streams based on game title')
 	argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
+	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
 	args = argParser.parse_args()
 	
+	if (args.silence != True):
+		helpers.introText()
 	if (args.url):
 		mixerURL = args.url
 		video = helpers.getVideoType(args.url)
@@ -243,16 +245,17 @@ def main(argv):
 		if (channelInfo):
 			channelID = channelInfo['id']
 			channelType = channelInfo['type']
-			print "Name: %s" % (helpers.uniStrip(channelInfo['name']))
-			print "Type: %s/%s" % (channelType['parent'], channelType['name'])
-			print "Total Viewers: %d" % (channelInfo['viewersTotal'])
-			print "Current Viewers: %d" % (channelInfo['viewersCurrent'])
+			if (args.silence != True):
+				print "Name: %s" % (helpers.uniStrip(channelInfo['name']))
+				print "Type: %s/%s" % (channelType['parent'], channelType['name'])
+				print "Total Viewers: %d" % (channelInfo['viewersTotal'])
+				print "Current Viewers: %d" % (channelInfo['viewersCurrent'])
 
 			m3u8Response = mixerApi.getStreamsByChannelID(channelID)
 			if (m3u8Response):
 				uri = helpers.getPrefferedVideoURL(m3u8Response)
 				if uri:
-					if cfg.verbose:
+					if cfg.verbose and (args.silence != True):
 						print "%s" % (uri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
@@ -278,7 +281,7 @@ def main(argv):
 					break
 
 			if uri:		
-				if cfg.verbose:
+				if cfg.verbose and (args.silence != True):
 					print "%s" % (uri)
 				if cfg.autoplay:
 					# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
