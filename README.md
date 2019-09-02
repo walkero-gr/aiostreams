@@ -13,9 +13,10 @@ The scripts might work under Linux and MacOS X, but those systems are not the ta
 
 A full list:
 * Python 2.5
+* [Pythonssl][1]
 * The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation
-* ffplay for the online live streaming videos, or something equivalent
-* mplayer for the online recorded videos, or something equivalent
+* [ffplay][2] for the online live streaming videos, or something equivalent
+* [mplayer][3] for the online recorded videos, or something equivalent
 * internet access
 
 #### Docker
@@ -28,3 +29,8 @@ docker run -it --rm --name aiostreams -v "$PWD":/usr/src/myapp -w /usr/src/myapp
 docker exec -it aiostreams bash
 python twitch.py
 ```
+
+[1]: http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha
+[2]: http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha
+[3]: http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer
+[blog]: https://walkero.gr
