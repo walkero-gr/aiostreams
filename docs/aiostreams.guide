@@ -49,6 +49,7 @@ They are developed and fully tested under AmigaOS 4.1 FE. There will be support 
 The scripts might work under Linux and MacOS X, but those systems are not the target of this project. There are other solution that might do better work.
 
 A full list:
+* AmigaOS 4.1 FE upd1 installed
 * Python 2.5
 * Pythonssl @{" 1 " SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha"}
 * The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation.
@@ -69,9 +70,23 @@ Links
 @{jleft}@{lindent 3}
 @{b}Installation@{ub}
 
-Unarchive the file wherever you want. It will work even from temporary mounted storage, i.e. USB, CDRom or RAM.
+@{u}AmigaOS 4.1 FE upd1@{uu}
+* Download and install @{"Pythonssl" SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha"} on your system.
+* Download and install @{"ffmpeg" SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha"} package on your system.
+* Download and install @{"mplayer" SYSTEM "c:URLOpen http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer"} package on your system.
+* Unarchive the aiostreams file wherever you want. 
 
-The scripts do not write anything to the disks, so they don't need the storage to be writable.
+@{u}AmigaOS 3@{uu}
+TBD - In @{"Todo List" LINK "Todo"}
+
+@{u}MorphOS@{uu}
+TBD - In @{"Todo List" LINK "Todo"}
+
+@{u}AROS@{uu}
+TBD - In @{"Todo List" LINK "Todo"}
+
+@{u}Have in mind@{uu}
+aiostreams scripts will work even from temporary mounted storage drives, i.e. USB, CDRom or RAM. The scripts do not write anything to the disk, so they don't even need the storage to be writable.
 
 @endnode
 @node "Configure" "Configure"
