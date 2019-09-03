@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.2 (05.09.2019)     
+@$VER: 1.2 (03.09.2019)     
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -13,7 +13,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.2 (2019-09-05)@{ui}
+@{i}v1.2 (2019-09-03)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -172,13 +172,13 @@ The following list includes all the available video qualities. At the configurat
 @{lindent 10}
 Value @{tab} Resolution (may vary)
 ----------------------------------
-chunked @{tab}@{tab} Usually this is the original video 
+chunked @{tab} Usually this is the original video 
  @{tab}@{tab} quality or 1080p (1920x1080)
-720p60 @{tab}@{tab} 1280x720 60fps
-720p30 @{tab}@{tab} 1280x720 30fps
-480p30 @{tab}@{tab} 720x480 30fps
-360p30 @{tab}@{tab} 480x360 30fps
-160p30 @{tab}@{tab} 284x160 30fps
+720p60 @{tab} 1280x720 60fps
+720p30 @{tab} 1280x720 30fps
+480p30 @{tab} 720x480 30fps
+360p30 @{tab} 480x360 30fps
+160p30 @{tab} 284x160 30fps
 audio_only @{tab}no video, audio only
 
 @{lindent 3}
@@ -253,10 +253,10 @@ Usually, the recorded videos are available only on 720p resolution.
 Value @{tab} Resolution (may vary)
 ----------------------------------
 1080p @{tab} 1920x1080 
-720p @{tab} 1280x720
-480p @{tab} 720x480
-320p @{tab} 480x320
-160p @{tab} 284x160
+720p @{tab}@{tab} 1280x720
+480p @{tab}@{tab} 720x480
+320p @{tab}@{tab} 480x320
+160p @{tab}@{tab} 284x160
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -309,11 +309,11 @@ Usually, the recorded videos are available only on 720p resolution.
 Value @{tab} Resolution (may vary)
 ----------------------------------
 1080p @{tab} 1920x1080 
-720p @{tab} 1280x720
-540p @{tab} 960x540
-480p @{tab} 720x480
-360p @{tab} 480x360
-240p @{tab} 284x160
+720p @{tab}@{tab} 1280x720
+540p @{tab}@{tab} 960x540
+480p @{tab}@{tab} 720x480
+360p @{tab}@{tab} 480x360
+240p @{tab}@{tab} 284x160
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -357,12 +357,12 @@ Usually, the recorded videos are available only on 720p resolution.
 @{lindent 10}
 Value @{tab} Resolution (may vary)
 ----------------------------------
-1080 @{tab} 1920x1080 
-720 @{tab} 1280x720
-480 @{tab} 720x480
-380 @{tab} 512x288
-240 @{tab} 320x184
-144 @{tab} 192x112
+1080 @{tab}@{tab} 1920x1080 
+720 @{tab}@{tab} 1280x720
+480 @{tab}@{tab} 720x480
+380 @{tab}@{tab} 512x288
+240 @{tab}@{tab} 320x184
+144 @{tab}@{tab} 192x112
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -412,7 +412,7 @@ No private info is sent by this script to Skaitv.gr.
 @{b}Todo list@{ub}
 
 The todo list is something that might change a lot between the version releases. You can find the up to date todo list and the status of things I am working on, at:
-https://github.com/walkero-gr/aiostreams/projects/1
+https://github.com/walkero-gr/aiostreams/projects/1 @{"open" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/projects/1"}
 
 Many things:
 * MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
