@@ -86,10 +86,12 @@ class twitchAPIHandler:
 		endpoint = "api/vods/%s/access_token.json" % (videoId)
 		return self.call(endpoint)
 
-	def searchByGameTitle(self, title):
+	def searchByGameTitle(self, title, offset = 0, limit = 50):
 		endpoint = "kraken/search/streams"
 		query = {
-			"query": title
+			"query": title,
+			"limit": limit,
+			"offset": offset
 		}
 		return self.call(endpoint, query)
 	
@@ -97,6 +99,23 @@ class twitchAPIHandler:
 		endpoint = "kraken/channels/%s/videos" % (channelName)
 		query = {
 			"limit": 50
+		}
+		return self.call(endpoint, query)
+
+	def getTopStreams(self, offset = 0, limit = 50):
+		endpoint = "kraken/streams"
+		query = {
+			"stream_type": "live",
+			"limit": limit,
+			"offset": offset
+		}
+		return self.call(endpoint, query)
+
+	def getTopGames(self, offset = 0, limit = 50):
+		endpoint = "kraken/games/top"
+		query = {
+			"limit": limit,
+			"offset": offset
 		}
 		return self.call(endpoint, query)
 
@@ -192,6 +211,8 @@ def main(argv):
 	argParser = argparse.ArgumentParser(description='This is a python script that uses twitch.tv API to get information about channels/videos for AmigaOS 4.1 and above.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from twitch.tv')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
+	argParser.add_argument('-ts', '--top-streams', action='store_true', default=False, dest='topstreams', help='Get a list of the current Top Streams that are live')
+	argParser.add_argument('-tg', '--top-games', action='store_true', default=False, dest='topgames', help='Get a list of the current Top Games that are live, based on their viewers')
 	argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Search for available streams based on game title')
 	argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
 	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
@@ -204,6 +225,24 @@ def main(argv):
 		video = helpers.getVideoType(args.url)
 	if (args.quality):
 		cfg.twitchQualityWeight.insert(0, args.quality)
+
+	if (args.topstreams):
+		streamList = twitchApi.getTopStreams()
+		print "%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title')
+		print "%s" % ('-'*200)
+		for stream in streamList['streams']:
+			print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (stream['channel']['url'], stream['viewers'], stream['channel']['language'], stream['game'], helpers.uniStrip(stream['channel']['status']))
+
+		sys.exit()
+
+	if (args.topgames):
+		gamesList = twitchApi.getTopGames()
+		print "%-50s\t %-10s\t %-10s" % ('Game', 'Viewers', 'Channels')
+		print "%s" % ('-'*200)
+		for game in gamesList['top']:
+			print "%-50s\t %-10d\t %-10d" % (helpers.uniStrip(game['game']['name']), game['viewers'], game['channels'])
+
+		sys.exit()
 
 	if (args.channelvideos):
 		channelName = video['id']

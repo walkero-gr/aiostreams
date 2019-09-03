@@ -139,6 +139,9 @@ With this script you can:
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
+  -ts, --top-streams    Get a list of the current Top Streams that are live
+  -tg, --top-games      Get a list of the current Top Games that are live,
+                        based on their viewers
   -sg SEARCHGAME, --search-game SEARCHGAME
                         Search for available streams based on game title
   -cv, --channel-videos
@@ -178,6 +181,12 @@ Search for a keyword or a game title. Include the value in double quotes, like b
 
 List the last 50 videos of a channel, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname -cv@{ub}
+
+List the 50 Top Games based on the viewers, like below
+@{b}twitch.py -tg@{ub}
+
+List the 50 Top Streams based on the viewers, like below
+@{b}twitch.py -ts@{ub}
 
 @{u}Privacy:@{uu}
 The script uses HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
@@ -413,6 +422,10 @@ v1.2
 * Added links in the AmigaGuide file, that use URLOpen
 * Added the silence parameter, that prevents the script to output anything, except the errors or the results of a search
 * Documentation updated
+* Removed version per script
+* Added Top Games list in twitch.py script. This returns the 50 Top Games based on the number of viewers.
+* Added Top Streams list in twitch.py script. This returns the 50 Top Streams based on the number of viewers.
+* Increased game search results list to 50 items in twitch.py script.
 
 v1.1
 * Mixer.com script added
