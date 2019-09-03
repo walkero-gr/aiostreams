@@ -13,10 +13,6 @@ try:
 	userOS = "os4"
 except:
 	pass
-# http://www.skaitv.gr/episode/enimerosi/oi-eidiseis-tou-ska-stis-2/2019-09-02-14
-# http://www.skaitv.gr/episode/enimerosi/ta-nea-tou-ska-stis-2000/2019-09-02-19
-# http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23
-# http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23/radio-arbula-istories-agapis-20052019
 
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?skaitv\.gr/
