@@ -154,9 +154,10 @@ With this script you can:
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
-  -ts, --top-streams    Get a list of the current Top Streams that are live
-  -tg, --top-games      Get a list of the current Top Games that are live,
-                        based on their viewers
+  -ts, --top-streams    Get a list of the current Top Live Streams, based on
+                        the number of viewers
+  -tg, --top-games      Get a list of the current Top Games with live streams
+                        available, based on the number of viewers
   -sg SEARCHGAME, --search-game SEARCHGAME
                         Search for available streams based on game title
   -cv, --channel-videos
@@ -231,9 +232,10 @@ With this script you can:
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
-  -ts, --top-streams    Get a list of the current Top Streams that are live
-  -tg, --top-games      Get a list of the current Top Games that are live,
-                        based on their viewers
+  -ts, --top-streams    Get a list of the current Top Live Streams, based on
+                        the number of viewers
+  -tg, --top-games      Get a list of the current Top Games with live streams
+                        available, based on the number of viewers
   -sg SEARCHGAME, --search-game SEARCHGAME
                         Search for available streams based on game title
   -cv, --channel-videos
