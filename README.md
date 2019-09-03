@@ -24,7 +24,7 @@ They are developed and fully tested under AmigaOS 4.1 FE. There will be support 
 * internet access
 * 
 #### Docker
-This is not necessary for using these projects. It just provides a good development environment for other systems.
+This is not necessary for using these scripts. It just provides a good development environment for other systems.
 To run the script in a docker container with Python 2.7 installed, use the following on different shells, from the script folder.
 
 ```bash
