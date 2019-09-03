@@ -30,6 +30,7 @@ Some of these networks support search, where you can find available streams and 
 @{tab}@{"Mixer.com" LINK "Mixer.com"}
 @{tab}@{"Vimeo.com" LINK "Vimeo.com"}
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
+@{tab}@{"Skaitv.gr" LINK "Skaitv.gr"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Author" LINK "Author"}
@@ -109,6 +110,7 @@ You can find usage information in the following sections, separated by network.
 @{"Mixer.com" LINK "Mixer.com"}
 @{"Vimeo.com" LINK "Vimeo.com"}
 @{"Dailymotion.com" LINK "Dailymotion.com"}
+@{"Skaitv.gr" LINK "Skaitv.gr"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -120,7 +122,7 @@ The problem right now is that the supported networks, like Twitch.tv, do not ren
 @{jleft}@{lindent 3}
 @{b}Twitch.tv@{ub}
 
-This script works with Twitch.tv website and it's available API. 
+This script supports @{"Twitch.tv" SYSTEM "c:URLOpen https://www.twitch.tv"} website and it's available API. 
 If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-sg, --search-game@{ub}.
 
 With this script you can: 
@@ -187,7 +189,7 @@ The script uses HTTPS URLs to access the Twitch.tv API and shares with the netwo
 @{jleft}@{lindent 3}
 @{b}Mixer.com@{ub}
 
-This script works with Mixer.com website and it's available API. 
+This script supports @{"Mixer.com" SYSTEM "c:URLOpen https://mixer.com"} website and it's available API. 
 If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-sg, --search-game@{ub}.
 
 With this script you can: 
@@ -256,7 +258,7 @@ No private info is sent by this script to Mixer.com API.
 @{jleft}@{lindent 3}
 @{b}Vimeo.com@{ub}
 
-This script works with Vimeo.com website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports @{"Vimeo.com" SYSTEM "c:URLOpen https://vimeo.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
 
 With this script you can: 
 * watch recorded videos
@@ -294,7 +296,7 @@ Watch a recorded video, like below
 @{b}vimeo.py -u https://vimeo.com/1234567890@{ub}
 
 Watch a recorded video at specific video quality, if this is available, like below
-@{b}mixer.py -u https://vimeo.com/1234567890 -q 720p@{ub}
+@{b}vimeo.py -u https://vimeo.com/1234567890 -q 720p@{ub}
 
 @{u}Privacy:@{uu}
 No private info is sent by this script to Vimeo.com.
@@ -305,7 +307,7 @@ No private info is sent by this script to Vimeo.com.
 @{jleft}@{lindent 3}
 @{b}Dailymotion.com@{ub}
 
-This script works with Dailymotion.com website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports @{"Dailymotion.com" SYSTEM "c:URLOpen https://www.dailymotion.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
 
 With this script you can: 
 * watch recorded videos
@@ -342,10 +344,39 @@ Watch a recorded video, like below
 @{b}dailymotion.py -u https://www.dailymotion.com/video/x7iifgh@{ub}
 
 Watch a recorded video at specific video quality, if this is available, like below
-@{b}mixer.py -u https://www.dailymotion.com/video/x7iifgh -q 720@{ub}
+@{b}dailymotion.py -u https://www.dailymotion.com/video/x7iifgh -q 720@{ub}
 
 @{u}Privacy:@{uu}
 No private info is sent by this script to dailymotion.com.
+
+@endnode
+@node "Skaitv.gr" "Skaitv.gr"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Skaitv.gr@{ub}
+
+This script supports @{"Skaitv.gr" SYSTEM "c:URLOpen http://www.skaitv.gr"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch recorded videos
+* autoplay videos with ffplay or mplayer
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video url from Skaitv.gr
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
+
+@{u}Available video qualities:@{uu}
+Usually, the recorded videos are available only on 720p resolution and there is no way to choose a different one.
+
+@{u}Examples:@{uu}
+Watch a recorded video, like below
+@{b}skaitv.py -u http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23@{ub}
+@{b}skaitv.py -u http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23/radio-arbula-istories-agapis-20052019@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to Skaitv.gr.
 
 @endnode
 @node "Todo" "Todo"
@@ -377,9 +408,11 @@ If you have any websites that you would like to be supported, please contact me 
 v1.2
 * Vimeo.com script added
 * Dailymotion.com script added
-* simplem3u8 parser updated
+* Skaitv.gr script added
+* simplem3u8 parser updated to support URLs starting with "../"
 * Added links in the AmigaGuide file, that use URLOpen
 * Added the silence parameter, that prevents the script to output anything, except the errors or the results of a search
+* Documentation updated
 
 v1.1
 * Mixer.com script added
@@ -410,7 +443,7 @@ https://walkero.gr @{"open" SYSTEM "c:URLOpen https://walkero.gr"}
 My Twitter account is:
 https://twitter.com/gsokianos @{"open" SYSTEM "c:URLOpen https://twitter.com/gsokianos"}
 
-If you would like to support me and this project, you can donate at:
+If you find this project useful, you can support it by donating at:
 https://www.paypal.me/gsokianos @{"Donate" SYSTEM "c:URLOpen https://www.paypal.me/gsokianos"}
 
 @endnode
