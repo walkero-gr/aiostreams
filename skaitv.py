@@ -1,11 +1,10 @@
 #!python
+import cfg, cmn
 import urllib, urllib2, sys, argparse, re, string
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-import cfg
 
-ver = "1.0"
 userOS = sys.platform
 
 try:
@@ -69,9 +68,6 @@ class skaiAPIHandler:
 
 
 class helpersHandler:
-	def introText(self):
-		print "skai.py v%s - Created by George Sokianos\n" % (ver)
-	
 	def parseURL(self, url):
 		return _url_re.match(url).groupdict()
 
@@ -96,22 +92,22 @@ class helpersHandler:
 		
 
 def main(argv):
+	cmnHandler = cmn.cmnHandler()
 	skaiApi = skaiAPIHandler()
 	helpers = helpersHandler()
-	global videoQualities
 
 	if len(argv) == 0:
-		print "No arguments given. Use skai.py -h for more info.\nThe script must be used from the shell."
+		print "No arguments given. Use skaitv.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
 		
 	# Parse the arguments
-	argParser = argparse.ArgumentParser(description='This is a python script that uses skai.gr to get information about videos for AmigaOS 4.1 and above.')
-	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from skai.gr')
+	argParser = argparse.ArgumentParser(description='This is a python script that uses skaitv.gr to get information about videos for AmigaOS 4.1 and above.')
+	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from skaitv.gr')
 	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
 	args = argParser.parse_args()
 
 	if (args.silence != True):
-		helpers.introText()
+		cmnHandler.showIntroText()
 	if (args.url):
 		skaiURL = args.url
 		video = helpers.getVideoType(args.url)

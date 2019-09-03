@@ -1,12 +1,11 @@
 #!python
+import cfg, cmn
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-import cfg
 
-ver = "1.0"
 clientId = "b1cb746d2751f467188edbb12997d4412b711011f640ce04"
 userOS = sys.platform
 
@@ -125,9 +124,6 @@ class mixerAPIHandler:
 		return json.loads(responseData)
 
 class helpersHandler:
-	def introText(self):
-		print "mixer.py v%s - Created by George Sokianos\n" % (ver)
-	
 	def parseURL(self, url):
 		return _url_re.match(url).groupdict()
 
@@ -158,6 +154,7 @@ class helpersHandler:
 		return re.sub(r'[^\x00-\x7f]',r'', text)
 
 def main(argv):
+	cmnHandler = cmn.cmnHandler()
 	mixerApi = mixerAPIHandler()
 	helpers = helpersHandler()
 	playlists = dict()
@@ -178,7 +175,7 @@ def main(argv):
 	args = argParser.parse_args()
 	
 	if (args.silence != True):
-		helpers.introText()
+		cmnHandler.showIntroText()
 	if (args.url):
 		mixerURL = args.url
 		video = helpers.getVideoType(args.url)

@@ -1,12 +1,11 @@
 #!python
+import cfg, cmn
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-import cfg
 
-ver = "1.0"
 userOS = sys.platform
 
 try:
@@ -58,9 +57,6 @@ class vimeoAPIHandler:
 
 
 class helpersHandler:
-	def introText(self):
-		print "vimeo.py v%s - Created by George Sokianos\n" % (ver)
-	
 	def parseURL(self, url):
 		return _url_re.match(url).groupdict()
 
@@ -119,6 +115,7 @@ class helpersHandler:
 		return retUri
 
 def main(argv):
+	cmnHandler = cmn.cmnHandler()
 	vimeoApi = vimeoAPIHandler()
 	helpers = helpersHandler()
 	global videoQualities
@@ -135,7 +132,7 @@ def main(argv):
 	args = argParser.parse_args()
 
 	if (args.silence != True):
-		helpers.introText()
+		cmnHandler.showIntroText()
 	if (args.url):
 		vimeoURL = args.url
 		video = helpers.getVideoType(args.url)
