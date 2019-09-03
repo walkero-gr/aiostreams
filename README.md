@@ -7,14 +7,14 @@ Some of these networks have a search API, and you can use them to find available
 
 They are developed and fully tested under AmigaOS 4.1 FE. There will be support for other systems in the future, like MorphOS, AmigaOS 3 and AROS, as long as Python is supported. The scripts might work under Linux and MacOS X, but those systems are not the target of this project. There are other solution available that work better.
 
-Supported networks:
-* Twitch.tv
-* Mixer.com
-* Vimeo.com
-* Dailymotion.com
-* Skaitv.gr
+### Supported networks:
+* [Twitch.tv](https://www.twitch.tv/)
+* [Mixer.com](https://mixer.com/)
+* [Vimeo.com](https://vimeo.com/)
+* [Dailymotion.com](https://www.dailymotion.com)
+* [Skaitv.gr](http://www.skaitv.gr/)
 
-Requirements:
+### Requirements
 * [AmigaOS 4.1 FE upd1][amigaos]
 * Python 2.5
 * [Pythonssl][pythonssl]
