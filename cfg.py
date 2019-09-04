@@ -43,6 +43,9 @@ dailymotionQualityWeight = [
 ]
 
 ytQualityWeight = [
+	43,			# 360p mp4, audio quality medium
+	18,			# 360p mp4, audio quality low
+	22,			# 720p mp4, audio quality medium
 	135,		# 480p mp4
 	244,		# 480p webm
 	134,		# 360p mp4

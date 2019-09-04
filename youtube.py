@@ -1,6 +1,7 @@
 #!python
 import cfg, cmn
-import urllib, urllib2, sys, argparse, re, string, urlparse
+import urllib, urllib2, sys, argparse, re, string
+import myurlparse as urlparse
 import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
@@ -141,7 +142,7 @@ def main(argv):
 			vUrlParsed = urlparse.parse_qs(videoInfo)
 			playerResponse = vUrlParsed['player_response']
 			response = json.loads(playerResponse[0])
-			
+
 			if response['playabilityStatus']['status'] != "OK":
 				print response['playabilityStatus']['reason']
 				sys.exit()
@@ -151,16 +152,26 @@ def main(argv):
 				print "Author: %s" % (response['videoDetails']['author'])
 				if (response['videoDetails']['isLiveContent'] == False):
 					print "Length: %ssec" % (response['videoDetails']['lengthSeconds'])
-					uri = helpers.getPrefferedVideoURL(response['streamingData']['adaptiveFormats'])
+					print "%-5s\t %-10s\t %-16s\t %-10s\t %s" % ('TagID', 'Quality', 'Audio Quality', 'Resolution', 'Mime type')
+					print "%s" % ('-'*200)
+					for format in response['streamingData']['formats']:
+						print "%-5s\t %-10s\t %-16s\t %sx%s\t %s" % (format['itag'], format['qualityLabel'], format['audioQuality'], format['width'], format['height'], format['mimeType'])
 				
 				if (response['videoDetails']['isLiveContent']):
 					print "Live streaming with %s viewers" % (response['videoDetails']['viewCount'])
-					m3u8Response = ytApi.getLiveStreams(response['streamingData']['hlsManifestUrl'])
-					if m3u8Response:
-						uri = helpers.getPrefferedVideoURL(m3u8Response, True)
-				
-				print "\nDescription:\n%s\n%s" % ('-'*30, response['videoDetails']['shortDescription'])
+						
+				print "\nDescription:\n%s\n%s" % ('-'*30, helpers.uniStrip(response['videoDetails']['shortDescription']))
 
+			if (response['videoDetails']['isLiveContent'] == False):
+				#uri = helpers.getPrefferedVideoURL(response['streamingData']['adaptiveFormats'])
+				#uri = response['streamingData']['formats'][0]['url']
+				uri = helpers.getPrefferedVideoURL(response['streamingData']['formats'])
+					
+			if (response['videoDetails']['isLiveContent']):
+				m3u8Response = ytApi.getLiveStreams(response['streamingData']['hlsManifestUrl'])
+				if m3u8Response:
+					uri = helpers.getPrefferedVideoURL(m3u8Response, True)					
+					
 			if (uri):
 				if cfg.verbose and (args.silence != True):
 					print "\n%s" % (uri)
