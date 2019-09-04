@@ -37,7 +37,35 @@ dailymotionQualityWeight = [
 	"480",
 	"380",
 	"240",
-	"144"
+	"144",
 	"720",
 	"1080"
+]
+
+ytQualityWeight = [
+	135,		# 480p mp4
+	244,		# 480p webm
+	134,		# 360p mp4
+	243,		# 360p webm
+	242,		# 240p mp4
+	136,		# 240p webm
+	160,		# 144p mp4
+	278,		# 144p webm
+	136,		# 720p mp4
+	247,		# 720p webm
+	137,		# 1080p mp4
+	248,		# 1080p webm
+	140,		# mp4, audio only, 44100, medium
+	249,		# webm, audio only, 48000, low
+	250,		# webm, audio only, 48000, low
+	251,		# webm, audio only, 48000, medium
+]
+
+ytLiveQualityWeight = [
+	480,		# 480p mp4
+	360,		# 360p mp4
+	240,		# 240p mp4
+	144,		# 144p mp4
+	720,		# 720p mp4
+	1080		# 1080p mp4
 ]
