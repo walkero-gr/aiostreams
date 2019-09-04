@@ -1,6 +1,6 @@
 #!python
-aioVer = "1.2"
-aioReleaseDate = "2019-09-03"
+aioVer = "1.3"
+aioReleaseDate = "2019-09-15"
 
 
 class cmnHandler:
