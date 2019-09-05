@@ -64,12 +64,13 @@ class mixerAPIHandler:
 		}
 		return self.call(endpoint, query)
 
-	def getTopStreamsByGameID(self, gameID):
+	def getTopStreamsByGameID(self, gameID, page = 0, limit = 50):
 		endpoint = "channels"
 		query = {
 			"order": "viewersCurrent:DESC",
 			"where": "typeId:eq:%d,online:eq:true" % (gameID),
-			"page": 0
+			"limit": limit,
+			"page": page
 		}
 		responseData = self.call(endpoint, query)
 		if responseData:
@@ -83,42 +84,48 @@ class mixerAPIHandler:
 			return json.loads(responseData)
 		return None
 
-	def searchByGameTitle(self, title):
+	def searchByGameTitle(self, title, page = 0, limit = 50):
 		endpoint = "types"
 		query = {
 			"order": "viewersCurrent:DESC",
 			"where": "name:eq:%s" % (title),
-			"page": 0
+			"limit": limit,
+			"page": page
 		}
+		
 		responseData = self.call(endpoint, query)
 		if responseData:
 			return json.loads(responseData)
 		return None
 	
-	def getTopStreams(self):
+	def getTopStreams(self, page = 0, limit = 50):
 		endpoint = "channels"
 		query = {
 			"order": "viewersCurrent:DESC",
 			"where": "online:eq:true",
-			"page": 0
+			"limit": limit,
+			"page": page
 		}
 		responseData = self.call(endpoint, query)
 		return json.loads(responseData)
 
-	def getTopGames(self):
+	def getTopGames(self, page = 0, limit = 50):
 		endpoint = "types"
 		query = {
 			"order": "viewersCurrent:DESC",
 			"where": "parent:eq:Games",
-			"page": 0
+			"limit": limit,
+			"page": page
 		}
 		responseData = self.call(endpoint, query)
 		return json.loads(responseData)
 
-	def getVideosByChannel(self, channelID):
+	def getVideosByChannel(self, channelID, page = 0, limit = 50):
 		endpoint = "channels/%d/recordings" % (channelID)
 		query = {
-			"order": "createdAt:DESC"
+			"order": "createdAt:DESC",
+			"limit": limit,
+			"page": page
 		}
 		responseData = self.call(endpoint, query)
 		return json.loads(responseData)
@@ -185,12 +192,12 @@ def main(argv):
 
 	if (args.topstreams):
 		streamList = mixerApi.getTopStreams()
-		print "%-36s\t %-20s\t %-50s\t %s" % ('URL', 'Type', 'Game', 'Title')
+		print "%-36s\t %-10s\t %-10s\t %-50s\t %s" % ('URL', 'Type', 'Viewers', 'Game', 'Title')
 		print "%s" % ('-'*200)
 		for stream in streamList:
 			streamType = stream['type']
 			streamUrl = ''.join(["https://mixer.com/", stream['token']])
-			print "%-36s\t %-20s\t %-50s\t %s" % (streamUrl, streamType['parent'], streamType['name'], helpers.uniStrip(stream['name']))
+			print "%-36s\t %-10s\t %-10d\t %-50s\t %s" % (streamUrl, streamType['parent'], stream['viewersCurrent'], streamType['name'], helpers.uniStrip(stream['name']))
 
 		sys.exit()
 
