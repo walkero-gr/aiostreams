@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.2 (03.09.2019)     
+@$VER: 1.3 (15.09.2019)     
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -13,7 +13,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.2 (2019-09-03)@{ui}
+@{i}v1.3 (2019-09-15)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -28,6 +28,7 @@ Some of these networks support search, where you can find available streams and 
 @{"Shell usage" LINK "Usage"}
 @{tab}@{"Twitch.tv" LINK "Twitch.tv"}
 @{tab}@{"Mixer.com" LINK "Mixer.com"}
+@{tab}@{"YouTube.com" LINK "YouTube.com"}
 @{tab}@{"Vimeo.com" LINK "Vimeo.com"}
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
 @{tab}@{"Skaitv.gr" LINK "Skaitv.gr"}
@@ -124,6 +125,7 @@ You can find usage information in the following sections, separated by network.
 @{"Twitch.tv" LINK "Twitch.tv"}
 @{"Mixer.com" LINK "Mixer.com"}
 @{"Vimeo.com" LINK "Vimeo.com"}
+@{"YouTube.com" LINK "YouTube.com"}
 @{"Dailymotion.com" LINK "Dailymotion.com"}
 @{"Skaitv.gr" LINK "Skaitv.gr"}
 @{lindent 3}
@@ -328,6 +330,66 @@ Watch a recorded video at specific video quality, if this is available, like bel
 No private info is sent by this script to Vimeo.com.
 
 @endnode
+@node "YouTube.com" "YouTube.com"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}YouTube.com@{ub}
+
+This script supports @{"YouTube.com" SYSTEM "c:URLOpen https://youtube.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch live streams
+* watch recorded videos
+* autoplay videos with ffplay or mplayer
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video url from YouTube.com
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+Usually, the recorded videos are available only on 720p and 360p resolution.
+
+@{lindent 10}
+Recorded video qualities
+TagID @{tab} Value @{tab} Resolution (may vary)
+----------------------------------
+22 @{tab} 720p @{tab}@{tab} 1280x720, audio quality medium
+18 @{tab} 360p @{tab}@{tab} 480x360, audio quality low
+43 @{tab} 360p @{tab}@{tab} 480x360, audio quality medium
+
+Live stream qualities
+Value @{tab} Resolution (may vary)
+----------------------------------
+1080p @{tab} 1920x1080 
+720p @{tab}@{tab} 1280x720
+540p @{tab}@{tab} 960x540
+480p @{tab}@{tab} 720x480
+360p @{tab}@{tab} 480x360
+240p @{tab}@{tab} 284x160
+
+@{lindent 3}
+@{u}Examples:@{uu}
+Watch a recorded video, like below
+@{b}youtube.py -u https://www.youtube.com/watch?v=1234567890@{ub}
+
+Watch a recorded video at specific video quality, if this is available, like below
+@{b}youtube.py -u https://www.YouTube.com/watch?v=1234567890 -q 22@{ub}
+
+Watch a live stream at specific video quality, if this is available, like below
+@{b}youtube.py -u https://www.YouTube.com/watch?v=1234567890 -q 720p@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to YouTube.com.
+
+@endnode
 @node "Dailymotion.com" "Dailymotion.com"
 @prev "Usage"
 @{jleft}@{lindent 3}
@@ -430,6 +492,10 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Author"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.3
+* YouTube.com script added
+* Fixed a config file bug
 
 v1.2
 * Vimeo.com script added
