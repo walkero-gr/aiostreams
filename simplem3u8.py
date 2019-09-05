@@ -10,14 +10,14 @@ class parseHandler:
 
         for line in m3u8Data.splitlines():
             if (line.startswith("#EXT-X-MEDIA:")):
-                params = self.parseXMedia(line)
-                
-                for attribute in params:
-                    attr, val = attribute.split("=")
-                    retList[listCnt][attr.lower()] = val.lower()
+				params = self.parseExt(line, "#EXT-X-MEDIA:")
+
+				for attribute in params:
+					attr, val = attribute.split("=")
+					retList[listCnt][attr.lower()] = val.lower()
 
             if (line.startswith("#EXT-X-STREAM-INF:")):
-                params = self.parseXStreamInf(line)
+                params = self.parseExt(line, "#EXT-X-STREAM-INF:")
 
                 for attribute in params:
                     attr, val = attribute.split("=")
@@ -31,20 +31,10 @@ class parseHandler:
 
         return retList
     
-    def parseXMedia(self, line):
-        extMedia = line.replace("#EXT-X-MEDIA:", "")
+    def parseExt(self, line, tag):
+        extMedia = line.replace(tag, "")
         extMedia = extMedia.replace("\n", "")
-        extMedia = extMedia.replace("'", "")
-        extMedia = extMedia.replace('"', "")
 
         params = ATTRIBUTELISTPATTERN.split(extMedia)[1::2]
-
-        return params
-    
-    def parseXStreamInf(self, line):
-        extStream = line.replace("#EXT-X-STREAM-INF:", "")
-        extStream = extStream.replace("\n", "")
-
-        params = ATTRIBUTELISTPATTERN.split(extStream)[1::2]
 
         return params
