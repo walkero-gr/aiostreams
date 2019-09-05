@@ -35,6 +35,4 @@ class parseHandler:
         extMedia = line.replace(tag, "")
         extMedia = extMedia.replace("\n", "")
 
-        params = ATTRIBUTELISTPATTERN.split(extMedia)[1::2]
-
-        return params
+        return ATTRIBUTELISTPATTERN.split(extMedia)[1::2]
