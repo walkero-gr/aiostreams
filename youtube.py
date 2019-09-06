@@ -98,6 +98,25 @@ class ytAPIHandler:
 			return json.loads(responseData)
 		return None
 
+	def searchLiveStreams(self, title, limit = 50):
+		endpoint = "search"
+		query = {
+			"order": "viewCount",
+			"q": title,
+			"part": "snippet",
+			"type": "video",
+			"videoDefinition": "any",
+			"videoEmbeddable": "true",
+			"eventType": "live",
+			"fields": "items(id,snippet(channelTitle,description,liveBroadcastContent,title))",
+			"maxResults": limit
+		}
+		
+		responseData = self.call(endpoint, query, True)
+		if responseData:
+			return json.loads(responseData)
+		return None
+
 	def getVideoStatistics(self, videoId):
 		endpoint = "videos"
 		query = {
@@ -155,7 +174,8 @@ def main(argv):
 	argParser = argparse.ArgumentParser(description='This is a python script that uses youtube.com API to get information about videos.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
-	argParser.add_argument('-sv', '--search-video', action='store', dest='searchvideo', help='Search videos based on description')
+	argParser.add_argument('-sv', '--search-video', action='store', dest='searchvideo', help='Search recorded videos based on description')
+	argParser.add_argument('-ss', '--search-streams', action='store', dest='searchstreams', help='Search live streams based on description')
 	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
 	args = argParser.parse_args()
 
@@ -174,8 +194,8 @@ def main(argv):
 		searchQuery = args.searchvideo
 		result = ytApi.searchVideo(searchQuery)
 		
-		if result:
-			print "%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title')
+		if result['items']:
+			print "%-40s\t %-8s\t %s" % ('URL', 'Views', 'Title')
 			print "%s" % ('-'*200)
 			videosDict = dict()
 			videoIds = []
@@ -196,6 +216,37 @@ def main(argv):
 				print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
 		else:
 			print "No videos found based on the search query: %s" % (searchQuery)
+		sys.exit()
+
+	############################################################
+	# Search Live Streams By string
+	# 
+	if (args.searchstreams):
+		searchQuery = args.searchstreams
+		result = ytApi.searchLiveStreams(searchQuery)
+		
+		if result['items']:
+			print "%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title')
+			print "%s" % ('-'*200)
+			videosDict = dict()
+			videoIds = []
+			for video in result['items']:
+				videoId = video['id']['videoId']
+				videosDict[videoId] = dict()
+				videosDict[videoId]['url'] = ''.join(["https://www.youtube.com/watch?v=", videoId])
+				videosDict[videoId]['title'] = cmnHandler.uniStrip(video['snippet']['title'])
+				videoIds.append(videoId)
+			
+			# Get video statistics in one call
+			videoStats = ytApi.getVideoStatistics(','.join(videoIds))
+			for stats in videoStats['items']:
+				videoId = stats['id']
+				videosDict[videoId]['viewCount'] = stats['statistics']['viewCount']
+
+			for key, video in videosDict.items():
+				print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
+		else:
+			print "No live streams found based on the search query: %s" % (searchQuery)
 		sys.exit()
 
 	############################################################
