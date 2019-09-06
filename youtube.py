@@ -8,13 +8,6 @@ from urllib2 import Request, urlopen, URLError
 from random import random
 
 apikey = 'AIzaSyAqIPMWKY6ty9JG66oiL17ZliALtZOJuzg'
-userOS = sys.platform
-
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
 
 _url_re = re.compile(r"""(?x)https?://(?:\w+\.)?youtube\.com
     (?:
@@ -129,11 +122,6 @@ class helpersHandler:
 			return {'type': 'video', 'video_id': types['video_id']}
 
 		return None
-		
-	def uniStrip(self, text):
-		if userOS == 'os4':
-			return re.sub(r'[^\x00-\x7f]',r'', text)
-		return text
 
 	def getPrefferedVideoURL(self, data, isLive = False):
 		if isLive:
@@ -160,8 +148,10 @@ def main(argv):
 	if len(argv) == 0:
 		print "No arguments given. Use youtube.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
-		
+
+	############################################################
 	# Parse the arguments
+	# 
 	argParser = argparse.ArgumentParser(description='This is a python script that uses youtube.com API to get information about videos.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
@@ -177,9 +167,12 @@ def main(argv):
 	if (args.quality):
 		cfg.ytQualityWeight.insert(0, int(args.quality))
 
+	############################################################
+	# Search Videos By string
+	# 
 	if (args.searchvideo):
-		description = args.searchvideo
-		result = ytApi.searchVideo(description)
+		searchQuery = args.searchvideo
+		result = ytApi.searchVideo(searchQuery)
 		
 		if result:
 			print "%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title')
@@ -190,7 +183,7 @@ def main(argv):
 				videoId = video['id']['videoId']
 				videosDict[videoId] = dict()
 				videosDict[videoId]['url'] = ''.join(["https://www.youtube.com/watch?v=", videoId])
-				videosDict[videoId]['title'] = helpers.uniStrip(video['snippet']['title'])
+				videosDict[videoId]['title'] = cmnHandler.uniStrip(video['snippet']['title'])
 				videoIds.append(videoId)
 			
 			# Get video statistics in one call
@@ -202,9 +195,12 @@ def main(argv):
 			for key, video in videosDict.items():
 				print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
 		else:
-			print "No videos found based on the search query: %s" % (description)
+			print "No videos found based on the search query: %s" % (searchQuery)
 		sys.exit()
 
+	############################################################
+	# Return info for recorded/live video and stream it
+	# 
 	if (videoId):
 		videoInfo = ytApi.getVideoInfo(videoId)
 		
@@ -230,7 +226,7 @@ def main(argv):
 				if (response['videoDetails']['isLiveContent']):
 					print "Live streaming with %s viewers" % (response['videoDetails']['viewCount'])
 						
-				print "\nDescription:\n%s\n%s" % ('-'*30, helpers.uniStrip(response['videoDetails']['shortDescription']))
+				print "\nDescription:\n%s\n%s" % ('-'*30, cmnHandler.uniStrip(response['videoDetails']['shortDescription']))
 
 			if (response['videoDetails']['isLiveContent'] == False):
 				#uri = helpers.getPrefferedVideoURL(response['streamingData']['adaptiveFormats'])
@@ -247,7 +243,7 @@ def main(argv):
 					print "\n%s" % (uri)
 				if cfg.autoplay:
 					# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-					if (userOS == 'os4'):
+					if (cmnHandler.getUserOS() == 'os4'):
 						amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 			else:
 				print "Not valid video url found!"

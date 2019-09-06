@@ -5,14 +5,6 @@ import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
 
-userOS = sys.platform
-
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
-
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?skaitv\.gr/
     (?:
@@ -83,10 +75,6 @@ class helpersHandler:
 
 		return None
 
-		
-	def uniStrip(self, text):
-		return re.sub(r'[^\x00-\x7f]',r'', text)
-
 	def buildM3U8Uri(self, media):
 		return "http://videostream.skai.gr/%s.m3u8" % (media)
 		
@@ -133,7 +121,7 @@ def main(argv):
 						print "%s" % (uri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-						if (userOS == 'os4'):
+						if (cmnHandler.getUserOS() == 'os4'):
 							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 				else:
 					print "Not valid video playlist found"

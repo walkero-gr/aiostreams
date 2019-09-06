@@ -6,14 +6,6 @@ import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
 
-userOS = sys.platform
-
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
-
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?vimeo\.com/
     (?:
@@ -97,9 +89,6 @@ class helpersHandler:
 			retData[stream['id']] = stream['quality']
 
 		return retData
-		
-	def uniStrip(self, text):
-		return re.sub(r'[^\x00-\x7f]',r'', text)
 	
 	def buildUri(self, cdnurl, uri):
 		uriClean = uri.replace("../", "")
@@ -161,7 +150,7 @@ def main(argv):
 						print "%s" % (playlistUri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, playlistUri, cfg.sPlayerArgs)
-						if (userOS == 'os4'):
+						if (cmnHandler.getUserOS() == 'os4'):
 							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, playlistUri, cfg.sPlayerArgs) )
 				else:
 					print "Not valid video found"

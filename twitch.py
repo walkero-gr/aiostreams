@@ -7,14 +7,6 @@ from urllib2 import Request, urlopen, URLError
 from random import random
 
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
-userOS = sys.platform
-
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass	
-
 
 _url_re = re.compile(r"""
     http(s)?://
@@ -191,9 +183,6 @@ class helpersHandler:
 					return playlists[idx]['uri']
 		
 		return None
-		
-	def uniStrip(self, text):
-		return re.sub(r'[^\x00-\x7f]',r'', text)
 
 def main(argv):
 	cmnHandler = cmn.cmnHandler()
@@ -231,7 +220,7 @@ def main(argv):
 		print "%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title')
 		print "%s" % ('-'*200)
 		for stream in streamList['streams']:
-			print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (stream['channel']['url'], stream['viewers'], stream['channel']['language'], stream['game'], helpers.uniStrip(stream['channel']['status']))
+			print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (stream['channel']['url'], stream['viewers'], stream['channel']['language'], stream['game'], cmnHandler.uniStrip(stream['channel']['status']))
 
 		sys.exit()
 
@@ -240,7 +229,7 @@ def main(argv):
 		print "%-50s\t %-10s\t %-10s" % ('Game', 'Viewers', 'Channels')
 		print "%s" % ('-'*200)
 		for game in gamesList['top']:
-			print "%-50s\t %-10d\t %-10d" % (helpers.uniStrip(game['game']['name']), game['viewers'], game['channels'])
+			print "%-50s\t %-10d\t %-10d" % (cmnHandler.uniStrip(game['game']['name']), game['viewers'], game['channels'])
 
 		sys.exit()
 
@@ -251,7 +240,7 @@ def main(argv):
 		print "%s" % ('-'*200)
 		for stream in streamList['videos']:
 			resolutions = ', '.join(stream['resolutions'])
-			print "%-36s\t %-20s\t %-50s\t %s" % (stream['url'], stream['recorded_at'], resolutions, helpers.uniStrip(stream['title']))
+			print "%-36s\t %-20s\t %-50s\t %s" % (stream['url'], stream['recorded_at'], resolutions, cmnHandler.uniStrip(stream['title']))
 
 		sys.exit()
 
@@ -262,7 +251,7 @@ def main(argv):
 		print "%s" % ('-'*200)
 		for stream in streamList['streams']:
 			channel = stream['channel']
-			print "%-30s\t %10d\t %-s\t %-6s\t %-50s\t %-s - \"%-s\"" % (helpers.uniStrip(channel['display_name']), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], helpers.uniStrip(stream['game']), helpers.uniStrip(channel['status']))
+			print "%-30s\t %10d\t %-s\t %-6s\t %-50s\t %-s - \"%-s\"" % (cmnHandler.uniStrip(channel['display_name']), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], cmnHandler.uniStrip(stream['game']), cmnHandler.uniStrip(channel['status']))
 		
 		sys.exit()
 
@@ -282,7 +271,7 @@ def main(argv):
 								print "%s" % (uri)
 							if cfg.autoplay:
 								# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-								if (userOS == 'os4'):
+								if (cmnHandler.getUserOS() == 'os4'):
 									amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 						else:
 							print "Not valid stream found"
@@ -308,7 +297,7 @@ def main(argv):
 							print "%s" % (uri)
 						if cfg.autoplay:
 							# print "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs)
-							if (userOS == 'os4'):
+							if (cmnHandler.getUserOS() == 'os4'):
 								amiga.system( "Run <>NIL: %s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
 					else:
 						print "Not valid video found"

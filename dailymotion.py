@@ -6,14 +6,6 @@ import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
 
-userOS = sys.platform
-
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
-
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?dailymotion\.com/
     (?:
@@ -82,9 +74,6 @@ class helpersHandler:
 		
 		return None
 		
-	def uniStrip(self, text):
-		return re.sub(r'[^\x00-\x7f]',r'', text)
-		
 	def clearUri(self, uri):
 		uriSplit = uri.split('#')
 		return uriSplit[0]
@@ -134,7 +123,7 @@ def main(argv):
 						print "%s" % (uri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-						if (userOS == 'os4'):
+						if (cmnHandler.getUserOS() == 'os4'):
 							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 				else:
 					print "Not valid video found"

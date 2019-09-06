@@ -6,14 +6,7 @@ import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
 
-clientId = "b1cb746d2751f467188edbb12997d4412b711011f640ce04"
-userOS = sys.platform
-
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass	
+clientId = "b1cb746d2751f467188edbb12997d4412b711011f640ce04"	
 
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?mixer\.com/
@@ -156,9 +149,6 @@ class helpersHandler:
 						return playlists[idx]['uri']
 		
 		return None
-		
-	def uniStrip(self, text):
-		return re.sub(r'[^\x00-\x7f]',r'', text)
 
 def main(argv):
 	cmnHandler = cmn.cmnHandler()
@@ -197,7 +187,7 @@ def main(argv):
 		for stream in streamList:
 			streamType = stream['type']
 			streamUrl = ''.join(["https://mixer.com/", stream['token']])
-			print "%-36s\t %-10s\t %-10d\t %-50s\t %s" % (streamUrl, streamType['parent'], stream['viewersCurrent'], streamType['name'], helpers.uniStrip(stream['name']))
+			print "%-36s\t %-10s\t %-10d\t %-50s\t %s" % (streamUrl, streamType['parent'], stream['viewersCurrent'], streamType['name'], cmnHandler.uniStrip(stream['name']))
 
 		sys.exit()
 
@@ -206,7 +196,7 @@ def main(argv):
 		print "%-50s\t %-10s\t %-10s" % ('Game', 'Viewers', 'Streams')
 		print "%s" % ('-'*200)
 		for game in gamesList:
-			print "%-50s\t %-10d\t %-10d" % (helpers.uniStrip(game['name']), game['viewersCurrent'], game['online'])
+			print "%-50s\t %-10d\t %-10d" % (cmnHandler.uniStrip(game['name']), game['viewersCurrent'], game['online'])
 
 		sys.exit()
 
@@ -218,7 +208,7 @@ def main(argv):
 		print "%s" % ('-'*200)
 		for recording in recordingsList:
 			streamUrl = "https://mixer.com/%s?vod=%d" % (channelName, recording['id'])
-			print "%-50s\t %-30s\t %s" % (streamUrl, recording['createdAt'], helpers.uniStrip(recording['name']))
+			print "%-50s\t %-30s\t %s" % (streamUrl, recording['createdAt'], cmnHandler.uniStrip(recording['name']))
 
 		sys.exit()
 
@@ -226,8 +216,8 @@ def main(argv):
 		gameTitle = args.searchgame
 		gameData = mixerApi.searchByGameTitle(gameTitle)
 		if gameData:
-			print helpers.uniStrip(gameData[0]['name'])
-			print helpers.uniStrip(gameData[0]['description'])
+			print cmnHandler.uniStrip(gameData[0]['name'])
+			print cmnHandler.uniStrip(gameData[0]['description'])
 			print "Current Viewers: %d" % (gameData[0]['viewersCurrent'])
 			print "Available Streams: %d\n" % (gameData[0]['online'])
 
@@ -237,7 +227,7 @@ def main(argv):
 			for stream in gameStreams:
 				streamType = stream['type']
 				streamUrl = ''.join(["https://mixer.com/", stream['token']])
-				print "%-36s\t %-10d\t %-20s\t %-50s\t %s" % (streamUrl, stream['viewersCurrent'], streamType['parent'], streamType['name'], helpers.uniStrip(stream['name']))
+				print "%-36s\t %-10d\t %-20s\t %-50s\t %s" % (streamUrl, stream['viewersCurrent'], streamType['parent'], streamType['name'], cmnHandler.uniStrip(stream['name']))
 		else:
 			print "No information for the game: %s" % (gameTitle)
 		sys.exit()
@@ -250,7 +240,7 @@ def main(argv):
 			channelID = channelInfo['id']
 			channelType = channelInfo['type']
 			if (args.silence != True):
-				print "Name: %s" % (helpers.uniStrip(channelInfo['name']))
+				print "Name: %s" % (cmnHandler.uniStrip(channelInfo['name']))
 				print "Type: %s/%s" % (channelType['parent'], channelType['name'])
 				print "Total Viewers: %d" % (channelInfo['viewersTotal'])
 				print "Current Viewers: %d" % (channelInfo['viewersCurrent'])
@@ -263,7 +253,7 @@ def main(argv):
 						print "%s" % (uri)
 					if cfg.autoplay:
 						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-						if (userOS == 'os4'):
+						if (cmnHandler.getUserOS() == 'os4'):
 							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 				else:
 					print "Not valid stream found"
@@ -289,7 +279,7 @@ def main(argv):
 					print "%s" % (uri)
 				if cfg.autoplay:
 					# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-					if (userOS == 'os4'):
+					if (cmnHandler.getUserOS() == 'os4'):
 						amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 			else:
 				print "Not valid recording stream found"
