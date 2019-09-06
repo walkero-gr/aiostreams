@@ -207,7 +207,7 @@ List the 50 Top Streams based on the viewers, like below
 @{b}twitch.py -ts@{ub}
 
 @{u}Privacy:@{uu}
-The script uses HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
+The script uses secure HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
 * Your public IP
 
 @endnode
@@ -340,15 +340,20 @@ This script supports @{"YouTube.com" SYSTEM "c:URLOpen https://youtube.com"} web
 With this script you can: 
 * watch live streams
 * watch recorded videos
+* search recorded videos and live streams based on given description
 * autoplay videos with ffplay or mplayer
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
-  -u URL, --url URL     The video url from YouTube.com
+  -u URL, --url URL     The video url
   -q QUALITY, --quality QUALITY
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
+  -sv SEARCHVIDEO, --search-video SEARCHVIDEO
+                        Search recorded videos based on description
+  -ss SEARCHSTREAMS, --search-streams SEARCHSTREAMS
+                        Search live streams based on description
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
 
@@ -377,17 +382,24 @@ Value @{tab} Resolution (may vary)
 
 @{lindent 3}
 @{u}Examples:@{uu}
-Watch a recorded video, like below
+Watch a recorded video, like below,
 @{b}youtube.py -u https://www.youtube.com/watch?v=1234567890@{ub}
 
-Watch a recorded video at specific video quality, if this is available, like below
+Watch a recorded video at specific video quality, if this is available, like below,
 @{b}youtube.py -u https://www.YouTube.com/watch?v=1234567890 -q 22@{ub}
 
-Watch a live stream at specific video quality, if this is available, like below
-@{b}youtube.py -u https://www.YouTube.com/watch?v=1234567890 -q 720p@{ub}
+Watch a live stream at specific video quality, if this is available, like below,
+@{b}youtube.py -u https://www.YouTube.com/watch?v=1234567890 -q 720@{ub}
+
+Search for recorded videos. Include the search string in double quotes, like below,
+@{b}youtube.py -sv "game title" @{ub}
+
+Search for live streams. Include the search string in double quotes, like below,
+@{b}youtube.py -ss "game title" @{ub}
 
 @{u}Privacy:@{uu}
-No private info is sent by this script to YouTube.com.
+The script uses secure HTTPS URLs to access the YouTube.com API and shares with the network the following personal info:
+* Your public IP
 
 @endnode
 @node "Dailymotion.com" "Dailymotion.com"
@@ -496,6 +508,7 @@ If you have any websites that you would like to be supported, please contact me 
 v1.3
 * YouTube.com script added
 * Fixed a config file bug
+* If the running system is not AmigaOS 4, the returned texts show unicode characters. Otherwise they are stripped.
 
 v1.2
 * Vimeo.com script added
