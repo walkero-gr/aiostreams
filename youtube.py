@@ -7,6 +7,7 @@ import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
 
+apikey = 'AIzaSyAqIPMWKY6ty9JG66oiL17ZliALtZOJuzg'
 userOS = sys.platform
 
 try:
@@ -44,6 +45,7 @@ _url_re = re.compile(r"""(?x)https?://(?:\w+\.)?youtube\.com
 class ytAPIHandler:
 	def __init__(self):
 		self.baseurl = 'https://youtube.com'
+		self.apiurl = 'https://www.googleapis.com/youtube/v3'
 
 		return
 
@@ -59,11 +61,17 @@ class ytAPIHandler:
 		
 		return None
 
-	def call(self, endpoint, query = None):
+	def call(self, endpoint, query = None, apiCall = False):
 		queryArgs = None
 		if (query):
+			query['key'] = apikey
 			queryArgs = urllib.urlencode(query)
-		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+		
+		requestUrl = self.baseurl
+		if apiCall:
+			requestUrl = self.apiurl
+
+		url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
 		return self.getURL(url)
 
 	def getVideoInfo(self, videoId):
@@ -79,6 +87,37 @@ class ytAPIHandler:
 	def getLiveStreams(self, m3u8Url):
 		return self.getURL(m3u8Url)
 
+	def searchVideo(self, title, limit = 50):
+		endpoint = "search"
+		query = {
+			"order": "relevance",
+			"q": title,
+			"part": "snippet",
+			"type": "video",
+			"videoDefinition": "any",
+			"videoEmbeddable": "true",
+			"fields": "items(id,snippet(channelTitle,description,liveBroadcastContent,title))",
+			"maxResults": limit
+		}
+		
+		responseData = self.call(endpoint, query, True)
+		if responseData:
+			return json.loads(responseData)
+		return None
+
+	def getVideoStatistics(self, videoId):
+		endpoint = "videos"
+		query = {
+			"id": videoId,
+			"part": "statistics,contentDetails",
+			"fields": "items(id,statistics,contentDetails/duration)"
+		}
+		
+		responseData = self.call(endpoint, query, True)
+		if responseData:
+			return json.loads(responseData)
+		return None
+
 class helpersHandler:
 	def parseURL(self, url):
 		return _url_re.match(url).groupdict()
@@ -92,7 +131,9 @@ class helpersHandler:
 		return None
 		
 	def uniStrip(self, text):
-		return re.sub(r'[^\x00-\x7f]',r'', text)
+		if userOS == 'os4':
+			return re.sub(r'[^\x00-\x7f]',r'', text)
+		return text
 
 	def getPrefferedVideoURL(self, data, isLive = False):
 		if isLive:
@@ -124,6 +165,7 @@ def main(argv):
 	argParser = argparse.ArgumentParser(description='This is a python script that uses youtube.com API to get information about videos.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
 	argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
+	argParser.add_argument('-sv', '--search-video', action='store', dest='searchvideo', help='Search videos based on description')
 	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
 	args = argParser.parse_args()
 
@@ -134,6 +176,34 @@ def main(argv):
 		videoId = video['video_id']
 	if (args.quality):
 		cfg.ytQualityWeight.insert(0, int(args.quality))
+
+	if (args.searchvideo):
+		description = args.searchvideo
+		result = ytApi.searchVideo(description)
+		
+		if result:
+			print "%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title')
+			print "%s" % ('-'*200)
+			videosDict = dict()
+			videoIds = []
+			for video in result['items']:
+				videoId = video['id']['videoId']
+				videosDict[videoId] = dict()
+				videosDict[videoId]['url'] = ''.join(["https://www.youtube.com/watch?v=", videoId])
+				videosDict[videoId]['title'] = helpers.uniStrip(video['snippet']['title'])
+				videoIds.append(videoId)
+			
+			# Get video statistics in one call
+			videoStats = ytApi.getVideoStatistics(','.join(videoIds))
+			for stats in videoStats['items']:
+				videoId = stats['id']
+				videosDict[videoId]['viewCount'] = stats['statistics']['viewCount']
+
+			for key, video in videosDict.items():
+				print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
+		else:
+			print "No videos found based on the search query: %s" % (description)
+		sys.exit()
 
 	if (videoId):
 		videoInfo = ytApi.getVideoInfo(videoId)
