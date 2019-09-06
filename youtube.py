@@ -1,6 +1,6 @@
 #!python
 import cfg, cmn
-import urllib, urllib2, sys, argparse, re, string
+import urllib, urllib2, sys, argparse, re, string, os
 import myurlparse as urlparse
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -293,9 +293,11 @@ def main(argv):
 				if cfg.verbose and (args.silence != True):
 					print "\n%s" % (uri)
 				if cfg.autoplay:
-					# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
+					# print '%s "%s" %s' % (cfg.sPlayer, uri, cfg.sPlayerArgs)
 					if (cmnHandler.getUserOS() == 'os4'):
 						amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+					# else:
+					# 	os.system( '%s "%s" %s' % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 			else:
 				print "Not valid video url found!"
 		else:

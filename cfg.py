@@ -5,6 +5,8 @@ vPlayer = "APPDIR:mplayer"
 vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
 sPlayer = "APPDIR:ffplay"
 sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"
+# sPlayer = "/Apps/VLC.app/Contents/MacOS/VLC"
+# sPlayerArgs = "-f --no-video-title-show"
 
 twitchQualityWeight = [
 	"480p30",
