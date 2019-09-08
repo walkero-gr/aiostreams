@@ -1,3 +1,4 @@
+# coding=utf-8
 #!python
 import cfg, cmn
 import urllib, urllib2, sys, argparse, re, string, os
@@ -6,7 +7,12 @@ import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-
+try:
+	import amiga
+	userOS = "os4"
+except:
+	pass
+	
 apikey = 'AIzaSyAqIPMWKY6ty9JG66oiL17ZliALtZOJuzg'
 
 _url_re = re.compile(r"""(?x)https?://(?:\w+\.)?youtube\.com
@@ -254,20 +260,24 @@ def main(argv):
 	# 
 	if (videoId):
 		videoInfo = ytApi.getVideoInfo(videoId)
-		
+
 		if videoInfo:
 			vUrlParsed = urlparse.parse_qs(videoInfo)
 			playerResponse = vUrlParsed['player_response']
 			response = json.loads(playerResponse[0])
+			
+			isLive = False
+			if (response['videoDetails']['isLiveContent']):
+				isLive = True
 
 			if response['playabilityStatus']['status'] != "OK":
 				print response['playabilityStatus']['reason']
 				sys.exit()
 
 			if (args.silence != True):
-				print "Title: %s" % (response['videoDetails']['title'])
+				print "Title: %s" % (cmnHandler.uniStrip(response['videoDetails']['title']))
 				print "Author: %s" % (response['videoDetails']['author'])
-				if (response['videoDetails']['isLiveContent'] == False):
+				if (isLive == False):
 					print "Length: %ssec" % (response['videoDetails']['lengthSeconds'])
 					print "%-5s\t %-10s\t %-16s\t %-10s\t %s" % ('TagID', 'Quality', 'Audio Quality', 'Resolution', 'Mime type')
 					print "%s" % ('-'*200)
@@ -278,16 +288,16 @@ def main(argv):
 					print "Live streaming with %s viewers" % (response['videoDetails']['viewCount'])
 						
 				print "\nDescription:\n%s\n%s" % ('-'*30, cmnHandler.uniStrip(response['videoDetails']['shortDescription']))
-
-			if (response['videoDetails']['isLiveContent'] == False):
+				
+			if (isLive):
+				m3u8Response = ytApi.getLiveStreams(response['streamingData']['hlsManifestUrl'])
+				if m3u8Response:
+					uri = helpers.getPrefferedVideoURL(m3u8Response, True)
+			else:
 				#uri = helpers.getPrefferedVideoURL(response['streamingData']['adaptiveFormats'])
 				#uri = response['streamingData']['formats'][0]['url']
 				uri = helpers.getPrefferedVideoURL(response['streamingData']['formats'])
-					
-			if (response['videoDetails']['isLiveContent']):
-				m3u8Response = ytApi.getLiveStreams(response['streamingData']['hlsManifestUrl'])
-				if m3u8Response:
-					uri = helpers.getPrefferedVideoURL(m3u8Response, True)					
+				
 					
 			if (uri):
 				if cfg.verbose and (args.silence != True):
@@ -295,7 +305,10 @@ def main(argv):
 				if cfg.autoplay:
 					# print '%s "%s" %s' % (cfg.sPlayer, uri, cfg.sPlayerArgs)
 					if (cmnHandler.getUserOS() == 'os4'):
-						amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+						if (isLive):
+							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+						else:
+							amiga.system( "Run <>NIL: %s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
 					# else:
 					# 	os.system( '%s "%s" %s' % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 			else:
