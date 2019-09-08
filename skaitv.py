@@ -4,7 +4,12 @@ import urllib, urllib2, sys, argparse, re, string
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-
+try:
+	import amiga
+	userOS = "os4"
+except:
+	pass
+	
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?skaitv\.gr/
     (?:

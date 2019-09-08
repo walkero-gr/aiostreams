@@ -1,5 +1,6 @@
+# coding=utf-8
 #!python
-import sys
+import sys, re
 aioVer = "1.3"
 aioReleaseDate = "2019-09-15"
 

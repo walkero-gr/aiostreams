@@ -5,7 +5,12 @@ import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-
+try:
+	import amiga
+	userOS = "os4"
+except:
+	pass
+	
 clientId = "b1cb746d2751f467188edbb12997d4412b711011f640ce04"	
 
 _url_re = re.compile(r"""
