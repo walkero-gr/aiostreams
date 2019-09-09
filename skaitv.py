@@ -1,4 +1,5 @@
-#!python
+#!/usr/bin/env python
+# coding=utf-8
 import cfg, cmn
 import urllib, urllib2, sys, argparse, re, string
 import simplejson as json
