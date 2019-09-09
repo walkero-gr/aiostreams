@@ -1,5 +1,5 @@
+#!/usr/bin/env python
 # coding=utf-8
-#!python
 import cfg, cmn
 import urllib, urllib2, sys, argparse, re, string, os
 import myurlparse as urlparse
@@ -148,7 +148,7 @@ class helpersHandler:
 
 		return None
 
-	def getPrefferedVideoURL(self, data, isLive = False):
+	def getPrefferedVideoURL(self, data, isLive = False, isCiphered = False):
 		if isLive:
 			sm3u8Parser = sm3u8.parseHandler()
 			data = sm3u8Parser.parse(data)
@@ -161,10 +161,22 @@ class helpersHandler:
 		for quality in cfg.ytQualityWeight:
 			for idx in data:
 				if (quality == idx['itag']):
-					return idx['url']
+					try: 
+						return idx['url']
+					except KeyError:
+						pass
+					if isCiphered:
+						try:
+							return self.getURLFromCipher(idx['cipher'])
+						except KeyError:
+							print "Cipher does not exist"
 
 		return None
-		
+	
+	def getURLFromCipher(self, cipher):
+		cipherParsed = urlparse.parse_qs(cipher)
+		return cipherParsed['url'][0]
+
 def main(argv):
 	cmnHandler = cmn.cmnHandler()
 	ytApi = ytAPIHandler()
@@ -250,7 +262,11 @@ def main(argv):
 				videosDict[videoId]['viewCount'] = stats['statistics']['viewCount']
 
 			for key, video in videosDict.items():
-				print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
+				try:
+					videoViewCount = video['viewCount'] 
+				except KeyError:
+					videoViewCount = 'N/A'
+				print "%-40s\t %-8s\t %s" % (video['url'], videoViewCount, video['title'])
 		else:
 			print "No live streams found based on the search query: %s" % (searchQuery)
 		sys.exit()
@@ -260,19 +276,22 @@ def main(argv):
 	# 
 	if (videoId):
 		videoInfo = ytApi.getVideoInfo(videoId)
-
 		if videoInfo:
 			vUrlParsed = urlparse.parse_qs(videoInfo)
 			playerResponse = vUrlParsed['player_response']
 			response = json.loads(playerResponse[0])
+			# print playerResponse[0]
 			
-			isLive = False
-			if (response['videoDetails']['isLiveContent']):
-				isLive = True
-
 			if response['playabilityStatus']['status'] != "OK":
 				print response['playabilityStatus']['reason']
 				sys.exit()
+
+			useCipher = False
+			isLive = False
+			if (response['videoDetails']['isLiveContent']):
+				isLive = True
+			if (response['videoDetails']['useCipher']):
+				useCipher = True
 
 			if (args.silence != True):
 				print "Title: %s" % (cmnHandler.uniStrip(response['videoDetails']['title']))
@@ -290,14 +309,10 @@ def main(argv):
 				print "\nDescription:\n%s\n%s" % ('-'*30, cmnHandler.uniStrip(response['videoDetails']['shortDescription']))
 				
 			if (isLive):
-				m3u8Response = ytApi.getLiveStreams(response['streamingData']['hlsManifestUrl'])
-				if m3u8Response:
-					uri = helpers.getPrefferedVideoURL(m3u8Response, True)
+				videoFormats = ytApi.getLiveStreams(response['streamingData']['hlsManifestUrl'])
 			else:
-				#uri = helpers.getPrefferedVideoURL(response['streamingData']['adaptiveFormats'])
-				#uri = response['streamingData']['formats'][0]['url']
-				uri = helpers.getPrefferedVideoURL(response['streamingData']['formats'])
-				
+				videoFormats = response['streamingData']['formats']
+			uri = helpers.getPrefferedVideoURL(videoFormats, isLive, useCipher)
 					
 			if (uri):
 				if cfg.verbose and (args.silence != True):
