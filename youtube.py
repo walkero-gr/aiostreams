@@ -50,6 +50,7 @@ class ytAPIHandler:
 
 	def getURL(self, url):
 		request = urllib2.Request(url)
+		request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
 		try:
 			response = urllib2.urlopen(request)
 			retData = response.read()
@@ -76,7 +77,11 @@ class ytAPIHandler:
 	def getVideoInfo(self, videoId):
 		endpoint = "get_video_info"
 		query = {
-			"video_id": videoId
+			"video_id": videoId,
+			# "sts": 18143,
+			# "el": "detailpage"
+			# "el": "embedded",
+			# "eurl": "https://youtube.googleapis.com/v/%s" % (videoId)
 		}
 		responseData = self.call(endpoint, query)
 		if responseData:
@@ -178,6 +183,7 @@ class helpersHandler:
 		return cipherParsed['url'][0]
 
 def main(argv):
+	global cmnHandler 
 	cmnHandler = cmn.cmnHandler()
 	ytApi = ytAPIHandler()
 	helpers = helpersHandler()
@@ -280,7 +286,6 @@ def main(argv):
 			vUrlParsed = urlparse.parse_qs(videoInfo)
 			playerResponse = vUrlParsed['player_response']
 			response = json.loads(playerResponse[0])
-			# print playerResponse[0]
 			
 			if response['playabilityStatus']['status'] != "OK":
 				print response['playabilityStatus']['reason']
@@ -292,6 +297,8 @@ def main(argv):
 				isLive = True
 			if (response['videoDetails']['useCipher']):
 				useCipher = True
+				print "This video is protected. Protected videos are not currently supported!"
+				sys.exit()
 
 			if (args.silence != True):
 				print "Title: %s" % (cmnHandler.uniStrip(response['videoDetails']['title']))
