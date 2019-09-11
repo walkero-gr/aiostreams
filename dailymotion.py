@@ -11,7 +11,8 @@ try:
 	userOS = "os4"
 except:
 	pass
-	
+
+cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?dailymotion\.com/
     (?:
@@ -85,7 +86,6 @@ class helpersHandler:
 		return uriSplit[0]
 
 def main(argv):
-	cmnHandler = cmn.cmnHandler()
 	dailymotionApi = dailymotionAPIHandler()
 	helpers = helpersHandler()
 	global videoQualities

@@ -11,7 +11,8 @@ try:
 	userOS = "os4"
 except:
 	pass
-	
+
+cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?vimeo\.com/
     (?:
@@ -110,7 +111,6 @@ class helpersHandler:
 		return retUri
 
 def main(argv):
-	cmnHandler = cmn.cmnHandler()
 	vimeoApi = vimeoAPIHandler()
 	helpers = helpersHandler()
 	global videoQualities

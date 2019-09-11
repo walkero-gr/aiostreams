@@ -12,7 +12,8 @@ try:
 	userOS = "os4"
 except:
 	pass
-	
+
+cmnHandler = cmn.cmnHandler()
 apikey = 'AIzaSyAqIPMWKY6ty9JG66oiL17ZliALtZOJuzg'
 
 _url_re = re.compile(r"""(?x)https?://(?:\w+\.)?youtube\.com
@@ -183,8 +184,6 @@ class helpersHandler:
 		return cipherParsed['url'][0]
 
 def main(argv):
-	global cmnHandler 
-	cmnHandler = cmn.cmnHandler()
 	ytApi = ytAPIHandler()
 	helpers = helpersHandler()
 

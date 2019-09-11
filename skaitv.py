@@ -10,7 +10,9 @@ try:
 	userOS = "os4"
 except:
 	pass
-	
+
+cmnHandler = cmn.cmnHandler()
+
 _url_re = re.compile(r"""
 	http(s)?://(\w+.)?skaitv\.gr/
     (?:
@@ -86,7 +88,6 @@ class helpersHandler:
 		
 
 def main(argv):
-	cmnHandler = cmn.cmnHandler()
 	skaiApi = skaiAPIHandler()
 	helpers = helpersHandler()
 

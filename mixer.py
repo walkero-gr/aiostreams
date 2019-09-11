@@ -11,7 +11,8 @@ try:
 	userOS = "os4"
 except:
 	pass
-	
+
+cmnHandler = cmn.cmnHandler()
 clientId = "b1cb746d2751f467188edbb12997d4412b711011f640ce04"	
 
 _url_re = re.compile(r"""
@@ -157,7 +158,6 @@ class helpersHandler:
 		return None
 
 def main(argv):
-	cmnHandler = cmn.cmnHandler()
 	mixerApi = mixerAPIHandler()
 	helpers = helpersHandler()
 	playlists = dict()

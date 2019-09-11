@@ -11,7 +11,8 @@ try:
 	userOS = "os4"
 except:
 	pass
-	
+
+cmnHandler = cmn.cmnHandler()
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
 
 _url_re = re.compile(r"""
@@ -191,7 +192,6 @@ class helpersHandler:
 		return None
 
 def main(argv):
-	cmnHandler = cmn.cmnHandler()
 	twitchApi = twitchAPIHandler()
 	usherApi = usherHandler()
 	helpers = helpersHandler()
