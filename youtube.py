@@ -13,7 +13,6 @@ try:
 except:
 	pass
 
-cmnHandler = cmn.cmnHandler()
 apikey = 'AIzaSyAqIPMWKY6ty9JG66oiL17ZliALtZOJuzg'
 
 _url_re = re.compile(r"""(?x)https?://(?:\w+\.)?youtube\.com
@@ -46,6 +45,7 @@ class ytAPIHandler:
 	def __init__(self):
 		self.baseurl = 'https://youtube.com'
 		self.apiurl = 'https://www.googleapis.com/youtube/v3'
+		self.eurl = 'https://youtube.googleapis.com/v'
 
 		return
 
@@ -75,20 +75,35 @@ class ytAPIHandler:
 		url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
 		return self.getURL(url)
 
-	def getVideoInfo(self, videoId):
+	def getVideoInfo(self, videoId, el = None, sts = None, useEurl = False):
 		endpoint = "get_video_info"
 		query = {
-			"video_id": videoId,
-			# "sts": 18143,
+			"video_id": videoId
+		}
+		if el:
 			# "el": "detailpage"
 			# "el": "embedded",
-			# "eurl": "https://youtube.googleapis.com/v/%s" % (videoId)
-		}
+			# "el": "vevo",
+			query['el'] = el
+		if sts:
+			# i.e. "sts": 18143,
+			query['sts'] = sts
+		if useEurl:
+			query['eurl'] = "%s/%s" % (self.eurl, videoId)
+		
 		responseData = self.call(endpoint, query)
 		if responseData:
 			return responseData
 		return None
-	
+
+	def getEmbedInfo(self, videoId):
+		endpoint = "embed/%s" % (videoId)
+		
+		responseData = self.call(endpoint)
+		if responseData:
+			return responseData
+		return None 
+
 	def getLiveStreams(self, m3u8Url):
 		return self.getURL(m3u8Url)
 
@@ -173,20 +188,43 @@ class helpersHandler:
 						pass
 					if isCiphered:
 						try:
-							return self.getURLFromCipher(idx['cipher'])
+							parsedCipher = self.parseCipher(idx['cipher'])
+							return self.getURLFromCipher(parsedCipher)
 						except KeyError:
 							print "Cipher does not exist"
 
 		return None
 	
-	def getURLFromCipher(self, cipher):
-		cipherParsed = urlparse.parse_qs(cipher)
-		return cipherParsed['url'][0]
+	def parseCipher(self, cipher):
+		return urlparse.parse_qs(cipher)
+
+	def getURLFromCipher(self, parsedCipher):
+		try:
+			return parsedCipher['url'][0]
+		except KeyError:
+			return None
+
+	def getPlayerUrl(self, embedInfo):
+		#   <script src="/yts/jsbin/player_ias-vflBmg71L/en_US/base.js"  name="player_ias/base" ></script>
+		# mobj = re.search(
+        #     r'src="/yts/jsbin/player(?P<uploader_id>[^"]+)/en_us">',
+        #     embedInfo)
+		playerjs = re.search(
+            r'<script src="(?P<player_url>[^"]+)"  name="player_ias/base" ></script>',
+            embedInfo)
+		if playerjs:
+			return "%s%s" % (ytApi.baseurl, playerjs.group('player_url'))
+		return None
+
+	def getSts(self, playerCode):
+		stsCode = re.search(
+            r'a.details.sts="(?P<sts>[^"]+)"',
+            playerCode)
+		if stsCode:
+			return stsCode.group('sts')
+		return None
 
 def main(argv):
-	ytApi = ytAPIHandler()
-	helpers = helpersHandler()
-
 	if len(argv) == 0:
 		print "No arguments given. Use youtube.py -h for more info.\nThe script must be used from the shell."
 		sys.exit()
@@ -297,6 +335,19 @@ def main(argv):
 			if (response['videoDetails']['useCipher']):
 				useCipher = True
 				print "This video is protected. Protected videos are not currently supported!"
+				embedInfo = ytApi.getEmbedInfo(videoId)
+				# print embedInfo
+				playerJSUrl = helpers.getPlayerUrl(embedInfo)
+				# print playerJSUrl
+				playerJSCode = ytApi.getURL(playerJSUrl)
+				# print playerJSCode
+				sts = helpers.getSts(playerJSCode)
+				videoInfo = ytApi.getVideoInfo(videoId, 'embedded', sts, True)
+				# print videoInfo
+				vUrlParsed = urlparse.parse_qs(videoInfo)
+				playerResponse = vUrlParsed['player_response']
+				# response = json.loads(playerResponse[0])
+				print playerResponse[0]
 				sys.exit()
 
 			if (args.silence != True):
@@ -342,4 +393,8 @@ def main(argv):
 	sys.exit()
 
 if __name__ == "__main__":
+	cmnHandler = cmn.cmnHandler()
+	ytApi = ytAPIHandler()
+	helpers = helpersHandler()
+	
 	main(sys.argv[1:])
