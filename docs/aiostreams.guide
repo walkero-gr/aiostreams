@@ -339,7 +339,7 @@ This script supports @{"YouTube.com" SYSTEM "c:URLOpen https://youtube.com"} web
 
 With this script you can: 
 * watch live streams
-* watch recorded videos
+* watch recorded videos. The protected videos are not supported yet
 * search recorded videos and live streams based on given description
 * autoplay videos with ffplay or mplayer
 
@@ -458,14 +458,17 @@ No private info is sent by this script to dailymotion.com.
 This script supports @{"Skaitv.gr" SYSTEM "c:URLOpen http://www.skaitv.gr"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
 
 With this script you can: 
-* watch recorded videos
+* watch recorded and archived videos
+* watch live stream. Currently no autplay is supperted, but a message to use the youtube script will show up
 * autoplay videos with ffplay or mplayer
 
 @{u}Shell parameters:@{uu}
-  -h, --help            show this help message and exit
-  -u URL, --url URL     The video url from Skaitv.gr
-  -shh, --silence       If this is set, the script will not output anything,
-                        except of errors.
+  -h, --help         show this help message and exit
+  -u URL, --url URL  The video url from skaitv.gr
+  -shh, --silence    If this is set, the script will not output anything,
+                     except of errors.
+  -l, --live         Play the current live stream. If -u argument is set, this
+                     is ignored.
 
 @{u}Available video qualities:@{uu}
 Usually, the recorded videos are available only on 720p resolution and there is no way to choose a different one.
@@ -474,6 +477,10 @@ Usually, the recorded videos are available only on 720p resolution and there is 
 Watch a recorded video, like below
 @{b}skaitv.py -u http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23@{ub}
 @{b}skaitv.py -u http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23/radio-arbula-istories-agapis-20052019@{ub}
+
+Watch the live stream, like below
+@{b}skaitv.py -u http://www.skaitv.gr/live@{ub}
+@{b}skaitv.py -l@{ub}
 
 @{u}Privacy:@{uu}
 No private info is sent by this script to Skaitv.gr.
@@ -508,7 +515,8 @@ If you have any websites that you would like to be supported, please contact me 
 v1.3
 * YouTube.com script added
 * Fixed a config file bug
-* If the running system is not AmigaOS 4, the returned texts show unicode characters. Otherwise they are stripped.
+* If the running system is not AmigaOS 4, the returned texts show unicode characters. Otherwise they are stripped
+* Skaitv.gr script updated to support some archived videos and live stream
 
 v1.2
 * Vimeo.com script added
