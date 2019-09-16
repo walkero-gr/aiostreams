@@ -20,7 +20,8 @@ _url_re = re.compile(r"""
 		/
 		(?P<caption2>[^/?]+)
 		/
-		(?P<caption>[^/?]+)
+		(?P<caption>[^/?]+)|
+		(?P<live>[^/?]+)
 	)
     (?:
 		/
@@ -66,25 +67,41 @@ class skaiAPIHandler:
 			return json.loads(responseData)
 		return None
 
+	def getLiveInfo(self, parsedUrl):
+		endpoint = "live.php"
+
+		responseData = self.call(endpoint)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 class helpersHandler:
 	def parseURL(self, url):
-		return _url_re.match(url).groupdict()
+		try:
+			return _url_re.match(url).groupdict()
+		except AttributeError:
+			print "The url you provided seems wrong. Please, consult the manual about the supported urls."
+			sys.exit()
 
 	def getVideoType(self, url):
 		types = self.parseURL(url)
 
-		if (types['caption'] and types['caption2']):
-			return {'type': 'video', 'caption': types['caption'], 'caption2': types['caption2'], 'clip': types['clip']}
+		if types:
+			if (types['caption'] and types['caption2']):
+				return {'type': 'video', 'caption': types['caption'], 'caption2': types['caption2'], 'clip': types['clip']}
 
-		# TODO: Support Live streams
-		#if (types['videos_id']):
-		#	return {'type': 'live', 'id': types['videos_id'], 'channel': types['channel']}
+			if (types['live'] == 'live'):
+				return {'type': 'live'}
 
 		return None
 
 	def buildM3U8Uri(self, media):
-		return "http://videostream.skai.gr/%s.m3u8" % (media)
+		vsUrl = "http://videostream.skai.gr"
+		slash = "/"
+		if (media.startswith(('/'))):
+			slash = ""
+
+		return "%s%s%s.m3u8" % (vsUrl, slash, media)
 		
 
 def main(argv):
@@ -99,6 +116,7 @@ def main(argv):
 	argParser = argparse.ArgumentParser(description='This is a python script that uses skaitv.gr to get information about videos for AmigaOS 4.1 and above.')
 	argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from skaitv.gr')
 	argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
+	argParser.add_argument('-l', '--live', action='store_true', default=False, dest='live', help='Play the current live stream. If -u argument is set, this is ignored.')
 	args = argParser.parse_args()
 
 	if (args.silence != True):
@@ -106,10 +124,11 @@ def main(argv):
 	if (args.url):
 		skaiURL = args.url
 		video = helpers.getVideoType(args.url)
+	if (args.live):
+		video = {'type': 'live'}
 
 	if (video['type'] == 'video'):
 		videoInfo = skaiApi.getVideoInfo(video)
-
 		if videoInfo['episode']:
 			uri = None
 			for episode in videoInfo['episode']:
@@ -119,10 +138,9 @@ def main(argv):
 				if video['clip'] != None and episode['mi_caption'] == video['clip']:
 					uri = helpers.buildM3U8Uri(episode['media_item_file'])
 					break
-
+			
 			if (uri):
 				m3u8Response = skaiApi.getURL(uri)
-
 				if m3u8Response:
 					if cfg.verbose and (args.silence != True):
 						print "%s" % (uri)
@@ -132,11 +150,47 @@ def main(argv):
 							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
 				else:
 					print "Not valid video playlist found"
+			else:
+				print "There is no video available!"
 		else:
 			print "There is no video available!"
 
 		sys.exit()
 	
+	if (video['type'] == 'live'):
+		videoInfo = skaiApi.getLiveInfo(video)
+
+		if videoInfo:
+			if (args.silence != True):
+				try:
+					print "Title: %s" % (cmnHandler.uniStrip(videoInfo['now']['0']['title']))
+					print "Description:\n%s" % (cmnHandler.uniStrip(videoInfo['now']['0']['short_descr']))
+				except KeyError:
+					print "There is no live stream right now."
+					sys.exit()
+
+				try:
+					print "\nWatch next: %s" % (cmnHandler.uniStrip(videoInfo['next'][0]['title']))
+					print "Starting at: %s" % (cmnHandler.uniStrip(videoInfo['next'][0]['start']))
+					print "Description:\n%s" % (cmnHandler.uniStrip(videoInfo['next'][0]['short_descr']))
+				except KeyError:
+					pass
+				
+				try:
+					livestreamUrl = videoInfo['now']['livestream']
+				except KeyError:
+					print "There is no live stream right now."
+					sys.exit()
+
+				if livestreamUrl:
+					if cfg.verbose and (args.silence != True):
+						print "\nLivestream: %s" % (livestreamUrl)
+					if cfg.autoplay:
+						print "Use youtube script to autoplay the live stream:\nyoutube.py -u %s" % (livestreamUrl)
+						# print "python youtube.py -u %s" % (livestreamUrl)
+						# if (cmnHandler.getUserOS() == 'os4'):
+						# 	amiga.system( "python youtube.py -u %s" % (livestreamUrl) )
+
 	sys.exit()
 
 if __name__ == "__main__":
