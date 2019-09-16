@@ -132,24 +132,36 @@ def main(argv):
 		if videoInfo['episode']:
 			uri = None
 			for episode in videoInfo['episode']:
-				if video['clip'] == None and episode['media_type'] == "1":
+				if video['clip'] == None and episode['media_type'] == "1" and episode['media_type_id'] == "2":
 					uri = helpers.buildM3U8Uri(episode['media_item_file'])
+					break
+				if video['clip'] == None and episode['media_type'] == "1" and episode['media_type_id'] == "4":
+					uri = 'https://www.youtube.com/watch?v=%s' % (episode['media_item_file'])
 					break
 				if video['clip'] != None and episode['mi_caption'] == video['clip']:
 					uri = helpers.buildM3U8Uri(episode['media_item_file'])
 					break
 			
 			if (uri):
-				m3u8Response = skaiApi.getURL(uri)
-				if m3u8Response:
+				if (episode['media_type_id'] == "2"):
+					m3u8Response = skaiApi.getURL(uri)
+					if m3u8Response:
+						if cfg.verbose and (args.silence != True):
+							print "%s" % (uri)
+						if cfg.autoplay:
+							# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
+							if (cmnHandler.getUserOS() == 'os4'):
+								amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+					else:
+						print "Not valid video playlist found"
+
+				# This is a YouTube video
+				if (episode['media_type_id'] == "4"):
 					if cfg.verbose and (args.silence != True):
 						print "%s" % (uri)
 					if cfg.autoplay:
-						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-						if (cmnHandler.getUserOS() == 'os4'):
-							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
-				else:
-					print "Not valid video playlist found"
+						print "Use youtube script to autoplay this video:\nyoutube.py -u %s" % (uri)
+
 			else:
 				print "There is no video available!"
 		else:
@@ -176,20 +188,20 @@ def main(argv):
 				except KeyError:
 					pass
 				
-				try:
-					livestreamUrl = videoInfo['now']['livestream']
-				except KeyError:
-					print "There is no live stream right now."
-					sys.exit()
+			try:
+				livestreamUrl = videoInfo['now']['livestream']
+			except KeyError:
+				print "There is no live stream right now."
+				sys.exit()
 
-				if livestreamUrl:
-					if cfg.verbose and (args.silence != True):
-						print "\nLivestream: %s" % (livestreamUrl)
-					if cfg.autoplay:
-						print "Use youtube script to autoplay the live stream:\nyoutube.py -u %s" % (livestreamUrl)
-						# print "python youtube.py -u %s" % (livestreamUrl)
-						# if (cmnHandler.getUserOS() == 'os4'):
-						# 	amiga.system( "python youtube.py -u %s" % (livestreamUrl) )
+			if livestreamUrl:
+				if cfg.verbose and (args.silence != True):
+					print "\nLivestream: %s" % (livestreamUrl)
+				if cfg.autoplay:
+					print "Use youtube script to autoplay this live stream:\nyoutube.py -u %s" % (livestreamUrl)
+					# print "python youtube.py -u %s" % (livestreamUrl)
+					# if (cmnHandler.getUserOS() == 'os4'):
+					# 	amiga.system( "python youtube.py -u %s" % (livestreamUrl) )
 
 	sys.exit()
 
