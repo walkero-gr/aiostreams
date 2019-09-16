@@ -301,7 +301,7 @@ def main(argv):
 
 			if (args.silence != True):
 				print "Title: %s" % (cmnHandler.uniStrip(response['videoDetails']['title']))
-				print "Author: %s" % (response['videoDetails']['author'])
+				print "Author: %s" % (cmnHandler.uniStrip(response['videoDetails']['author']))
 				if (isLive == False):
 					print "Length: %ssec" % (response['videoDetails']['lengthSeconds'])
 					print "%-5s\t %-10s\t %-16s\t %-10s\t %s" % ('TagID', 'Quality', 'Audio Quality', 'Resolution', 'Mime type')
