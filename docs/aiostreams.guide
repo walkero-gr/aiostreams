@@ -514,9 +514,12 @@ If you have any websites that you would like to be supported, please contact me 
 
 v1.3
 * YouTube.com script added
-* Fixed a config file bug
 * If the running system is not AmigaOS 4, the returned texts show unicode characters. Otherwise they are stripped
 * Skaitv.gr script updated to support some archived videos and live stream
+* Fixed a config file bug
+* Fixed a bug in Twitch script
+    File "twitch.py", line 192, in getPrefferedVideoURL
+    if (quality == playlists[idx]['video']):
 
 v1.2
 * Vimeo.com script added

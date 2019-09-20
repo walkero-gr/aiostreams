@@ -121,7 +121,7 @@ class twitchAPIHandler:
 class usherHandler:
 	def __init__(self):
 		# self.baseurl = 'https://usher.ttvnw.net'
-		self.baseurl = 'https://usher.twitch.tv'
+		self.baseurl = 'http://usher.twitch.tv'
 
 		return None
 
@@ -186,8 +186,9 @@ class helpersHandler:
 	
 		for quality in cfg.twitchQualityWeight:
 			for idx in playlists:
-				if (quality == playlists[idx]['video']):
-					return playlists[idx]['uri']
+				if (playlists[idx]):
+					if (quality == playlists[idx]['video']):
+						return playlists[idx]['uri']
 		
 		return None
 
