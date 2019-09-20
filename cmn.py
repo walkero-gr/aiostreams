@@ -1,8 +1,9 @@
 # coding=utf-8
 import sys, re
+import unicodedata
 
 aioVer = "1.3"
-aioReleaseDate = "2019-09-15"
+aioReleaseDate = "2019-09-20"
 userOS = sys.platform
 
 try:
@@ -21,6 +22,7 @@ class cmnHandler:
 	def uniStrip(self, text):
 		if (userOS == 'os4'):
 			return re.sub(r'[^\x00-\x7f]',r'', text)
+		# text = unicodedata.normalize('NFKD', text).encode('ascii', 'xmlcharrefreplace')
 		return text
 
 	def spoofAs(self, agent):
