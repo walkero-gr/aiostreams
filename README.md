@@ -10,6 +10,7 @@ They are developed and fully tested under AmigaOS 4.1 FE. There will be support 
 ### Supported networks:
 * [Twitch.tv](https://www.twitch.tv/)
 * [Mixer.com](https://mixer.com/)
+* [YouTube.com](https://youtube.com/)
 * [Vimeo.com](https://vimeo.com/)
 * [Dailymotion.com](https://www.dailymotion.com)
 * [Skaitv.gr](http://www.skaitv.gr/)
@@ -22,7 +23,7 @@ They are developed and fully tested under AmigaOS 4.1 FE. There will be support 
 * [ffplay][ffmpeg] for the online live streaming videos, or something equivalent
 * [mplayer][mplayer] for the online recorded videos, or something equivalent
 * internet access
-* 
+
 #### Docker
 This is not necessary for using these scripts. It just provides a good development environment for other systems.
 To run the script in a docker container with Python 2.7 installed, use the following on different shells, from the script folder.
