@@ -1,16 +1,15 @@
 # coding=utf-8
-import sys, re
+import sys, re, os
+import cfg
 import unicodedata
+try:
+	import amiga
+except:
+	pass
 
 aioVer = "1.3"
 aioReleaseDate = "2019-09-20"
 userOS = sys.platform
-
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
 
 class cmnHandler:
 	def showIntroText(self):
@@ -20,9 +19,9 @@ class cmnHandler:
 		return userOS
 		
 	def uniStrip(self, text):
-		if (userOS == 'os4'):
+		if (userOS == 'ppc-amiga' or userOS == 'morphos'):
 			return re.sub(r'[^\x00-\x7f]',r'', text)
-		# text = unicodedata.normalize('NFKD', text).encode('ascii', 'xmlcharrefreplace')
+			# text = unicodedata.normalize('NFKD', text).encode('ascii', 'xmlcharrefreplace')
 		return text
 
 	def spoofAs(self, agent):
@@ -37,3 +36,16 @@ class cmnHandler:
 			return agents[agent]
 		except KeyError:
 			return None
+
+	def videoAutoplay(self, uri, videoType = 'list'):
+		if (videoType == 'list'):
+			player = cfg.sPlayer
+			playerArgs = cfg.sPlayerArgs
+		else:
+			player = cfg.vPlayer
+			playerArgs = cfg.vPlayerArgs
+
+		if (userOS == 'ppc-amiga'):
+			amiga.system( "Run <>NIL: %s %s %s" % (player, uri, playerArgs) )
+		else:
+			os.system( '%s "%s" %s' % (player, uri, playerArgs) )

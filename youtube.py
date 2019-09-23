@@ -9,7 +9,6 @@ from urllib2 import Request, urlopen, URLError
 from random import random
 try:
 	import amiga
-	userOS = "os4"
 except:
 	pass
 
@@ -324,14 +323,10 @@ def main(argv):
 				if cfg.verbose and (args.silence != True):
 					print "\n%s" % (uri)
 				if cfg.autoplay:
-					# print '%s "%s" %s' % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-					if (cmnHandler.getUserOS() == 'os4'):
-						if (isLive):
-							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
-						else:
-							amiga.system( "Run <>NIL: %s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
-					# else:
-					# 	os.system( '%s "%s" %s' % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+					if (isLive):
+						cmnHandler.videoAutoplay(uri, 'list')
+					else:
+						cmnHandler.videoAutoplay(uri, 'video')
 			else:
 				print "Not valid video url found!"
 		else:

@@ -5,11 +5,6 @@ import urllib, urllib2, sys, argparse, re, string
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
 
 cmnHandler = cmn.cmnHandler()
 
@@ -149,9 +144,7 @@ def main(argv):
 						if cfg.verbose and (args.silence != True):
 							print "%s" % (uri)
 						if cfg.autoplay:
-							# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-							if (cmnHandler.getUserOS() == 'os4'):
-								amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+							cmnHandler.videoAutoplay(uri, 'list')
 					else:
 						print "Not valid video playlist found"
 
@@ -200,7 +193,7 @@ def main(argv):
 				if cfg.autoplay:
 					print "Use youtube script to autoplay this live stream:\nyoutube.py -u %s" % (livestreamUrl)
 					# print "python youtube.py -u %s" % (livestreamUrl)
-					# if (cmnHandler.getUserOS() == 'os4'):
+					# if (cmnHandler.getUserOS() == 'ppc-amiga'):
 					# 	amiga.system( "python youtube.py -u %s" % (livestreamUrl) )
 
 	sys.exit()

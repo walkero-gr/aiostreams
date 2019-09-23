@@ -6,11 +6,6 @@ import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
 
 cmnHandler = cmn.cmnHandler()
 clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
@@ -277,9 +272,7 @@ def main(argv):
 							if cfg.verbose and (args.silence != True):
 								print "%s" % (uri)
 							if cfg.autoplay:
-								# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-								if (cmnHandler.getUserOS() == 'os4'):
-									amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+								cmnHandler.videoAutoplay(uri, 'list')
 						else:
 							print "Not valid stream found"
 					else:
@@ -303,9 +296,7 @@ def main(argv):
 						if cfg.verbose and (args.silence != True):
 							print "%s" % (uri)
 						if cfg.autoplay:
-							# print "%s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs)
-							if (cmnHandler.getUserOS() == 'os4'):
-								amiga.system( "Run <>NIL: %s %s %s" % (cfg.vPlayer, uri, cfg.vPlayerArgs) )
+							cmnHandler.videoAutoplay(uri, 'video')
 					else:
 						print "Not valid video found"
 				else:

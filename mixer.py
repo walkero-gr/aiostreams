@@ -6,11 +6,6 @@ import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-try:
-	import amiga
-	userOS = "os4"
-except:
-	pass
 
 cmnHandler = cmn.cmnHandler()
 clientId = "b1cb746d2751f467188edbb12997d4412b711011f640ce04"	
@@ -258,13 +253,11 @@ def main(argv):
 					if cfg.verbose and (args.silence != True):
 						print "%s" % (uri)
 					if cfg.autoplay:
-						# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-						if (cmnHandler.getUserOS() == 'os4'):
-							amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+						cmnHandler.videoAutoplay(uri, 'list')
 				else:
 					print "Not valid stream found"
 			else:
-				print "There was an error with the usherApi"
+				print "There is no playlist available"
 		else:
 			print "There is no Live stream for the channel: %s" % (channelName)
 
@@ -284,9 +277,7 @@ def main(argv):
 				if cfg.verbose and (args.silence != True):
 					print "%s" % (uri)
 				if cfg.autoplay:
-					# print "%s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs)
-					if (cmnHandler.getUserOS() == 'os4'):
-						amiga.system( "Run <>NIL: %s %s %s" % (cfg.sPlayer, uri, cfg.sPlayerArgs) )
+					cmnHandler.videoAutoplay(uri, 'list')
 			else:
 				print "Not valid recording stream found"
 		else:
