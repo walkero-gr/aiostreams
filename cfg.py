@@ -1,12 +1,18 @@
 #!python
 autoplay = True
 verbose = True
+
+# AmigaOS 4.1 FE players
 vPlayer = "APPDIR:mplayer"
 vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
 sPlayer = "APPDIR:ffplay"
 sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"
-# sPlayer = "/Apps/VLC.app/Contents/MacOS/VLC"
-# sPlayerArgs = "-f --no-video-title-show"
+
+# MacOS X players
+# vPlayer = "~/Apps/VLC.app/Contents/MacOS/VLC"
+# vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+# sPlayer = "~/Apps/VLC.app/Contents/MacOS/VLC"
+# sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 
 twitchQualityWeight = [
 	"480p30",
