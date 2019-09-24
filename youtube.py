@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!python
 # coding=utf-8
 import cfg, cmn
 import urllib, urllib2, sys, argparse, re, string, os
