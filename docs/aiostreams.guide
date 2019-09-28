@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.3 (20.09.2019)     
+@$VER: 1.4 (29.09.2019)     
 @wordwrap
 @font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
@@ -13,13 +13,13 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.3 (2019-09-20)@{ui}
+@{i}v1.4 (2019-09-29)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
-These can be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically.
+All the scripts should be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
 
-Some of these networks support search, where you can find available streams and videos. Under the Usage section you can find the available features of each script and how to use them.
+Some of these networks have a search API, and you can use them to find available streams and videos, without the need to visit the website. This is a fast way to find what you want, without waiting huge amount of Javascript to be executed on your machine. Especially useful when your computer doesn't have the necessary horse power to support those websites.
 
 @{lindent 15}@{settabs 10}
 @{"Requirements" LINK "Requirements"}
@@ -32,8 +32,10 @@ Some of these networks support search, where you can find available streams and 
 @{tab}@{"Vimeo.com" LINK "Vimeo.com"}
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
 @{tab}@{"Skaitv.gr" LINK "Skaitv.gr"}
+@{tab}@{"Dlive.tv" LINK "Dlive.tv"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
+@{"Troubleshooting" LINK "Troubleshooting"}
 @{"Author" LINK "Author"}
 
 @endnode
@@ -45,15 +47,16 @@ Some of these networks support search, where you can find available streams and 
 
 The scripts are based on Python v2.5, so this is absolutely necessary to be installed at your system.
 
-They are developed and fully tested under AmigaOS 4.1 FE. There will be support for other systems in the future, like MorphOS, AmigaOS 3 and AROS, as long as Python is supported. 
+All the scripts are developed and fully tested under AmigaOS 4.1 FE and MorphOs 3.11. There will be support for other systems in the future, like AmigaOS 3 and AROS, as long as Python is supported. 
 
-The scripts might work under Linux and MacOS X, but those systems are not the target of this project. There are other solution that might do better work.
+The scripts work just fine under Linux and MacOS X, but those systems are not the target of this project. There are other solutions that might do a better job.
 
-A full list:
+@{u}A full list of requirements per OS:@{uu}
+
+@{b}AmigaOS 4.1@{ub}
 * AmigaOS 4.1 FE upd1 installed
 * Python 2.5
 * Pythonssl @{" 1 " SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=library/misc/pythonssl.lha"}
-* The Python modules: urllib, urllib2, sys, re, string, random. Usually they are part of the python Installation.
 * ffplay for the online live streaming videos, or something equivalent. @{" 2 " SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha"}
 * mplayer for the online recorded videos, or something equivalent. @{" 3 " SYSTEM "c:URLOpen http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer"}
 * internet access
@@ -63,6 +66,11 @@ Links
 [2] http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha
 [3] http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer
 
+@{b}MorphOS 3.x@{ub}
+* MorphOS 3.10 and above
+* Python 2.5 and above
+* Currently there is no suitable video player available on MorphOS, that could support the necessary streams. As soon as new video players are available, they can be used by aiostreams scripts.
+* internet access
 
 @endnode
 @node "Installation" "Installation"
@@ -81,7 +89,8 @@ Links
 TBD - In @{"Todo List" LINK "Todo"}
 
 @{u}MorphOS@{uu}
-TBD - In @{"Todo List" LINK "Todo"}
+* Download and install Python using @{"Grunch" SYSTEM "c:openurl URL='http://geit.de/eng_grunch.html'"} (http://geit.de/eng_grunch.html)
+* Unarchive the aiostreams file wherever you want. 
 
 @{u}AROS@{uu}
 TBD - In @{"Todo List" LINK "Todo"}
@@ -109,7 +118,9 @@ The available parameters are:
 * @{b}mixerQualityWeight:@{ub} Set the preffered sort of video qualities for the Mixer.com network. This means that the first available will be served.
 * @{b}vimeoQualityWeight:@{ub} Set the preffered sort of video qualities for the Vimeo.com network. This means that the first available will be served.
 * @{b}dailymotionQualityWeight:@{ub} Set the preffered sort of video qualities for the Dailymotion.com network. This means that the first available will be served.
-
+* @{b}ytQualityWeight:@{ub} Set the preffered sort of video qualities for the recorded videos from YouTube.com. This means that the first available will be served.
+* @{b}ytLiveQualityWeight:@{ub} Set the preffered sort of video qualities for the Live videos from YouTube.com. This means that the first available will be served.
+* @{b}dliveQualityWeight:@{ub} Set the preffered sort of video qualities for the Dlive.tv network. This means that the first available will be served.
 
 @endnode
 @node "Usage" "Shell usage"
@@ -128,6 +139,7 @@ You can find usage information in the following sections, separated by network.
 @{"YouTube.com" LINK "YouTube.com"}
 @{"Dailymotion.com" LINK "Dailymotion.com"}
 @{"Skaitv.gr" LINK "Skaitv.gr"}
+@{"Dlive.tv" LINK "Dlive.tv"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -147,7 +159,7 @@ With this script you can:
 * watch channels' recorded videos
 * search channels by game title that are live and streaming
 * list available recorded videos by channel
-* autoplay videos with ffplay or mplayer
+* autoplay videos with ffplay, mplayer or other players
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
@@ -225,7 +237,7 @@ With this script you can:
 * search channels by game title that are live and streaming
 * get a list of the available recorded videos by channel
 * get a list of the Top Streams and Top Games, based on the viewers
-* autoplay videos with ffplay or mplayer
+* autoplay videos with ffplay, mplayer or other players
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
@@ -290,7 +302,7 @@ This script supports @{"Vimeo.com" SYSTEM "c:URLOpen https://vimeo.com"} website
 
 With this script you can: 
 * watch recorded videos
-* autoplay videos with ffplay or mplayer
+* autoplay videos with ffplay, mplayer or other players
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
@@ -341,7 +353,7 @@ With this script you can:
 * watch live streams
 * watch recorded videos. The protected videos are not supported yet
 * search recorded videos and live streams based on given description
-* autoplay videos with ffplay or mplayer
+* autoplay videos with ffplay, mplayer or other players
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
@@ -411,7 +423,7 @@ This script supports @{"Dailymotion.com" SYSTEM "c:URLOpen https://www.dailymoti
 
 With this script you can: 
 * watch recorded videos
-* autoplay videos with ffplay or mplayer
+* autoplay videos with ffplay, mplayer or other players
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
@@ -459,8 +471,8 @@ This script supports @{"Skaitv.gr" SYSTEM "c:URLOpen http://www.skaitv.gr"} webs
 
 With this script you can: 
 * watch recorded and archived videos
-* watch live stream. Currently no autplay is supperted, but a message to use the youtube script will show up
-* autoplay videos with ffplay or mplayer
+* watch live stream. Currently no autoplay is supported, but a message to use the youtube script will show up
+* autoplay videos with ffplay, mplayer or other players
 
 @{u}Shell parameters:@{uu}
   -h, --help         show this help message and exit
@@ -496,14 +508,57 @@ The todo list is something that might change a lot between the version releases.
 https://github.com/walkero-gr/aiostreams/projects/1 @{"open" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/projects/1"}
 
 Many things:
-* MorphOS support. Actually I am waiting to get in my hands my Powebook G4.
 * Reuters.tv support
 * Support Emotion player, if possible.
 * AmigaOS 3 and AROS support.
 * A way to get a notification on which of your favorite channels are currently streaming.
-* Add silence mode
 
 If you have any websites that you would like to be supported, please contact me and I will check if this is possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used outside their websites.
+
+@endnode@{u}
+@node "Dlive.tv" "Dlive.tv"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Dlive.tv@{ub}
+
+This script supports @{"dlive.tv" SYSTEM "c:URLOpen https://dlive.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch recorded videos
+* watch live stream
+* autoplay videos with ffplay, mplayer or other players
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video/channel url from dlive.tv
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+@{lindent 10}
+Value @{tab} Resolution (may vary)
+----------------------------------
+src @{tab}@{tab} 1920x1080 
+720p @{tab}@{tab} 1280x720
+480p @{tab}@{tab} 720x480
+360p @{tab}@{tab} 480x360
+
+@{lindent 3}
+@{u}Examples:@{uu}
+Watch a recorded video, like below
+@{b}dlive.py -u https://dlive.tv/p/channelvideo@{ub}
+
+Watch the live stream, like below
+@{b}dlive.py -u https://dlive.tv/channelname@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to dlive.tv.
 
 @endnode
 @node "Changelog" "Changelog"
@@ -511,6 +566,11 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Author"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.4
+* Dlive.tv script added
+* MorphOS 3.x, MacOS X and Linux systems are now supported with autoplay
+* Various fixes
 
 v1.3
 * YouTube.com script added
@@ -543,6 +603,21 @@ v1.0
 * Initial release
 * Twitch.tv script added
 * Simple m3u8 parser created
+
+@endnode
+@node "Troubleshooting" "Troubleshooting"
+@prev "MAIN"
+@next "Installation"
+@{jleft}@{lindent 3}
+@{b}Troubleshooting@{ub}
+
+@{i}* The file is not executable (AmigaOS)@{ui}
+Sometimes the "Script" bit of the scripts are removed by LHA or by GIT. The result is to not be able to run the scripts by using only the filename. Try to use as a prefix the @{b}python@{ub} command. This will force the script to run with python.
+
+Use icon information to set the "Script" bit to on (checked).
+
+@{i}* bash: ./dlive.py: python: bad interpreter: No such file or directory (Linux)@{ui}
+This means that it can't find the python command on your system. Try to use @{b}python@{ub} or @{b}python2@{ub} as a prefix.
 
 @endnode
 @node "Author" "Author"

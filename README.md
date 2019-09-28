@@ -1,11 +1,11 @@
 # aiostreams
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
-These can be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using ffplay or mplayer.
+All the scripts should be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
 
 Some of these networks have a search API, and you can use them to find available streams and videos, without the need to visit the website. This is a fast way to find what you want, without waiting huge amount of Javascript to be executed on your machine. Especially useful when your computer doesn't have the necessary horse power to support those websites.
 
-They are developed and fully tested under AmigaOS 4.1 FE. There will be support for other systems in the future, like MorphOS, AmigaOS 3 and AROS, as long as Python is supported. The scripts might work under Linux and MacOS X, but those systems are not the target of this project. There are other solution available that work better.
+All the scripts are developed and fully tested under AmigaOS 4.1 FE and MorphOS 3.x. There will be support for other systems in the future, like AmigaOS 3 and AROS, as long as Python is supported. The scripts work just fine under Linux and MacOS X, but those systems are not the target of this project. There are other solutions that might do a better job.
 
 ### Supported networks:
 * [Twitch.tv](https://www.twitch.tv/)
@@ -14,8 +14,10 @@ They are developed and fully tested under AmigaOS 4.1 FE. There will be support 
 * [Vimeo.com](https://vimeo.com/)
 * [Dailymotion.com](https://www.dailymotion.com)
 * [Skaitv.gr](http://www.skaitv.gr/)
+* [Dlive.tv](https://dlive.tv/)
 
-### Requirements
+### A full list of requirements per OS:
+#### AmigaOS 4.1
 * [AmigaOS 4.1 FE upd1][amigaos]
 * Python 2.5
 * [Pythonssl][pythonssl]
@@ -24,7 +26,13 @@ They are developed and fully tested under AmigaOS 4.1 FE. There will be support 
 * [mplayer][mplayer] for the online recorded videos, or something equivalent
 * internet access
 
-#### Docker
+#### MorphOS 3.x
+* MorphOS 3.10 and above
+* Python 2.5 and above
+* Currently there is no suitable video player available on MorphOS, that could support the necessary streams. As soon as new video players are available, they can be used by aiostreams scripts.
+* internet access
+
+### Docker for development
 This is not necessary for using these scripts. It just provides a good development environment for other systems.
 To run the script in a docker container with Python 2.7 installed, use the following on different shells, from the script folder.
 
