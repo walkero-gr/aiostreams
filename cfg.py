@@ -9,9 +9,15 @@ sPlayer = "APPDIR:ffplay"
 sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"
 
 # MacOS X players
-# vPlayer = "~/Apps/VLC.app/Contents/MacOS/VLC"
+# vPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
 # vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
-# sPlayer = "~/Apps/VLC.app/Contents/MacOS/VLC"
+# sPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
+# sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+
+# Linux players
+# vPlayer = "/usr/bin/vlc"
+# vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+# sPlayer = "/usr/bin/vlc"
 # sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 
 twitchQualityWeight = [
