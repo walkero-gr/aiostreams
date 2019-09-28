@@ -86,3 +86,10 @@ ytLiveQualityWeight = [
 	720,		# 720p mp4
 	1080		# 1080p mp4
 ]
+
+dliveQualityWeight = [
+	"480p",
+	"360p",
+	"720p",
+	"src"
+]
