@@ -4,11 +4,11 @@ import cfg
 import unicodedata
 try:
 	import amiga
-except:
+except ImportError:
 	pass
 
-aioVer = "1.3"
-aioReleaseDate = "2019-09-20"
+aioVer = "1.4"
+aioReleaseDate = "2019-09-29"
 userOS = sys.platform
 
 class cmnHandler:
