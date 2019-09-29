@@ -27,6 +27,7 @@ class dliveAPIHandler:
 	def getURL(self, url):
 		request = urllib2.Request(url)
 		request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
+
 		try:
 			response = urllib2.urlopen(request)
 			retData = response.read()
@@ -38,15 +39,15 @@ class dliveAPIHandler:
 		return None
 
 	def call(self, endpoint, query = None, apiCall = False):
-		queryArgs = None
-		if (query):
-			queryArgs = urllib.urlencode(query)
-		
 		requestUrl = self.baseurl
 		if apiCall:
 			requestUrl = self.apiurl
 
-		url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
+		url = "%s/%s" % (requestUrl, endpoint)
+		if (query):
+			queryArgs = urllib.urlencode(query)
+			url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
+		print url
 		return self.getURL(url)
 
 	def getChannelInfoByName(self, channelName):
@@ -200,13 +201,40 @@ def main(argv):
 	if (video['type'] == 'channel'):
 		channelName = video['id']
 		channelInfo = dliveApi.getChannelInfoByName(channelName)
-		apolloJson = helpers.getApolloInfo(channelInfo)
+		if channelInfo:
+			apolloJson = helpers.getApolloInfo(channelInfo)
 
-		username = helpers.getUserName(apolloJson)
+			username = helpers.getUserName(apolloJson)
 
-		if helpers.isLiveStream:
-			m3u8Response = dliveApi.getStreamsByUsername(username)
+			if helpers.isLiveStream:
+				m3u8Response = dliveApi.getStreamsByUsername(username)
 
+				if (m3u8Response):
+					uri = helpers.getPrefferedVideoURL(m3u8Response)
+					if uri:
+						if cfg.verbose and (args.silence != True):
+							print "%s" % (uri)
+						if cfg.autoplay:
+							cmnHandler.videoAutoplay(uri, 'video')
+					else:
+						print "Not valid stream found"
+				else:
+					print "There was an error with the m3u8 reading"
+		else:
+			print "There was an error with website access"
+
+		sys.exit()
+
+	if (video['type'] == 'video'):
+		video = video['id']
+		channelInfo = dliveApi.getVideoInfoByName(video)
+		if channelInfo:
+			apolloJson = helpers.getApolloInfo(channelInfo)
+
+			username = helpers.getUserName(apolloJson)
+			playbackUrl = helpers.getPlaybackUrl(apolloJson)
+		
+			m3u8Response = dliveApi.getURL(playbackUrl)
 			if (m3u8Response):
 				uri = helpers.getPrefferedVideoURL(m3u8Response)
 				if uri:
@@ -215,32 +243,11 @@ def main(argv):
 					if cfg.autoplay:
 						cmnHandler.videoAutoplay(uri, 'video')
 				else:
-					print "Not valid stream found"
+					print "Not valid video found"
 			else:
 				print "There was an error with the m3u8 reading"
-
-		sys.exit()
-
-	if (video['type'] == 'video'):
-		video = video['id']
-		channelInfo = dliveApi.getVideoInfoByName(video)
-		apolloJson = helpers.getApolloInfo(channelInfo)
-
-		username = helpers.getUserName(apolloJson)
-		playbackUrl = helpers.getPlaybackUrl(apolloJson)
-		
-		m3u8Response = dliveApi.getURL(playbackUrl)
-		if (m3u8Response):
-			uri = helpers.getPrefferedVideoURL(m3u8Response)
-			if uri:
-				if cfg.verbose and (args.silence != True):
-					print "%s" % (uri)
-				if cfg.autoplay:
-					cmnHandler.videoAutoplay(uri, 'video')
-			else:
-				print "Not valid video found"
 		else:
-			print "There was an error with the m3u8 reading"
+			print "There was an error with website access"
 
 		sys.exit()
 	
