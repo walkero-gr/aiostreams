@@ -2,7 +2,6 @@
 @author "George (walkero) Sokianos"
 @$VER: 1.4 (29.09.2019)     
 @wordwrap
-@font "DejaVu Sans Mono.font" 17
 @node "MAIN" "aiostreams"
 @next "Requirements"
 @{jcenter}
@@ -498,24 +497,6 @@ Watch the live stream, like below
 No private info is sent by this script to Skaitv.gr.
 
 @endnode
-@node "Todo" "Todo"
-@prev "Usage"
-@next "Changelog"
-@{jleft}@{lindent 3}
-@{b}Todo list@{ub}
-
-The todo list is something that might change a lot between the version releases. You can find the up to date todo list and the status of things I am working on, at:
-https://github.com/walkero-gr/aiostreams/projects/1 @{"open" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/projects/1"}
-
-Many things:
-* Reuters.tv support
-* Support Emotion player, if possible.
-* AmigaOS 3 and AROS support.
-* A way to get a notification on which of your favorite channels are currently streaming.
-
-If you have any websites that you would like to be supported, please contact me and I will check if this is possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used outside their websites.
-
-@endnode@{u}
 @node "Dlive.tv" "Dlive.tv"
 @prev "Usage"
 @{jleft}@{lindent 3}
@@ -561,9 +542,27 @@ Watch the live stream, like below
 No private info is sent by this script to dlive.tv.
 
 @endnode
+@node "Todo" "Todo"
+@prev "Usage"
+@next "Changelog"
+@{jleft}@{lindent 3}
+@{b}Todo list@{ub}
+
+The todo list is something that might change a lot between the version releases. You can find the up to date todo list and the status of things I am working on, at:
+https://github.com/walkero-gr/aiostreams/projects/1 @{"open" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/projects/1"}
+
+Many things:
+* Reuters.tv support
+* Support Emotion player, if possible.
+* AmigaOS 3 and AROS support.
+* A way to get a notification on which of your favorite channels are currently streaming.
+
+If you have any websites that you would like to be supported, please contact me and I will check if this is possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used outside their websites.
+
+@endnode
 @node "Changelog" "Changelog"
 @prev "Todo"
-@next "Author"
+@next "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
 
@@ -606,8 +605,8 @@ v1.0
 
 @endnode
 @node "Troubleshooting" "Troubleshooting"
-@prev "MAIN"
-@next "Installation"
+@prev "Changelog"
+@next "Author"
 @{jleft}@{lindent 3}
 @{b}Troubleshooting@{ub}
 
@@ -621,9 +620,10 @@ This means that it can't find the python command on your system. Try to use @{b}
 
 @endnode
 @node "Author" "Author"
-@prev "Changelog"
+@prev "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Author@{ub}
+
 My name is George Sokianos and you can reach me at Amiga forums under the username @{b}walkero@{ub}.
 
 The project is open source and you can find the code at:
