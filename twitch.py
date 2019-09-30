@@ -37,20 +37,16 @@ class twitchAPIHandler:
 	def __init__(self):
 		self.baseurl = 'https://api.twitch.tv'
 
-		return
+		return None
 
-	def call(self, endpoint, query = None):
-		queryArgs = None
-		if (query):
-			queryArgs = urllib.urlencode(query)
-		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
-		
+	def getURL(self, url):
 		request = urllib2.Request(url)
 		request.add_header('Accept', 'application/vnd.twitchtv.v4+json')
 		request.add_header('Client-ID', clientId)
+
 		try:
 			response = urllib2.urlopen(request)
-			retData = json.load(response)
+			retData = response.read()
 			response.close()
 			return retData
 		except URLError, e:
@@ -58,27 +54,48 @@ class twitchAPIHandler:
 		
 		return None
 
+	def call(self, endpoint, query = None):
+		url = "%s/%s" % (self.baseurl, endpoint)
+		if (query):
+			queryArgs = urllib.urlencode(query)
+			url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+		
+		return self.getURL(url)
+
 	def getChannelInfoByName(self, channelName):
 		endpoint = "kraken/channels/%s.json" % (channelName)
-		retData = self.call(endpoint)
-
-		return retData
+		responseData = self.call(endpoint)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 	def getStreamsByChannel(self, channelName):
 		endpoint = "kraken/streams/%s.json" % (channelName)
-		return self.call(endpoint)
+		responseData = self.call(endpoint)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 	def getAccessTokenByChannel(self, channelName):
 		endpoint = "api/channels/%s/access_token.json" % (channelName)
-		return self.call(endpoint)
+		responseData = self.call(endpoint)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 	def getVideoInfoByID(self, videoId):
 		endpoint = "kraken/videos/%s.json" % (videoId)
-		return self.call(endpoint)
+		responseData = self.call(endpoint)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 	def getAccessTokenByVideo(self, videoId):
 		endpoint = "api/vods/%s/access_token.json" % (videoId)
-		return self.call(endpoint)
+		responseData = self.call(endpoint)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 	def searchByGameTitle(self, title, offset = 0, limit = 50):
 		endpoint = "kraken/search/streams"
@@ -87,14 +104,20 @@ class twitchAPIHandler:
 			"limit": limit,
 			"offset": offset
 		}
-		return self.call(endpoint, query)
+		responseData = self.call(endpoint, query)
+		if responseData:
+			return json.loads(responseData)
+		return None
 	
 	def getVideosByChannel(self, channelName):
 		endpoint = "kraken/channels/%s/videos" % (channelName)
 		query = {
 			"limit": 50
 		}
-		return self.call(endpoint, query)
+		responseData = self.call(endpoint, query)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 	def getTopStreams(self, offset = 0, limit = 50):
 		endpoint = "kraken/streams"
@@ -103,7 +126,10 @@ class twitchAPIHandler:
 			"limit": limit,
 			"offset": offset
 		}
-		return self.call(endpoint, query)
+		responseData = self.call(endpoint, query)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 	def getTopGames(self, offset = 0, limit = 50):
 		endpoint = "kraken/games/top"
@@ -111,7 +137,10 @@ class twitchAPIHandler:
 			"limit": limit,
 			"offset": offset
 		}
-		return self.call(endpoint, query)
+		responseData = self.call(endpoint, query)
+		if responseData:
+			return json.loads(responseData)
+		return None
 
 class usherHandler:
 	def __init__(self):
@@ -120,11 +149,7 @@ class usherHandler:
 
 		return None
 
-	def call(self, endpoint, query = None):
-		queryArgs = None
-		if (query):
-			queryArgs = urllib.urlencode(query)
-		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+	def getURL(self, url):
 		request = urllib2.Request(url)
 
 		try:
@@ -137,6 +162,14 @@ class usherHandler:
 		
 		return None
 
+	def call(self, endpoint, query = None):
+		url = "%s/%s" % (self.baseurl, endpoint)
+		if (query):
+			queryArgs = urllib.urlencode(query)
+			url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+
+		return self.getURL(url)
+
 	def getStreams(self, endpoint, sig, token):
 		query = {
 			"player": "twitchweb",
@@ -148,7 +181,10 @@ class usherHandler:
 			"sig": sig,
 			"token": token
 		}
-		return self.call(endpoint, query)
+		responseData = self.call(endpoint, query)
+		if responseData:
+			return responseData
+		return None
 
 	def getChannelStreams(self, channelName, sig, token):
 		endpoint = "api/channel/hls/%s" % (channelName)

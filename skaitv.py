@@ -28,7 +28,7 @@ class skaiAPIHandler:
 	def __init__(self):
 		self.baseurl = 'http://www.skaitv.gr/json'
 
-		return
+		return None
 
 	def getURL(self, url):
 		request = urllib2.Request(url)
@@ -43,10 +43,11 @@ class skaiAPIHandler:
 		return None
 
 	def call(self, endpoint, query = None):
-		queryArgs = None
+		url = "%s/%s" % (self.baseurl, endpoint)
 		if (query):
 			queryArgs = urllib.urlencode(query)
-		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+			url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+			
 		return self.getURL(url)
 
 	def getVideoInfo(self, parsedUrl):

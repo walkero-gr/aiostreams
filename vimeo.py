@@ -20,7 +20,7 @@ class vimeoAPIHandler:
 	def __init__(self):
 		self.baseurl = 'https://player.vimeo.com'
 
-		return
+		return None
 
 	def getURL(self, url):
 		request = urllib2.Request(url)
@@ -35,10 +35,10 @@ class vimeoAPIHandler:
 		return None
 
 	def call(self, endpoint, query = None):
-		queryArgs = None
+		url = "%s/%s" % (self.baseurl, endpoint)
 		if (query):
 			queryArgs = urllib.urlencode(query)
-		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+			url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
 
 		return self.getURL(url)
 
@@ -48,7 +48,6 @@ class vimeoAPIHandler:
 		if responseData:
 			return json.loads(responseData)
 		return None
-
 
 class helpersHandler:
 	def parseURL(self, url):
@@ -104,6 +103,7 @@ class helpersHandler:
 		retUri = '%s/%s' % (retUri, uriClean)
 
 		return retUri
+
 
 def main(argv):
 	vimeoApi = vimeoAPIHandler()

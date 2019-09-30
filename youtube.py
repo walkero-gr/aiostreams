@@ -46,7 +46,7 @@ class ytAPIHandler:
 		self.baseurl = 'https://youtube.com'
 		self.apiurl = 'https://www.googleapis.com/youtube/v3'
 
-		return
+		return None
 
 	def getURL(self, url):
 		request = urllib2.Request(url)
@@ -62,16 +62,16 @@ class ytAPIHandler:
 		return None
 
 	def call(self, endpoint, query = None, apiCall = False):
-		queryArgs = None
-		if (query):
-			query['key'] = apikey
-			queryArgs = urllib.urlencode(query)
-		
 		requestUrl = self.baseurl
 		if apiCall:
 			requestUrl = self.apiurl
+		
+		url = "%s/%s" % (requestUrl, endpoint)
+		if (query):
+			query['key'] = apikey
+			queryArgs = urllib.urlencode(query)
+			url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
 
-		url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
 		return self.getURL(url)
 
 	def getVideoInfo(self, videoId):

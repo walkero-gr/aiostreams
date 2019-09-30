@@ -22,7 +22,7 @@ class dliveAPIHandler:
 		self.baseurl = 'https://dlive.tv'
 		self.apiurl = 'https://live.prd.dlive.tv'
 
-		return
+		return None
 
 	def getURL(self, url):
 		request = urllib2.Request(url)
@@ -47,7 +47,7 @@ class dliveAPIHandler:
 		if (query):
 			queryArgs = urllib.urlencode(query)
 			url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
-		print url
+		
 		return self.getURL(url)
 
 	def getChannelInfoByName(self, channelName):

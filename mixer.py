@@ -25,16 +25,13 @@ class mixerAPIHandler:
 	def __init__(self):
 		self.baseurl = 'https://mixer.com/api/v1'
 
-		return
+		return None
 
-	def call(self, endpoint, query = None):
-		queryArgs = None
-		if (query):
-			queryArgs = urllib.urlencode(query)
-		url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
-
+	def getURL(self, url):
 		request = urllib2.Request(url)
+		request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
 		request.add_header('Client-ID', clientId)
+
 		try:
 			response = urllib2.urlopen(request)
 			retData = response.read()
@@ -44,6 +41,14 @@ class mixerAPIHandler:
 			print e
 		
 		return None
+
+	def call(self, endpoint, query = None):
+		url = "%s/%s" % (self.baseurl, endpoint)
+		if (query):
+			queryArgs = urllib.urlencode(query)
+			url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+
+		return self.getURL(url)
 
 	def getChannelInfoByName(self, channelName):
 		endpoint = "channels/%s" % (channelName)
