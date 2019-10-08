@@ -144,8 +144,8 @@ class twitchAPIHandler:
 
 class usherHandler:
 	def __init__(self):
-		# self.baseurl = 'https://usher.ttvnw.net'
-		self.baseurl = 'https://usher.twitch.tv'
+		self.baseurl = 'http://usher.ttvnw.net'
+		#self.baseurl = 'https://usher.twitch.tv'
 
 		return None
 
