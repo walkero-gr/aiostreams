@@ -19,7 +19,7 @@ _url_re = re.compile(r"""
 
 class dliveAPIHandler:
 	def __init__(self):
-		self.baseurl = 'https://dlive.tv'
+		self.baseurl = 'http://aiostreams.amiga-projects.net/v1/dlive'
 		self.apiurl = 'https://live.prd.dlive.tv'
 
 		return None
@@ -51,14 +51,14 @@ class dliveAPIHandler:
 		return self.getURL(url)
 
 	def getChannelInfoByName(self, channelName):
-		endpoint = "%s" % (channelName)
+		endpoint = "channel/%s" % (channelName)
 		responseData = self.call(endpoint)
 		if responseData:
 			return responseData
 		return None
 
 	def getVideoInfoByName(self, videoId):
-		endpoint = "p/%s" % (videoId)
+		endpoint = "video/%s" % (videoId)
 		responseData = self.call(endpoint)
 		if responseData:
 			return responseData
@@ -98,14 +98,6 @@ class helpersHandler:
 		
 		return None
 
-	def getApolloInfo(self, html):
-		start = html.find('__APOLLO_STATE__')
-		end = html.find('function()', start)
-		end = end-2
-		
-		retJson = html[start:end]
-		return retJson.replace('__APOLLO_STATE__=', "")
-
 	def getDisplayName(self, jsondata):
 		jsonDict = json.loads(jsondata)
 		for key, values in jsonDict['defaultClient'].items():
@@ -119,7 +111,7 @@ class helpersHandler:
 
 	def getUserName(self, jsondata):
 		jsonDict = json.loads(jsondata)
-		for key, values in jsonDict['defaultClient'].items():
+		for key, values in jsonDict['data']['defaultClient'].items():
 			if (key.startswith('user:')):
 				try:
 					return values['username']
@@ -130,7 +122,7 @@ class helpersHandler:
 
 	def getChanneAbout(self, jsondata):
 		jsonDict = json.loads(jsondata)
-		for key, values in jsonDict['defaultClient'].items():
+		for key, values in jsonDict['data']['defaultClient'].items():
 			if (key.startswith('user:')):
 				try:
 					return values['about']
@@ -141,7 +133,7 @@ class helpersHandler:
 	
 	def isLiveStream(self, jsondata):
 		jsonDict = json.loads(jsondata)
-		for key, values in jsonDict['defaultClient'].items():
+		for key, values in jsonDict['data']['defaultClient'].items():
 			if (key.startswith('user:')):
 				try:
 					if values['livestream']:
@@ -153,7 +145,7 @@ class helpersHandler:
 	
 	def getLiveStreamId(self, jsondata):
 		jsonDict = json.loads(jsondata)
-		for key, values in jsonDict['defaultClient'].items():
+		for key, values in jsonDict['data']['defaultClient'].items():
 			if (key.startswith('user:')):
 				if values['livestream']:
 					try:
@@ -165,7 +157,7 @@ class helpersHandler:
 	
 	def getPlaybackUrl(self, jsondata):
 		jsonDict = json.loads(jsondata)
-		for key, values in jsonDict['defaultClient'].items():
+		for key, values in jsonDict['data']['defaultClient'].items():
 			if (key.startswith('$ROOT_QUERY.pastBroadcast') and key.endswith('})')):
 				try:
 					return values['playbackUrl']
@@ -200,41 +192,13 @@ def main(argv):
 
 	if (video['type'] == 'channel'):
 		channelName = video['id']
-		channelInfo = dliveApi.getChannelInfoByName(channelName)
-		if channelInfo:
-			apolloJson = helpers.getApolloInfo(channelInfo)
+		apolloJson = dliveApi.getChannelInfoByName(channelName)
 
-			username = helpers.getUserName(apolloJson)
+		username = helpers.getUserName(apolloJson)
 
-			if helpers.isLiveStream:
-				m3u8Response = dliveApi.getStreamsByUsername(username)
+		if helpers.isLiveStream:
+			m3u8Response = dliveApi.getStreamsByUsername(username)
 
-				if (m3u8Response):
-					uri = helpers.getPrefferedVideoURL(m3u8Response)
-					if uri:
-						if cfg.verbose and (args.silence != True):
-							print "%s" % (uri)
-						if cfg.autoplay:
-							cmnHandler.videoAutoplay(uri, 'video')
-					else:
-						print "Not valid stream found"
-				else:
-					print "There was an error with the m3u8 reading"
-		else:
-			print "There was an error with website access"
-
-		sys.exit()
-
-	if (video['type'] == 'video'):
-		video = video['id']
-		channelInfo = dliveApi.getVideoInfoByName(video)
-		if channelInfo:
-			apolloJson = helpers.getApolloInfo(channelInfo)
-
-			username = helpers.getUserName(apolloJson)
-			playbackUrl = helpers.getPlaybackUrl(apolloJson)
-		
-			m3u8Response = dliveApi.getURL(playbackUrl)
 			if (m3u8Response):
 				uri = helpers.getPrefferedVideoURL(m3u8Response)
 				if uri:
@@ -243,11 +207,31 @@ def main(argv):
 					if cfg.autoplay:
 						cmnHandler.videoAutoplay(uri, 'video')
 				else:
-					print "Not valid video found"
+					print "Not valid stream found"
 			else:
 				print "There was an error with the m3u8 reading"
+
+		sys.exit()
+
+	if (video['type'] == 'video'):
+		video = video['id']
+		apolloJson = dliveApi.getVideoInfoByName(video)
+
+		username = helpers.getUserName(apolloJson)
+		playbackUrl = helpers.getPlaybackUrl(apolloJson)
+	
+		m3u8Response = dliveApi.getURL(playbackUrl)
+		if (m3u8Response):
+			uri = helpers.getPrefferedVideoURL(m3u8Response)
+			if uri:
+				if cfg.verbose and (args.silence != True):
+					print "%s" % (uri)
+				if cfg.autoplay:
+					cmnHandler.videoAutoplay(uri, 'video')
+			else:
+				print "Not valid video found"
 		else:
-			print "There was an error with website access"
+			print "There was an error with the m3u8 reading"
 
 		sys.exit()
 	
