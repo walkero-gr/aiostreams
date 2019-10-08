@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.4 (29.09.2019)     
+@$VER: 1.4.1 (08.10.2019)     
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.4 (2019-09-29)@{ui}
+@{i}v1.4.1 (2019-10-08)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -565,6 +565,10 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.4.1
+* Changes on dlive script to support AmigaOS 4 and MorphOS. Now you can watch streams and videos on your beloved systems
+* A change on twitch script to be usable with Emotion player under AmigaOS 4
 
 v1.4
 * Dlive.tv script added
