@@ -142,10 +142,10 @@ class twitchAPIHandler:
 			return json.loads(responseData)
 		return None
 
-class usherHandler:
+
+class aiostreamsapiHandler:
 	def __init__(self):
-		self.baseurl = 'http://usher.ttvnw.net'
-		#self.baseurl = 'https://usher.twitch.tv'
+		self.baseurl = 'http://aiostreams.amiga-projects.net/v1/twitch'
 
 		return None
 
@@ -170,31 +170,22 @@ class usherHandler:
 
 		return self.getURL(url)
 
-	def getStreams(self, endpoint, sig, token):
-		query = {
-			"player": "twitchweb",
-			"type": "any",
-			"allow_source": "true",
-			"allow_audio_only": "true",
-			"allow_spectre": "false",
-			"p": int(random() * 999999),
-			"sig": sig,
-			"token": token
-		}
-		responseData = self.call(endpoint, query)
+	def getStreams(self, endpoint):
+		responseData = self.call(endpoint)
+
 		if responseData:
 			return responseData
 		return None
 
-	def getChannelStreams(self, channelName, sig, token):
-		endpoint = "api/channel/hls/%s" % (channelName)
+	def getChannelStreams(self, channelName):
+		endpoint = "getplaylist/channel/%s" % (channelName)
 
-		return self.getStreams(endpoint, sig, token)
+		return self.getStreams(endpoint)
 
-	def getVideoStreams(self, videoId, sig, token):
-		endpoint = "vod/%s" % (videoId)
+	def getVideoStreams(self, videoId):
+		endpoint = "getplaylist/video/%s" % (videoId)
 		
-		return self.getStreams(endpoint, sig, token)
+		return self.getStreams(endpoint)
 
 class helpersHandler:
 	def parseURL(self, url):
@@ -225,8 +216,9 @@ class helpersHandler:
 
 def main(argv):
 	twitchApi = twitchAPIHandler()
-	usherApi = usherHandler()
 	helpers = helpersHandler()
+	aiostreamsapi = aiostreamsapiHandler()
+
 	video = {'type': ''}
 	playlists = dict()
 	
@@ -300,8 +292,7 @@ def main(argv):
 		if (streams):
 			if (streams['stream']):
 				if (streams['stream']['stream_type'] == 'live'):
-					accessToken = twitchApi.getAccessTokenByChannel(channelName)
-					m3u8Response = usherApi.getChannelStreams(channelName, accessToken['sig'], accessToken['token'])
+					m3u8Response = aiostreamsapi.getChannelStreams(channelName)
 					if (m3u8Response):
 						uri = helpers.getPrefferedVideoURL(m3u8Response)
 						if uri:
@@ -312,7 +303,7 @@ def main(argv):
 						else:
 							print "Not valid stream found"
 					else:
-						print "There was an error with the usherApi"
+						print "There was an error with the playlist retrieval"
 			else:
 				print "There is no Live stream for the channel: %s" % (channelName)
 
@@ -324,8 +315,7 @@ def main(argv):
 		streams = twitchApi.getVideoInfoByID(videoId)
 		if (streams):
 			if (streams['viewable'] == 'public'):
-				accessToken = twitchApi.getAccessTokenByVideo(videoId)
-				m3u8Response = usherApi.getVideoStreams(videoId, accessToken['sig'], accessToken['token'])
+				m3u8Response = aiostreamsapi.getVideoStreams(videoId)
 				if (m3u8Response):
 					uri = helpers.getPrefferedVideoURL(m3u8Response)
 					if uri:
@@ -336,7 +326,7 @@ def main(argv):
 					else:
 						print "Not valid video found"
 				else:
-					print "There was an error with the usherApi"
+					print "There was an error with the playlist retrieval"
 				
 		else:
 			print "There is no video available with ID: %s" % (videoId)
