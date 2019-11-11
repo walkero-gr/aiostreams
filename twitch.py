@@ -170,22 +170,16 @@ class aiostreamsapiHandler:
 
 		return self.getURL(url)
 
-	def getStreams(self, endpoint):
-		responseData = self.call(endpoint)
-
+	def getStreams(self, id, type):
+		endpoint = "getplaylist"
+		query = {
+			"id": id,
+			"type": type
+		}
+		responseData = self.call(endpoint, query)
 		if responseData:
 			return responseData
 		return None
-
-	def getChannelStreams(self, channelName):
-		endpoint = "getplaylist/channel/%s" % (channelName)
-
-		return self.getStreams(endpoint)
-
-	def getVideoStreams(self, videoId):
-		endpoint = "getplaylist/video/%s" % (videoId)
-		
-		return self.getStreams(endpoint)
 
 class helpersHandler:
 	def parseURL(self, url):
@@ -292,7 +286,7 @@ def main(argv):
 		if (streams):
 			if (streams['stream']):
 				if (streams['stream']['stream_type'] == 'live'):
-					m3u8Response = aiostreamsapi.getChannelStreams(channelName)
+					m3u8Response = aiostreamsapi.getStreams(channelName, 'channel')
 					if (m3u8Response):
 						uri = helpers.getPrefferedVideoURL(m3u8Response)
 						if uri:
@@ -315,7 +309,7 @@ def main(argv):
 		streams = twitchApi.getVideoInfoByID(videoId)
 		if (streams):
 			if (streams['viewable'] == 'public'):
-				m3u8Response = aiostreamsapi.getVideoStreams(videoId)
+				m3u8Response = aiostreamsapi.getStreams(videoId, 'video')
 				if (m3u8Response):
 					uri = helpers.getPrefferedVideoURL(m3u8Response)
 					if uri:
