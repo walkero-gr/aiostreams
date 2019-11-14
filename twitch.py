@@ -8,7 +8,6 @@ from urllib2 import Request, urlopen, URLError
 from random import random
 
 cmnHandler = cmn.cmnHandler()
-clientId = "k5y7u3ntz5llxu22gstxyfxlwcz10v"
 
 _url_re = re.compile(r"""
     http(s)?://
@@ -149,7 +148,7 @@ class twitchAPIHandler:
 class aiostreamsapiHandler:
 	def __init__(self):
 		self.baseurl = 'https://aiostreams.amiga-projects.net/v1/twitch'
-
+		
 		return None
 
 	def getURL(self, url):
@@ -184,6 +183,13 @@ class aiostreamsapiHandler:
 			return responseData
 		return None
 
+	def getKey(self):
+		endpoint = "getkey"
+		responseData = self.call(endpoint)
+		if responseData:
+			return json.loads(responseData)
+		return None
+
 class helpersHandler:
 	def parseURL(self, url):
 		return _url_re.match(url).groupdict()
@@ -215,6 +221,14 @@ def main(argv):
 	twitchApi = twitchAPIHandler()
 	helpers = helpersHandler()
 	aiostreamsapi = aiostreamsapiHandler()
+	
+	keyData = aiostreamsapi.getKey()
+	if (keyData):
+		global clientId
+		clientId = keyData['clientId']
+	else:
+		print 'An error occured. Please contact the developer.'
+		sys.exit()
 
 	video = {'type': ''}
 	playlists = dict()
