@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.4.1 (08.10.2019)     
+@$VER: 1.4.2 (14.11.2019)     
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.4.1 (2019-10-08)@{ui}
+@{i}v1.4.2 (2019-11-14)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -565,6 +565,10 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.4.2
+* Twitch script uses Twitch API v5
+* Twitch script uses aiostreams API as a workaround fix of streams that were not working before because of unicode channel names.
 
 v1.4.1
 * Changes on dlive script to support AmigaOS 4 and MorphOS. Now you can watch streams and videos on your beloved systems
