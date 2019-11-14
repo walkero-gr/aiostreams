@@ -41,7 +41,7 @@ class twitchAPIHandler:
 
 	def getURL(self, url):
 		request = urllib2.Request(url)
-		request.add_header('Accept', 'application/vnd.twitchtv.v4+json')
+		request.add_header('Accept', 'application/vnd.twitchtv.v5+json')
 		request.add_header('Client-ID', clientId)
 
 		try:
@@ -63,14 +63,17 @@ class twitchAPIHandler:
 		return self.getURL(url)
 
 	def getChannelInfoByName(self, channelName):
-		endpoint = "kraken/channels/%s.json" % (channelName)
-		responseData = self.call(endpoint)
+		endpoint = "kraken/users"
+		query = {
+			"login": channelName
+		}
+		responseData = self.call(endpoint, query)
 		if responseData:
 			return json.loads(responseData)
 		return None
 
-	def getStreamsByChannel(self, channelName):
-		endpoint = "kraken/streams/%s.json" % (channelName)
+	def getStreamsByChannel(self, id):
+		endpoint = "kraken/streams/%s" % (id)
 		responseData = self.call(endpoint)
 		if responseData:
 			return json.loads(responseData)
@@ -145,7 +148,7 @@ class twitchAPIHandler:
 
 class aiostreamsapiHandler:
 	def __init__(self):
-		self.baseurl = 'http://aiostreams.amiga-projects.net/v1/twitch'
+		self.baseurl = 'https://aiostreams.amiga-projects.net/v1/twitch'
 
 		return None
 
@@ -259,7 +262,9 @@ def main(argv):
 
 	if (args.channelvideos):
 		channelName = video['id']
-		streamList = twitchApi.getVideosByChannel(channelName)
+		channelUserInfo = twitchApi.getChannelInfoByName(channelName)
+		channelUserId = channelUserInfo['users'][0]['_id']
+		streamList = twitchApi.getVideosByChannel(channelUserId)
 		print "%-36s\t %-20s\t %-50s\t %s" % ('URL', 'Recorded at', 'Available resolutions', 'Title')
 		print "%s" % ('-'*200)
 		for stream in streamList['videos']:
@@ -281,8 +286,9 @@ def main(argv):
 
 	if (video['type'] == 'channel'):
 		channelName = video['id']
-			
-		streams = twitchApi.getStreamsByChannel(channelName)
+		channelUserInfo = twitchApi.getChannelInfoByName(channelName)
+		channelUserId = channelUserInfo['users'][0]['_id']
+		streams = twitchApi.getStreamsByChannel(channelUserId)
 		if (streams):
 			if (streams['stream']):
 				if (streams['stream']['stream_type'] == 'live'):
