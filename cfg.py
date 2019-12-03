@@ -93,3 +93,12 @@ dliveQualityWeight = [
 	"720p",
 	"src"
 ]
+
+peertubeQualityWeight = [
+	"480p",
+	"360p",
+	"240p",
+	"720p",
+	"768p",
+	"1080p"
+]
