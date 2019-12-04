@@ -9,7 +9,10 @@ from random import random
 
 cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
-	http(s)?://(\w+.)?peertube\.co.uk/
+	http(s)?://(www.)?
+    (?:
+		(?P<instance>[^/?]+)/
+	)
     (?:
 		videos/watch/(?P<video_uuid>[^/?]+)
 	)?
@@ -17,7 +20,7 @@ _url_re = re.compile(r"""
 
 class peertubeAPIHandler:
 	def __init__(self):
-		self.baseurl = 'https://peertube.co.uk/api/v1'
+		self.baseurl = None
 
 		return None
 
@@ -69,6 +72,13 @@ class helpersHandler:
 		
 		return None
 
+	def getInstanceUrl(self, url):
+		types = self.parseURL(url)
+		if (types['instance']):
+			return "https://%s/api/v1" % (types['instance'])
+
+		return None
+
 
 def main(argv):
 	peertubeApi = peertubeAPIHandler()
@@ -95,6 +105,7 @@ def main(argv):
 		cfg.peertubeQualityWeight.insert(0, args.quality)
 
 	if (video['type'] == 'video'):
+		peertubeApi.baseurl = helpers.getInstanceUrl(args.url)
 		videoUuid = video['uuid']
 		streams = peertubeApi.getVideoInfoByID(videoUuid)
 
