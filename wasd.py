@@ -138,7 +138,10 @@ def main(argv):
         sys.exit()
         
     # Parse the arguments
-    scriptDescription = 'This is a python script for wasd.tv online streaming platform. You can use this to discover and watch a streaming, using your beloved video player. This script is part of the aiostreams scripts package.'
+    scriptDescription = ' \
+        This is a python script for wasd.tv online streaming platform. \
+        You can use this to discover and watch a streaming, using your beloved video player. \
+        This script is part of the aiostreams scripts package (https://github.com/walkero-gr/aiostreams).'
     argParser = argparse.ArgumentParser(description=scriptDescription)
     argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from wasd.com')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
