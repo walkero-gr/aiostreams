@@ -7,13 +7,16 @@ try:
 except ImportError:
     pass
 
-aioVer = "1.4.2"
-aioReleaseDate = "2019-11-14"
+aioVer = "1.5"
+aioReleaseDate = "2019-12-10"
 userOS = sys.platform
 
 class cmnHandler:
+    def getIntroVersionText(self):
+        return "aiostreams v%s (%s) - Developed by George Sokianos\n" % (aioVer, aioReleaseDate)
+
     def showIntroText(self):
-        print "aiostreams v%s (%s) - Developed by George Sokianos\n" % (aioVer, aioReleaseDate)
+        print self.getIntroVersionText()
 
     def getUserOS(self):
         return userOS
