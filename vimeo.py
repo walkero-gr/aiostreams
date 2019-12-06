@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -68,7 +68,7 @@ class helpersHandler:
         sm3u8Parser = sm3u8.parseHandler()
         playlists = sm3u8Parser.parse(data)
         
-        for quality in cfg.vimeoQualityWeight:
+        for quality in vqw.vimeoVQW:
             for idx in playlists:
                 if (playlists[idx]):
                     streamQuality = self.getQualityByUri(playlists[idx]['uri'])
@@ -127,7 +127,7 @@ def main(argv):
         vimeoURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.quality):
-        cfg.vimeoQualityWeight.insert(0, args.quality)
+        vqw.vimeoVQW.insert(0, args.quality)
 
     if (video['type'] == 'video'):
         videoId = video['id']

@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -209,7 +209,7 @@ class helpersHandler:
         sm3u8Parser = sm3u8.parseHandler()
         playlists = sm3u8Parser.parse(data)
 
-        for quality in cfg.twitchQualityWeight:
+        for quality in vqw.twitchVQW:
             for idx in playlists:
                 if (playlists[idx]):
                     if (quality == playlists[idx]['video']):
@@ -217,7 +217,7 @@ class helpersHandler:
         
         return None
 
-    def main(argv):
+def main(argv):
     twitchApi = twitchAPIHandler()
     helpers = helpersHandler()
     aiostreamsapi = aiostreamsapiHandler()
@@ -254,7 +254,7 @@ class helpersHandler:
         twitchURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.quality):
-        cfg.twitchQualityWeight.insert(0, args.quality)
+        vqw.twitchVQW.insert(0, args.quality)
 
     if (args.topstreams):
         streamList = twitchApi.getTopStreams()

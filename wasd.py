@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import cookielib, urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -115,7 +115,7 @@ class helpersHandler:
         sm3u8Parser = sm3u8.parseHandler()
         playlists = sm3u8Parser.parse(data)
         
-        for quality in cfg.wasdQualityWeight:
+        for quality in vqw.wasdVQW:
             for idx in playlists:
                 if (playlists[idx]):
                     streamQuality = playlists[idx]
@@ -143,7 +143,7 @@ def main(argv):
         You can use this to discover and watch a streaming, using your beloved video player. \
         This script is part of the aiostreams scripts package (https://github.com/walkero-gr/aiostreams).'
     argParser = argparse.ArgumentParser(description=scriptDescription)
-    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from wasd.com')
+    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from wasd.tv')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     args = argParser.parse_args()
@@ -154,7 +154,7 @@ def main(argv):
         wasdURL = args.url
         videoType = helpers.getVideoType(args.url)
     if (args.quality):
-        cfg.wasdQualityWeight.insert(0, args.quality)
+        vqw.wasdVQW.insert(0, args.quality)
 
     if (videoType['channel'] or videoType['video']):
         if videoType['video']:

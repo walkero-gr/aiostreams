@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -65,7 +65,7 @@ class helpersHandler:
         sm3u8Parser = sm3u8.parseHandler()
         playlists = sm3u8Parser.parse(data)
         
-        for quality in cfg.dailymotionQualityWeight:
+        for quality in vqw.dailymotionVQW:
             for idx in playlists:
                 if (playlists[idx]):
                     streamQuality = playlists[idx]['name']
@@ -100,7 +100,7 @@ def main(argv):
         dailymotionURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.quality):
-        cfg.dailymotionQualityWeight.insert(0, args.quality)
+        vqw.dailymotionVQW.insert(0, args.quality)
 
     if (video['type'] == 'video'):
         videoId = video['id']

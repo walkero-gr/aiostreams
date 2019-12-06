@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -90,7 +90,7 @@ class helpersHandler:
         sm3u8Parser = sm3u8.parseHandler()
         playlists = sm3u8Parser.parse(data)
         
-        for quality in cfg.dliveQualityWeight:
+        for quality in vqw.dliveVQW:
             for idx in playlists:
                 if (playlists[idx]):
                     if (playlists[idx]['name'].find(quality) >= 0):
@@ -188,7 +188,7 @@ def main(argv):
         video = helpers.getVideoType(args.url)
 
     if (args.quality):
-        cfg.dliveQualityWeight.insert(0, args.quality)
+        vqw.dliveVQW.insert(0, args.quality)
 
     if (video['type'] == 'channel'):
         channelName = video['id']

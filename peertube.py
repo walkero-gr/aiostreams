@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
@@ -65,7 +65,7 @@ class helpersHandler:
         return None
 
     def getPrefferedVideoURL(self, data):
-        for quality in cfg.peertubeQualityWeight:
+        for quality in vqw.peertubeVQW:
             for idx in data:
                 if (quality == idx['resolution']['label']):
                     return idx['fileUrl']
@@ -106,7 +106,7 @@ def main(argv):
         peertubeURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.quality):
-        cfg.peertubeQualityWeight.insert(0, args.quality)
+        vqw.peertubeVQW.insert(0, args.quality)
 
     if (video['type'] == 'video'):
         peertubeApi.baseurl = helpers.getInstanceUrl(args.url)

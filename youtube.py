@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string, os
 import myurlparse as urlparse
 import simplem3u8 as sm3u8
@@ -157,13 +157,13 @@ class helpersHandler:
         if isLive:
             sm3u8Parser = sm3u8.parseHandler()
             data = sm3u8Parser.parse(data)
-            for quality in cfg.ytLiveQualityWeight:
+            for quality in vqw.ytLiveVQW:
                 for idx in data:
                     streamQuality = data[idx]['resolution']
                     if (streamQuality.find(str(quality)) >= 0):
                         return data[idx]['uri']
 
-        for quality in cfg.ytQualityWeight:
+        for quality in vqw.ytVQW:
             for idx in data:
                 if (quality == idx['itag']):
                     try: 
@@ -182,7 +182,7 @@ class helpersHandler:
         cipherParsed = urlparse.parse_qs(cipher)
         return cipherParsed['url'][0]
 
-    def main(argv):
+def main(argv):
     ytApi = ytAPIHandler()
     helpers = helpersHandler()
 
@@ -207,7 +207,7 @@ class helpersHandler:
         video = helpers.getVideoType(args.url)
         videoId = video['video_id']
     if (args.quality):
-        cfg.ytQualityWeight.insert(0, int(args.quality))
+        vqw.ytVQW.insert(0, int(args.quality))
 
     ############################################################
     # Search Videos By string
@@ -291,12 +291,20 @@ class helpersHandler:
 
             useCipher = False
             isLive = False
-            if (response['videoDetails']['isLiveContent']):
-                isLive = True
-            if (response['videoDetails']['useCipher']):
-                useCipher = True
-                print "This video is protected. Protected videos are not currently supported!"
-                sys.exit()
+            
+            try:
+                if (response['videoDetails']['isLiveContent']):
+                    isLive = True
+            except KeyError:
+                pass
+
+            try:
+                if (response['videoDetails']['useCipher']):
+                    useCipher = True
+                    print "This video is protected. Protected videos are not currently supported!"
+                    sys.exit()
+            except KeyError:
+                pass
 
             if (args.silence != True):
                 print "Title: %s" % (cmnHandler.uniStrip(response['videoDetails']['title']))
@@ -337,4 +345,4 @@ class helpersHandler:
     sys.exit()
 
 if __name__ == "__main__":
-    ain(sys.argv[1:])
+    main(sys.argv[1:])
