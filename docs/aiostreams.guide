@@ -127,7 +127,7 @@ You will also find a file named @{b}vqw.py@{ub}. There are the video qualities f
 * @{b}ytVQW:@{ub} Set the preffered sort of video qualities for the recorded videos from YouTube.com.
 * @{b}ytLiveVQW:@{ub} Set the preffered sort of video qualities for the Live videos from YouTube.com.
 * @{b}dliveVQW:@{ub} Set the preffered sort of video qualities for the Dlive.tv network.
-* @{b}peertubeVQW:@{ub} Set the preffered sort of video qualities for the PerrTube instances.
+* @{b}peertubeVQW:@{ub} Set the preffered sort of video qualities for the PeerTube instances.
 * @{b}wasdVQW:@{ub} Set the preffered sort of video qualities for the Wasd.tv network.
 
 @endnode
@@ -191,19 +191,7 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
-@{lindent 10}
-Value @{tab} Resolution (may vary)
-----------------------------------
-chunked @{tab} Usually this is the original video 
- @{tab}@{tab} quality or 1080p (1920x1080)
-720p60 @{tab} 1280x720 60fps
-720p30 @{tab} 1280x720 30fps
-480p30 @{tab} 720x480 30fps
-360p30 @{tab} 480x360 30fps
-160p30 @{tab} 284x160 30fps
-audio_only @{tab}no video, audio only
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -269,18 +257,8 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 Usually, the recorded videos are available only on 720p resolution.
-
-@{lindent 10}
-Value @{tab} Resolution (may vary)
-----------------------------------
-1080p @{tab} 1920x1080 
-720p @{tab}@{tab} 1280x720
-480p @{tab}@{tab} 720x480
-320p @{tab}@{tab} 480x320
-160p @{tab}@{tab} 284x160
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -325,19 +303,8 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 Usually, the recorded videos are available only on 720p resolution.
-
-@{lindent 10}
-Value @{tab} Resolution (may vary)
-----------------------------------
-1080p @{tab} 1920x1080 
-720p @{tab}@{tab} 1280x720
-540p @{tab}@{tab} 960x540
-480p @{tab}@{tab} 720x480
-360p @{tab}@{tab} 480x360
-240p @{tab}@{tab} 284x160
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -380,27 +347,8 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 Usually, the recorded videos are available only on 720p and 360p resolution.
-
-@{lindent 10}
-Recorded video qualities
-TagID @{tab} Value @{tab} Resolution (may vary)
-----------------------------------
-22 @{tab} 720p @{tab}@{tab} 1280x720, audio quality medium
-18 @{tab} 360p @{tab}@{tab} 480x360, audio quality low
-43 @{tab} 360p @{tab}@{tab} 480x360, audio quality medium
-
-Live stream qualities
-Value @{tab} Resolution (may vary)
-----------------------------------
-1080p @{tab} 1920x1080 
-720p @{tab}@{tab} 1280x720
-540p @{tab}@{tab} 960x540
-480p @{tab}@{tab} 720x480
-360p @{tab}@{tab} 480x360
-240p @{tab}@{tab} 284x160
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -446,19 +394,8 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 Usually, the recorded videos are available only on 720p resolution.
-
-@{lindent 10}
-Value @{tab} Resolution (may vary)
-----------------------------------
-1080 @{tab}@{tab} 1920x1080 
-720 @{tab}@{tab} 1280x720
-480 @{tab}@{tab} 720x480
-380 @{tab}@{tab} 512x288
-240 @{tab}@{tab} 320x184
-144 @{tab}@{tab} 192x112
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -531,15 +468,7 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
-@{lindent 10}
-Value @{tab} Resolution (may vary)
-----------------------------------
-src @{tab}@{tab} 1920x1080 
-720p @{tab}@{tab} 1280x720
-480p @{tab}@{tab} 720x480
-360p @{tab}@{tab} 480x360
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -558,7 +487,7 @@ No private info is sent by this script to dlive.tv.
 @{jleft}@{lindent 3}
 @{b}PeerTube@{ub}
 
-This script supports different PeerTube instances websites. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports different @{"PeerTube" SYSTEM "c:URLOpen https://joinpeertube.org/"} instances websites. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
 
 With this script you can: 
 * watch recorded videos
@@ -575,17 +504,7 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
-@{lindent 10}
-Value @{tab} Resolution (may vary)
-----------------------------------
-1080p @{tab}@{tab} 1920x1080 
-768p @{tab}@{tab} 1280x768
-720p @{tab}@{tab} 1280x720
-480p @{tab}@{tab} 720x480
-360p @{tab}@{tab} 480x360
-240p @{tab}@{tab} 284x160
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 
 @{lindent 3}
 @{u}Examples:@{uu}
@@ -600,7 +519,7 @@ No private info is sent by this script to PeerTube instances.
 @node "wasd.tv" "wasd.tv"
 @prev "Usage"
 @{jleft}@{lindent 3}
-@{b}wasd.tv@{ub}
+@{b}Wasd.tv@{ub}
 
 This script supports @{"wasd.tv" SYSTEM "c:URLOpen https://wasd.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
 
@@ -620,18 +539,7 @@ With this script you can:
                         except of errors.
 
 @{u}Available video qualities:@{uu}
-The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
-
-@{lindent 10}
-Value @{tab} Resolution (may vary)
-----------------------------------
-1200 @{tab}@{tab} 1920x1200
-1080 @{tab}@{tab} 1920x1080
-720 @{tab}@{tab} 1280x720
-480 @{tab}@{tab} 720x480
-360 @{tab}@{tab} 480x360
-240 @{tab}@{tab} 320x240
-144 @{tab}@{tab} 192x112
+At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
 
 @{lindent 3}
 @{u}Examples:@{uu}
