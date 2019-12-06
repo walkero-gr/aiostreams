@@ -1,0 +1,34 @@
+# Configuration
+# At this file you can change the behaviour of the scripts, by setting
+# various parameteres, and most important the preferred video players
+#
+
+# Set this to True to enable autoplay of the video with your preffered video player. Set it to False to disable it.
+autoplay = True
+
+# Set this to True to get more info from the script during the execution. Set it to False to disable it.
+verbose = False
+
+# AmigaOS 4.1 FE video players
+vPlayer = "APPDIR:mplayer"
+vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
+sPlayer = "APPDIR:ffplay"
+sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"
+
+# AmigaOS 4.1 FE Emotion player
+vPlayer = "APPDIR:emotion"
+vPlayerArgs = ""
+sPlayer = "APPDIR:emotion"
+sPlayerArgs = ""
+
+# MacOS X video players
+vPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
+vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+sPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
+sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+
+# Linux video players
+vPlayer = "/usr/bin/vlc"
+vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+sPlayer = "/usr/bin/vlc"
+sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
