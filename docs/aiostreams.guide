@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.4.2 (14.11.2019)     
+@$VER: 1.5 (2019-12-08)
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.4.2 (2019-11-14)@{ui}
+@{i}v1.5 (2019-12-08)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
@@ -32,6 +32,8 @@ Some of these networks have a search API, and you can use them to find available
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
 @{tab}@{"Skaitv.gr" LINK "Skaitv.gr"}
 @{tab}@{"Dlive.tv" LINK "Dlive.tv"}
+@{tab}@{"PeerTube" LINK "PeerTube"}
+@{tab}@{"Wasd.tv" LINK "Wasd.tv"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Troubleshooting" LINK "Troubleshooting"}
@@ -105,21 +107,28 @@ aiostreams scripts will work even from temporary mounted storage drives, i.e. US
 @{b}Configure@{ub}
 
 In aiostreams folder you will find a configuration file named @{b}cfg.py@{ub}. You can edit it and change a few parameters, so that it will be suitable for you.
+Consult the @{b}cfg.py.examples@{ub} file where you can find examples on how to set different players on other operating systems.
 
 The available parameters are:
 * @{b}autoplay:@{ub} Set this to @{i}True@{ui} to enable autoplay of the video with your preffered video player. Set it to @{i}False@{ui} to disable it.
 * @{b}verbose:@{ub} Set this to @{i}True@{ui} to get more info from the script during the execution. Set it to @{i}False@{ui} to disable it.
-* @{b}vPlayer:@{ub} Set the path to your preffered video player for recorded streams and not live streams. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
+* @{b}vPlayer:@{ub} Set the path to your preffered video player. This is going to be used on recorded streams only. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
 * @{b}vPlayerArgs:@{ub} Set the arguments that are going to be used with your preffered video player. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
-* @{b}sPlayer:@{ub} Set the path to your preffered streaming player for live or recorded streams. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
+* @{b}sPlayer:@{ub} Set the path to your preffered video player. This is going to be used mostly on live streams, but depending the network, might be used on recorder streams as well. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
 * @{b}sPlayerArgs:@{ub} Set the arguments that are going to be used with your preffered streaming player. This is used only if @{b}autoplay@{ub} is set to @{i}True@{ui}.
-* @{b}twitchQualityWeight:@{ub} Set the preffered sort of video qualities for the Twitch.tv network. This means that the first available will be served.
-* @{b}mixerQualityWeight:@{ub} Set the preffered sort of video qualities for the Mixer.com network. This means that the first available will be served.
-* @{b}vimeoQualityWeight:@{ub} Set the preffered sort of video qualities for the Vimeo.com network. This means that the first available will be served.
-* @{b}dailymotionQualityWeight:@{ub} Set the preffered sort of video qualities for the Dailymotion.com network. This means that the first available will be served.
-* @{b}ytQualityWeight:@{ub} Set the preffered sort of video qualities for the recorded videos from YouTube.com. This means that the first available will be served.
-* @{b}ytLiveQualityWeight:@{ub} Set the preffered sort of video qualities for the Live videos from YouTube.com. This means that the first available will be served.
-* @{b}dliveQualityWeight:@{ub} Set the preffered sort of video qualities for the Dlive.tv network. This means that the first available will be served.
+
+
+You will also find a file named @{b}vqw.py@{ub}. There are the video qualities for each network. You can set the order of the stream and video qualities, which means that the first available will be served.
+
+* @{b}twitchVQW:@{ub} Set the preffered sort of video qualities for the Twitch.tv network.
+* @{b}mixerVQW:@{ub} Set the preffered sort of video qualities for the Mixer.com network.
+* @{b}vimeoVQW:@{ub} Set the preffered sort of video qualities for the Vimeo.com network.
+* @{b}dailymotionVQW:@{ub} Set the preffered sort of video qualities for the Dailymotion.com network.
+* @{b}ytVQW:@{ub} Set the preffered sort of video qualities for the recorded videos from YouTube.com.
+* @{b}ytLiveVQW:@{ub} Set the preffered sort of video qualities for the Live videos from YouTube.com.
+* @{b}dliveVQW:@{ub} Set the preffered sort of video qualities for the Dlive.tv network.
+* @{b}peertubeVQW:@{ub} Set the preffered sort of video qualities for the PerrTube instances.
+* @{b}wasdVQW:@{ub} Set the preffered sort of video qualities for the Wasd.tv network.
 
 @endnode
 @node "Usage" "Shell usage"
@@ -139,6 +148,8 @@ You can find usage information in the following sections, separated by network.
 @{"Dailymotion.com" LINK "Dailymotion.com"}
 @{"Skaitv.gr" LINK "Skaitv.gr"}
 @{"Dlive.tv" LINK "Dlive.tv"}
+@{"PeerTube" LINK "PeerTube"}
+@{"Wasd.tv" LINK "Wasd.tv"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -542,6 +553,98 @@ Watch the live stream, like below
 No private info is sent by this script to dlive.tv.
 
 @endnode
+@node "PeerTube" "PeerTube"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}PeerTube@{ub}
+
+This script supports different PeerTube instances websites. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch recorded videos
+* autoplay videos with ffplay, mplayer or other video players
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video url from PeerTube instance
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+@{lindent 10}
+Value @{tab} Resolution (may vary)
+----------------------------------
+1080p @{tab}@{tab} 1920x1080 
+768p @{tab}@{tab} 1280x768
+720p @{tab}@{tab} 1280x720
+480p @{tab}@{tab} 720x480
+360p @{tab}@{tab} 480x360
+240p @{tab}@{tab} 284x160
+
+@{lindent 3}
+@{u}Examples:@{uu}
+Watch a recorded video, like below
+@{b}peertube.py -u https://peertube.co.uk/videos/watch/c9eefbff-4207-4947-8000-000f9856af11@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to PeerTube instances.
+
+@endnode
+
+@node "wasd.tv" "wasd.tv"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}wasd.tv@{ub}
+
+This script supports @{"wasd.tv" SYSTEM "c:URLOpen https://wasd.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch recorded videos
+* watch live stream
+* autoplay videos with ffplay, mplayer or other players
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video url from wasd.tv
+  -q QUALITY, --quality QUALITY
+                        Set the preffered video quality. This is optional. If
+                        not set or if it is not available the default quality
+                        weight will be used.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
+
+@{u}Available video qualities:@{uu}
+The following list includes all the available video qualities. At the configuration file you can set the weighted sort of this list. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if exists in an other position in the list.
+
+@{lindent 10}
+Value @{tab} Resolution (may vary)
+----------------------------------
+1200 @{tab}@{tab} 1920x1200
+1080 @{tab}@{tab} 1920x1080
+720 @{tab}@{tab} 1280x720
+480 @{tab}@{tab} 720x480
+360 @{tab}@{tab} 480x360
+240 @{tab}@{tab} 320x240
+144 @{tab}@{tab} 192x112
+
+@{lindent 3}
+@{u}Examples:@{uu}
+Watch a recorded video, like below
+@{b}wasd.py -u https://wasd.tv/channel/123456/videos/123456@{ub}
+
+Watch the live stream, like below
+@{b}wasd.py -u https://wasd.tv/channel/123456@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to wasd.tv.
+
+@endnode
 @node "Todo" "Todo"
 @prev "Usage"
 @next "Changelog"
@@ -552,9 +655,8 @@ The todo list is something that might change a lot between the version releases.
 https://github.com/walkero-gr/aiostreams/projects/1 @{"open" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/projects/1"}
 
 Many things:
-* Reuters.tv support
-* Support Emotion player, if possible.
 * AmigaOS 3 and AROS support.
+* Workbench notifications, wherever it is possible.
 * A way to get a notification on which of your favorite channels are currently streaming.
 
 If you have any websites that you would like to be supported, please contact me and I will check if this is possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used outside their websites.
@@ -565,6 +667,11 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.5
+* Wasd.tv script added
+* PeerTube script added
+* Separated video qualities lists from the configuration file to a new file named vqw.py
 
 v1.4.2
 * Twitch script uses Twitch API v5
@@ -637,7 +744,7 @@ My name is George Sokianos and you can reach me at Amiga forums under the userna
 The project is open source and you can find the code at:
 https://github.com/walkero-gr/aiostreams @{"github" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams"}
 
-If you have any requests or you would like to report any problems you found, you can do that at:
+If you have any request or you would like to report a problem you discovered, go to:
 https://github.com/walkero-gr/aiostreams/issues @{"issues" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/issues"}
 
 You can read my blog at:
@@ -648,5 +755,8 @@ https://twitter.com/gsokianos @{"open" SYSTEM "c:URLOpen https://twitter.com/gso
 
 If you find this project useful, you can support it by donating at:
 https://www.paypal.me/gsokianos @{"Donate" SYSTEM "c:URLOpen https://www.paypal.me/gsokianos"}
+
+My PeerTube channels:
+https://peertube.co.uk/accounts/walkero/video-channels @{"open" SYSTEM "c:URLOpen https://peertube.co.uk/accounts/walkero/video-channels"}
 
 @endnode
