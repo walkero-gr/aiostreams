@@ -35,15 +35,17 @@ _url_re = re.compile(r"""
 class twitchAPIHandler:
     def __init__(self):
         self.baseurl = 'https://api.twitch.tv'
-        keyData = aiostreamsapi.getKey()
-        self.clientId = keyData['clientId']
 
         return None
+
+    def getClientId(self):
+        keyData = aiostreamsapi.getKey()
+        return keyData['clientId']
 
     def getURL(self, url):
         request = urllib2.Request(url)
         request.add_header('Accept', 'application/vnd.twitchtv.v5+json')
-        request.add_header('Client-ID', self.clientId)
+        request.add_header('Client-ID', self.getClientId())
 
         try:
             response = urllib2.urlopen(request)
