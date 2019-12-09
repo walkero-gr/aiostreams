@@ -167,8 +167,9 @@ def main(argv):
         sys.exit()
         
     # Parse the arguments
-    argParser = argparse.ArgumentParser(description='This is a python script that uses mixer.com API to get information about channels/videos for AmigaOS 4.1 and above.')
-    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url from mixer.com')
+    argParser = argparse.ArgumentParser(description=cmnHandler.getScriptDescription('mixer.com'), epilog=cmnHandler.getScriptEpilog(),
+                                        formatter_class=argparse.RawDescriptionHelpFormatter)
+    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-ts', '--top-streams', action='store_true', default=False, dest='topstreams', help='Get a list of the current Top Live Streams, based on the number of viewers')
     argParser.add_argument('-tg', '--top-games', action='store_true', default=False, dest='topgames', help='Get a list of the current Top Games with live streams available, based on the number of viewers')

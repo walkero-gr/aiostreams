@@ -52,3 +52,17 @@ class cmnHandler:
             amiga.system( "Run <>NIL: %s %s %s" % (player, uri, playerArgs) )
         else:
             os.system( '%s "%s" %s' % (player, uri, playerArgs) )
+
+    def getScriptDescription(self, networkName):
+        descr = "%s\
+(https://github.com/walkero-gr/aiostreams)\n\n\
+This is a python script for %s online streaming platform.\n\
+You can use this to discover and watch a streaming, using your beloved video player." % (self.getIntroVersionText(), networkName)
+
+        return descr
+    
+    def getScriptEpilog(self):
+        descr = "\
+If you use and love those scripts, please consider to donate at https://www.paypal.me/gsokianos\n\
+Your support is much appreciated."
+        return descr

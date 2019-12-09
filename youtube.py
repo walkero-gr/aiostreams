@@ -193,7 +193,8 @@ def main(argv):
     ############################################################
     # Parse the arguments
     # 
-    argParser = argparse.ArgumentParser(description='This is a python script that uses youtube.com API to get information about videos.')
+    argParser = argparse.ArgumentParser(description=cmnHandler.getScriptDescription('youtube.com'), epilog=cmnHandler.getScriptEpilog(),
+                                        formatter_class=argparse.RawDescriptionHelpFormatter)
     argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-sv', '--search-video', action='store', dest='searchvideo', help='Search recorded videos based on description')

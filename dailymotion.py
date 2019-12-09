@@ -88,8 +88,9 @@ def main(argv):
         sys.exit()
         
     # Parse the arguments
-    argParser = argparse.ArgumentParser(description='This is a python script that uses dailymotion.com to get information about videos for AmigaOS 4.1 and above.')
-    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from dailymotion.com')
+    argParser = argparse.ArgumentParser(description=cmnHandler.getScriptDescription('dailymotion.com'), epilog=cmnHandler.getScriptEpilog(),
+                                        formatter_class=argparse.RawDescriptionHelpFormatter)
+    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     args = argParser.parse_args()

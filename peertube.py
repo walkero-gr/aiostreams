@@ -90,12 +90,9 @@ def main(argv):
         sys.exit()
         
     # Parse the arguments
-    scriptDescription = ' \
-        This is a python script for PeerTube online streaming instances. \
-        You can use this to discover and watch a recorder video, using your beloved video player. \
-        This script is part of the aiostreams scripts package (https://github.com/walkero-gr/aiostreams).'
-    argParser = argparse.ArgumentParser(description=scriptDescription)
-    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from PeerTube instance')
+    argParser = argparse.ArgumentParser(description=cmnHandler.getScriptDescription('PeerTube'), epilog=cmnHandler.getScriptEpilog(),
+                                        formatter_class=argparse.RawDescriptionHelpFormatter)
+    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     args = argParser.parse_args()

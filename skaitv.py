@@ -109,8 +109,9 @@ def main(argv):
         sys.exit()
         
     # Parse the arguments
-    argParser = argparse.ArgumentParser(description='This is a python script that uses skaitv.gr to get information about videos for AmigaOS 4.1 and above.')
-    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url from skaitv.gr')
+    argParser = argparse.ArgumentParser(description=cmnHandler.getScriptDescription('skaitv.gr'), epilog=cmnHandler.getScriptEpilog(),
+                                        formatter_class=argparse.RawDescriptionHelpFormatter)
+    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     argParser.add_argument('-l', '--live', action='store_true', default=False, dest='live', help='Play the current live stream. If -u argument is set, this is ignored.')
     args = argParser.parse_args()
