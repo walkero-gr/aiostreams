@@ -2,7 +2,6 @@
 # coding=utf-8
 import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string
-import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
