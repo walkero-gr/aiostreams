@@ -35,13 +35,15 @@ _url_re = re.compile(r"""
 class twitchAPIHandler:
     def __init__(self):
         self.baseurl = 'https://api.twitch.tv'
+        keyData = aiostreamsapi.getKey()
+        self.clientId = keyData['clientId']
 
         return None
 
     def getURL(self, url):
         request = urllib2.Request(url)
         request.add_header('Accept', 'application/vnd.twitchtv.v5+json')
-        request.add_header('Client-ID', clientId)
+        request.add_header('Client-ID', self.clientId)
 
         try:
             response = urllib2.urlopen(request)
@@ -188,7 +190,10 @@ class aiostreamsapiHandler:
         responseData = self.call(endpoint)
         if responseData:
             return json.loads(responseData)
-        return None
+        else:
+            print 'Key error: Please contact the developer.'
+            sys.exit()
+
 
 class helpersHandler:
     def parseURL(self, url):
@@ -218,17 +223,10 @@ class helpersHandler:
         return None
 
 def main(argv):
+    global aiostreamsapi
+    aiostreamsapi = aiostreamsapiHandler()
     twitchApi = twitchAPIHandler()
     helpers = helpersHandler()
-    aiostreamsapi = aiostreamsapiHandler()
-
-    keyData = aiostreamsapi.getKey()
-    if (keyData):
-        global clientId
-        clientId = keyData['clientId']
-    else:
-        print 'An error occured. Please contact the developer.'
-        sys.exit()
 
     video = {'type': ''}
     playlists = dict()
