@@ -2,14 +2,18 @@
 All notable changes to this project will be documented in this file.
 
 
-## [1.5] - 2019-12-08
+## [unreleased]
 ### Added
 - Wasd.tv script added
 - PeerTube script added
 - Added a full changelog file
 
 ### Changed
-- Separated video qualities lists from the configuration file to a new file named vqw.py
+- Changed the place of the video qualities lists by separating them from the configuration file to a new file named vqw.py
+- Changed the scripts' descriptions on help request
+
+### Fixed
+- Fixed skaitv.py script to support the latest changes of the website
 
 
 ## [1.4.2] - 2019-11-14

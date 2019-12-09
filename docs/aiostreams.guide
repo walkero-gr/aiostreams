@@ -577,10 +577,12 @@ If you have any websites that you would like to be supported, please contact me 
 @{b}Changelog@{ub}
 
 v1.5
-* Wasd.tv script added
-* PeerTube script added
-* Separated video qualities lists from the configuration file to a new file named vqw.py
+* Added Wasd.tv script
+* Added PeerTube script
+* Fixed skaitv.py script to support the latest changes of the website
+* Changed the place of the video qualities lists by separating them from the configuration file to a new file named vqw.py
 * Added a full changelog file
+* Changed the scripts' descriptions on help request
 
 v1.4.2
 * Twitch script uses Twitch API v5
