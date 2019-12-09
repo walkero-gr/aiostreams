@@ -26,7 +26,7 @@ _url_re = re.compile(r"""
 
 class skaiAPIHandler:
     def __init__(self):
-        self.baseurl = 'http://www.skaitv.gr/json'
+        self.baseurl = 'http://www.skaitv.gr'
 
         return None
 
@@ -47,7 +47,7 @@ class skaiAPIHandler:
         if (query):
             queryArgs = urllib.urlencode(query)
             url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
-            
+
         return self.getURL(url)
 
     def getVideoInfo(self, parsedUrl):
@@ -64,12 +64,19 @@ class skaiAPIHandler:
         return None
 
     def getLiveInfo(self, parsedUrl):
-        endpoint = "live.php"
-
-        responseData = self.call(endpoint)
-        if responseData:
-            return json.loads(responseData)
+        endpoint = "live"
+        responseHtml = self.call(endpoint)
+        if responseHtml:
+            return self.getJsonData(responseHtml)
         return None
+    
+    def getJsonData(self, html):
+        start = html.find('var data = ')
+        end = html.find('initPlayer', start)
+        end = end-46
+
+        return json.loads(html[start+11:end])
+
 
 class helpersHandler:
     def parseURL(self, url):
@@ -166,12 +173,11 @@ def main(argv):
 
     if (video['type'] == 'live'):
         videoInfo = skaiApi.getLiveInfo(video)
-
         if videoInfo:
             if (args.silence != True):
                 try:
-                    print "Title: %s" % (cmnHandler.uniStrip(videoInfo['now']['0']['title']))
-                    print "Description:\n%s" % (cmnHandler.uniStrip(videoInfo['now']['0']['short_descr']))
+                    print "Title: %s" % (cmnHandler.uniStrip(videoInfo['now']['title']))
+                    print "Description:\n%s" % (cmnHandler.uniStrip(videoInfo['now']['short_descr']))
                 except KeyError:
                     print "There is no live stream right now."
                     sys.exit()
@@ -194,9 +200,6 @@ def main(argv):
                     print "\nLivestream: %s" % (livestreamUrl)
                 if cfg.autoplay:
                     print "Use youtube script to autoplay this live stream:\nyoutube.py -u %s" % (livestreamUrl)
-                    # print "python youtube.py -u %s" % (livestreamUrl)
-                    # if (cmnHandler.getUserOS() == 'ppc-amiga'):
-                    # 	amiga.system( "python youtube.py -u %s" % (livestreamUrl) )
 
     sys.exit()
 
