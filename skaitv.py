@@ -51,16 +51,10 @@ class skaiAPIHandler:
         return self.getURL(url)
 
     def getVideoInfo(self, parsedUrl):
-        endpoint = "episode.php"
-        query = {
-            "caption": "no",
-            "show_caption": parsedUrl['caption'],
-            "epanalipsi": "",
-            "cat_caption2": parsedUrl['caption2']
-        }
-        responseData = self.call(endpoint, query)
-        if responseData:
-            return json.loads(responseData)
+        endpoint = "episode/%s/%s/%s/%s" % (parsedUrl['categ'], parsedUrl['caption2'], parsedUrl['caption'], parsedUrl['clip'])
+        responseHtml = self.call(endpoint)
+        if responseHtml:
+            return self.getJsonData(responseHtml)
         return None
 
     def getLiveInfo(self, parsedUrl):
@@ -74,7 +68,6 @@ class skaiAPIHandler:
         start = html.find('var data = ')
         end = html.find('initPlayer', start)
         end = end-46
-
         return json.loads(html[start+11:end])
 
 
@@ -91,7 +84,7 @@ class helpersHandler:
 
         if types:
             if (types['caption'] and types['caption2']):
-                return {'type': 'video', 'caption': types['caption'], 'caption2': types['caption2'], 'clip': types['clip']}
+                return {'type': 'video', 'categ': types['categ'], 'caption': types['caption'], 'caption2': types['caption2'], 'clip': types['clip']}
 
             if (types['live'] == 'live'):
                 return {'type': 'live'}
