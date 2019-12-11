@@ -112,6 +112,36 @@ class wasdAPIHandler:
             return json.loads(responseData)
         return None
 
+    def searchByGameTitle(self, title, page = 0, limit = 50):
+        endpoint = "search/games"
+        query = {
+            "search_phrase": title,
+            "limit": limit,
+            "offset": page
+        }
+        
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
+    def getTopStreamsByGameID(self, id, page = 0, limit = 50):
+        endpoint = "media-containers"
+        query = {
+            "media_container_status": "RUNNING",
+            "game_id": id,
+            "media_container_type": "SINGLE,COOP",
+            "order_direction": "DESC",
+            "order_type": "VIEWERS",
+            "limit": limit,
+            "offset": page
+        }
+
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
 
 class helpersHandler:
     def parseURL(self, url):
@@ -154,6 +184,7 @@ def main(argv):
     argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-tg', '--top-games', action='store_true', default=False, dest='topgames', help='Get a list of the current Top Games with live streams available, based on the number of viewers')
+    argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Search for available streams based on game title/id')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     args = argParser.parse_args()
 
@@ -167,11 +198,40 @@ def main(argv):
 
     if (args.topgames):
         gamesList = wasdApi.getTopGames()
-        print "%-50s\t %-10s\t %-10s" % ('Game', 'Viewers', 'Streams')
+        print "%-10s\t %-50s\t %-10s\t %-10s" % ('Game ID', 'Game', 'Viewers', 'Streams')
         print "%s" % ('-'*200)
         for game in gamesList['result']:
-            print "%-50s\t %-10d\t %-10d" % (cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count'])
+            print "%-10s\t %-50s\t %-10d\t %-10d" % (game['game_id'], cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count'])
+        sys.exit()
 
+    if (args.searchgame):
+        gameTitle = args.searchgame
+        gameId = 0
+        try: 
+            if int(gameTitle) >= 1:
+                gameId = gameTitle
+        except ValueError:
+            gameData = wasdApi.searchByGameTitle(gameTitle)
+            if gameData['result']['count'] > 1:
+                gamesList = gameData['result']['rows']
+                print "Found more than one game with the title %s. Select the one you want by the Game ID"
+                print "%-10s\t %-50s\t %-10s\t %-10s" % ('Game ID', 'Game', 'Viewers', 'Streams')
+                print "%s" % ('-'*200)
+                for game in gamesList:
+                    print "%-10s\t %-50s\t %-10d\t %-10d" % (game['game_id'], cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count'])
+            else:
+                gameId = gameData['result']['rows'][0]['game_id']
+
+        if gameId > 0:
+            gameStreams = wasdApi.getTopStreamsByGameID(gameId)
+            if gameStreams:
+                print "%-36s\t %-10s\t %s" % ('URL', 'Viewers', 'Title')
+                print "%s" % ('-'*200)
+                for stream in gameStreams['result']:
+                    streamUrl = "https://wasd.tv/channel/%s" % (stream['channel_id'])
+                    print "%-36s\t %-10d\t %s" % (streamUrl, stream['media_container_streams'][0]['stream_current_viewers'], cmnHandler.uniStrip(stream['media_container_name']))
+            else:
+                print "No streams found for the game: %s" % (gameTitle)
         sys.exit()
 
     if (videoType['channel'] or videoType['video']):
