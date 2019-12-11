@@ -101,6 +101,17 @@ class wasdAPIHandler:
             return json.loads(responseData)
         return None
 
+    def getTopGames(self, page = 0, limit = 50):
+        endpoint = "games"
+        query = {
+            "limit": limit,
+            "offset": page
+        }
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
 
 class helpersHandler:
     def parseURL(self, url):
@@ -142,6 +153,7 @@ def main(argv):
                                         formatter_class=argparse.RawDescriptionHelpFormatter)
     argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
+    argParser.add_argument('-tg', '--top-games', action='store_true', default=False, dest='topgames', help='Get a list of the current Top Games with live streams available, based on the number of viewers')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     args = argParser.parse_args()
 
@@ -152,6 +164,15 @@ def main(argv):
         videoType = helpers.getVideoType(args.url)
     if (args.quality):
         vqw.wasdVQW.insert(0, args.quality)
+
+    if (args.topgames):
+        gamesList = wasdApi.getTopGames()
+        print "%-50s\t %-10s\t %-10s" % ('Game', 'Viewers', 'Streams')
+        print "%s" % ('-'*200)
+        for game in gamesList['result']:
+            print "%-50s\t %-10d\t %-10d" % (cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count'])
+
+        sys.exit()
 
     if (videoType['channel'] or videoType['video']):
         if videoType['video']:
