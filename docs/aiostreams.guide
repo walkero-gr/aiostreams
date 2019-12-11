@@ -530,11 +530,15 @@ With this script you can:
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
-  -u URL, --url URL     The video url from wasd.tv
+  -u URL, --url URL     The video/channel url
   -q QUALITY, --quality QUALITY
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
+  -tg, --top-games      Get a list of the current Top Games with live streams
+                        available, based on the number of viewers
+  -sg SEARCHGAME, --search-game SEARCHGAME
+                        Search for available streams based on game title/id
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
 
