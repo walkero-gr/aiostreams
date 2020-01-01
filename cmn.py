@@ -8,7 +8,7 @@ except ImportError:
     pass
 
 aioVer = "1.5"
-aioReleaseDate = "2019-12-08"
+aioReleaseDate = "2020-01-01"
 userOS = sys.platform
 
 class cmnHandler:

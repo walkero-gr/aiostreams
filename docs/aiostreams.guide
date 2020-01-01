@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.5 (2019-12-08)
+@$VER: 1.5 (2020-01-01)
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.5 (2019-12-08)@{ui}
+@{i}v1.5 (2020-01-01)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
