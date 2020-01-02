@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+
+## [1.5] - 2020-01-01
+### Added
 - Wasd.tv script added
 - PeerTube script added
 - Added a full changelog file
