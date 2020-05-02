@@ -64,7 +64,7 @@ class helpersHandler:
 
         return None
 
-    def getPrefferedVideoURL(self, data):
+    def getPreferredVideoURL(self, data):
         sm3u8Parser = sm3u8.parseHandler()
         playlists = sm3u8Parser.parse(data)
         
@@ -72,8 +72,9 @@ class helpersHandler:
             for idx in playlists:
                 if (playlists[idx]):
                     streamQuality = self.getQualityByUri(playlists[idx]['uri'])
-                    if (streamQuality.find(quality) >= 0):
-                        return playlists[idx]['uri']
+                    if streamQuality:
+                        if (streamQuality.find(quality) >= 0):
+                            return playlists[idx]['uri']
         
         return None
 
@@ -87,8 +88,16 @@ class helpersHandler:
     def getVideoQualities(self, data):
         retData = dict()
         for stream in data['streams']:
-            retData[stream['id']] = stream['quality']
+            streamId = stream['id']
+            try:
+                # When id is a GUID string
+                if(streamId.find('-')):
+                    streamIdArray = streamId.split("-")
+                    streamId = streamIdArray[0]
+            except AttributeError:
+                pass
 
+            retData[streamId] = stream['quality']
         return retData
 
     def buildUri(self, cdnurl, uri):
@@ -145,7 +154,7 @@ def main(argv):
                         break
 
             if (m3u8Response):
-                uri = helpers.getPrefferedVideoURL(m3u8Response)
+                uri = helpers.getPreferredVideoURL(m3u8Response)
                 if uri:
                     playlistUri = helpers.buildUri(cdns[idx]['url'], uri)
                     if cfg.verbose and (args.silence != True):
