@@ -17,6 +17,7 @@ All the scripts are developed and fully tested under AmigaOS 4.1 FE and MorphOS 
 * [Dlive.tv](https://dlive.tv/)
 * [PeerTube](https://joinpeertube.org/)
 * [Wasd.tv](https://wasd.tv/)
+* [Lbry.tv](https://lbry.tv/)
 
 ### A full list of requirements per OS:
 #### AmigaOS 4.1
