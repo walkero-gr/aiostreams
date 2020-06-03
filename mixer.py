@@ -160,7 +160,6 @@ class helpersHandler:
 def main(argv):
     mixerApi = mixerAPIHandler()
     helpers = helpersHandler()
-    playlists = dict()
 
     if len(argv) == 0:
         print "No arguments given. Use mixer.py -h for more info.\nThe script must be used from the shell."
@@ -181,9 +180,7 @@ def main(argv):
     if (args.silence != True):
         cmnHandler.showIntroText()
     if (args.url):
-        mixerURL = args.url
         video = helpers.getVideoType(args.url)
-
     if (args.quality):
         vqw.mixerVQW.insert(0, args.quality)
 

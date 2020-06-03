@@ -134,7 +134,6 @@ def main(argv):
     if (args.silence != True):
         cmnHandler.showIntroText()
     if (args.url):
-        vimeoURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.quality):
         vqw.vimeoVQW.insert(0, args.quality)

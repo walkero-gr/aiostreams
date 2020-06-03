@@ -82,7 +82,6 @@ class helpersHandler:
 def main(argv):
     peertubeApi = peertubeAPIHandler()
     helpers = helpersHandler()
-    global videoQualities
 
     if len(argv) == 0:
         print "No arguments given. Use peertube.py -h for more info.\nThe script must be used from the shell."
@@ -99,7 +98,6 @@ def main(argv):
     if (args.silence != True):
         cmnHandler.showIntroText()
     if (args.url):
-        peertubeURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.quality):
         vqw.peertubeVQW.insert(0, args.quality)

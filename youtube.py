@@ -7,10 +7,6 @@ import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
-try:
-    import amiga
-except:
-    pass
 
 cmnHandler = cmn.cmnHandler()
 
@@ -260,7 +256,7 @@ def main(argv):
         
         if result['items']:
             print "%-40s\t %-8s\t %s" % ('URL', 'Views', 'Title')
-            print "%s" % ('-'*200)
+            print "%s" % ('-'*120)
             videosDict = dict()
             videoIds = []
             for video in result['items']:
@@ -291,7 +287,7 @@ def main(argv):
         
         if result['items']:
             print "%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title')
-            print "%s" % ('-'*200)
+            print "%s" % ('-'*120)
             videosDict = dict()
             videoIds = []
             for video in result['items']:
@@ -353,7 +349,7 @@ def main(argv):
                 if (isLive == False):
                     print "Length: %ssec" % (response['videoDetails']['lengthSeconds'])
                     print "%-5s\t %-10s\t %-16s\t %-10s\t %s" % ('TagID', 'Quality', 'Audio Quality', 'Resolution', 'Mime type')
-                    print "%s" % ('-'*200)
+                    print "%s" % ('-'*120)
                     for format in response['streamingData']['formats']:
                         print "%-5s\t %-10s\t %-16s\t %sx%s\t %s" % (format['itag'], format['qualityLabel'], format['audioQuality'], format['width'], format['height'], format['mimeType'])
                 

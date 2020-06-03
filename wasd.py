@@ -48,7 +48,7 @@ class wasdAPIHandler:
         ]
         opener = urllib2.build_opener(*handlers)
         authRequest = urllib2.Request(authUrl)
-        authResponse = opener.open(authRequest)
+        opener.open(authRequest)
 
         # Request the endpoint
         request = urllib2.Request(url)
@@ -172,7 +172,6 @@ class helpersHandler:
 def main(argv):
     wasdApi = wasdAPIHandler()
     helpers = helpersHandler()
-    global videoQualities
 
     if len(argv) == 0:
         print "No arguments given. Use wasd.py -h for more info.\nThe script must be used from the shell."
@@ -191,7 +190,6 @@ def main(argv):
     if (args.silence != True):
         cmnHandler.showIntroText()
     if (args.url):
-        wasdURL = args.url
         videoType = helpers.getVideoType(args.url)
     if (args.quality):
         vqw.wasdVQW.insert(0, args.quality)

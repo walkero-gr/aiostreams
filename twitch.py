@@ -231,7 +231,6 @@ def main(argv):
     helpers = helpersHandler()
 
     video = {'type': ''}
-    playlists = dict()
 
     if len(argv) == 0:
         print "No arguments given. Use twitch.py -h for more info.\nThe script must be used from the shell."
@@ -252,7 +251,6 @@ def main(argv):
     if (args.silence != True):
         cmnHandler.showIntroText()
     if (args.url):
-        twitchURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.quality):
         vqw.twitchVQW.insert(0, args.quality)

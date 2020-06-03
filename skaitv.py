@@ -119,7 +119,6 @@ def main(argv):
     if (args.silence != True):
         cmnHandler.showIntroText()
     if (args.url):
-        skaiURL = args.url
         video = helpers.getVideoType(args.url)
     if (args.live):
         video = {'type': 'live'}

@@ -7,8 +7,7 @@ All notable changes to this project will be documented in this file.
 - Lbry.tv script added
 
 ### Changed
-
-### Fixed
+- Cleared unused variables from scripts
 
 
 ## [1.5] - 2020-01-01
