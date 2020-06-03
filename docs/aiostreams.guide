@@ -34,6 +34,7 @@ Some of these networks have a search API, and you can use them to find available
 @{tab}@{"Dlive.tv" LINK "Dlive.tv"}
 @{tab}@{"PeerTube" LINK "PeerTube"}
 @{tab}@{"Wasd.tv" LINK "Wasd.tv"}
+@{tab}@{"Lbry.tv" LINK "Lbry.tv"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Troubleshooting" LINK "Troubleshooting"}
@@ -150,6 +151,7 @@ You can find usage information in the following sections, separated by network.
 @{"Dlive.tv" LINK "Dlive.tv"}
 @{"PeerTube" LINK "PeerTube"}
 @{"Wasd.tv" LINK "Wasd.tv"}
+@{"Lbry.tv" LINK "Lbry.tv"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -557,6 +559,34 @@ Watch the live stream, like below
 No private info is sent by this script to wasd.tv.
 
 @endnode
+
+@node "lbry.tv" "lbry.tv"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Lbry.tv@{ub}
+
+This script supports @{"lbry.tv" SYSTEM "c:URLOpen https://lbry.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+
+With this script you can: 
+* watch recorded videos
+* autoplay videos with ffplay, mplayer or other players
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -u URL, --url URL     The video/channel url
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
+
+@{lindent 3}
+@{u}Examples:@{uu}
+Watch a recorded video, like below
+@{b}lbry.py -u https://lbry.tv/@channelname/videoname@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script to lbry.tv.
+
+@endnode
+
 @node "Todo" "Todo"
 @prev "Usage"
 @next "Changelog"
