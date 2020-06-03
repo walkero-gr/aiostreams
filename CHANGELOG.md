@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 ### Added
+- Lbry.tv script added
 
 ### Changed
 
