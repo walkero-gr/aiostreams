@@ -596,7 +596,7 @@ No private info is sent by this script to lbry.tv.
 The todo list is something that might change a lot between the version releases. You can find the up to date todo list and the status of things I am working on, at:
 https://github.com/walkero-gr/aiostreams/projects/1 @{"open" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/projects/1"}
 
-Many things:
+Many things, like:
 * AmigaOS 3 and AROS support.
 * Workbench notifications, wherever it is possible.
 * A way to get a notification on which of your favorite channels are currently streaming.
@@ -684,7 +684,7 @@ This means that it can't find the python command on your system. Try to use @{b}
 @{jleft}@{lindent 3}
 @{b}Author@{ub}
 
-My name is George Sokianos and you can reach me at Amiga forums under the username @{b}walkero@{ub}.
+You can reach me at Amiga forums under the username @{b}walkero@{ub}.
 
 The project is open source and you can find the code at:
 https://github.com/walkero-gr/aiostreams @{"github" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams"}
@@ -698,7 +698,7 @@ https://walkero.gr @{"open" SYSTEM "c:URLOpen https://walkero.gr"}
 My Twitter account is:
 https://twitter.com/gsokianos @{"open" SYSTEM "c:URLOpen https://twitter.com/gsokianos"}
 
-If you find this project useful, you can support it by donating at:
+aiostreams is DONATIONWARE. If you find this project useful, you can support it by donating at:
 https://www.paypal.me/gsokianos @{"Donate" SYSTEM "c:URLOpen https://www.paypal.me/gsokianos"}
 
 My PeerTube channels:

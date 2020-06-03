@@ -63,6 +63,7 @@ You can use this to discover and watch a streaming, using your beloved video pla
     
     def getScriptEpilog(self):
         descr = "\
-If you use and love those scripts, please consider to donate at https://www.paypal.me/gsokianos\n\
+aiostreams is DONATIONWARE.\n\
+If you find this project useful, please consider to donate at https://www.paypal.me/gsokianos\n\
 Your support is much appreciated."
         return descr
