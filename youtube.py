@@ -13,7 +13,6 @@ except:
     pass
 
 cmnHandler = cmn.cmnHandler()
-apikey = 'AIzaSyAqIPMWKY6ty9JG66oiL17ZliALtZOJuzg'
 
 _url_re = re.compile(r"""(?x)https?://(?:\w+\.)?youtube\.com
     (?:
@@ -48,6 +47,10 @@ class ytAPIHandler:
 
         return None
 
+    def getClientId(self):
+        keyData = aiostreamsapi.getKey()
+        return keyData['clientId']
+
     def getURL(self, url):
         request = urllib2.Request(url)
         request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
@@ -68,7 +71,7 @@ class ytAPIHandler:
         
         url = "%s/%s" % (requestUrl, endpoint)
         if (query):
-            query['key'] = apikey
+            query['key'] = self.getClientId()
             queryArgs = urllib.urlencode(query)
             url = "%s/%s?%s" % (requestUrl, endpoint, queryArgs)
 
@@ -141,6 +144,42 @@ class ytAPIHandler:
             return json.loads(responseData)
         return None
 
+class aiostreamsapiHandler:
+    def __init__(self):
+        self.baseurl = 'https://aiostreams.amiga-projects.net/v1/youtube'
+        
+        return None
+
+    def getURL(self, url):
+        request = urllib2.Request(url)
+
+        try:
+            response = urllib2.urlopen(request)
+            retData = response.read()
+            response.close()
+            return retData
+        except URLError, e:
+            print e
+        
+        return None
+
+    def call(self, endpoint, query = None):
+        url = "%s/%s" % (self.baseurl, endpoint)
+        if (query):
+            queryArgs = urllib.urlencode(query)
+            url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
+
+        return self.getURL(url)
+
+    def getKey(self):
+        endpoint = "getkey"
+        responseData = self.call(endpoint)
+        if responseData:
+            return json.loads(responseData)
+        else:
+            print 'Key error: Please contact the developer.'
+            sys.exit()
+
 class helpersHandler:
     def parseURL(self, url):
         return _url_re.match(url).groupdict()
@@ -183,6 +222,8 @@ class helpersHandler:
         return cipherParsed['url'][0]
 
 def main(argv):
+    global aiostreamsapi
+    aiostreamsapi = aiostreamsapiHandler()
     ytApi = ytAPIHandler()
     helpers = helpersHandler()
 
@@ -292,9 +333,8 @@ def main(argv):
 
             useCipher = False
             isLive = False
-            
             try:
-                if (response['videoDetails']['isLiveContent']):
+                if (response['videoDetails']['isLive']):
                     isLive = True
             except KeyError:
                 pass
