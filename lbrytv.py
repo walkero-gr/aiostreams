@@ -5,12 +5,16 @@ import urllib, urllib2, sys, argparse, re, string, time
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
+from datetime import datetime
 
 cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
     http(s)?://lbry\.tv/
     (?:
-        @(?P<channel>[^/?]+)/(?P<video_id>[^/?]+)
+        @(?P<channel>[^/?]+)
+    )
+    (?:
+        /(?P<video_id>[^/?]+)
     )?
 """, re.VERBOSE)
 
@@ -60,6 +64,60 @@ class lbrytvAPIHandler:
             return json.loads(responseData)
         return None
 
+    def getChannelInfoByName(self, uri):
+        endpoint = "proxy"
+        query = {
+            "jsonrpc": "2.0",
+            "method": "resolve",
+            "params": {
+                "urls": [
+                    uri
+                ],
+                "include_purchase_receipt": "true",
+                "include_is_my_output": "true"
+            },
+            "id": int(time.time())
+        }
+        
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
+    def getVideosByClaimId(self, id):
+        endpoint = "proxy"
+        query = {
+            "jsonrpc": "2.0",
+            "method": "claim_search",
+            "params": {
+                "page_size": 20,
+                "page": 1,
+                "no_totals": "true",
+                "channel_ids": [
+                    id
+                ],
+                "not_channel_ids": [],
+                "not_tags": [
+                    "porn", "porno", "nsfw", "mature", "xxx", "sex", "creampie",
+                    "blowjob", "handjob", "vagina", "boobs", "big boobgs",
+                    "big dick", "pussy", "cumshot", "anal", "hard fucking",
+                    "ass", "fuck", "hentai"
+                ],
+                "order_by": [
+                    "release_time"
+                ],
+                "release_time": "<%d" % (int(time.time())),
+                "fee_amount": ">=0",
+                "include_purchase_receipt": "true"
+            },
+            "id": int(time.time())
+        }
+        
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
 class helpersHandler:
     def parseURL(self, url):
         return _url_re.match(url).groupdict()
@@ -70,14 +128,30 @@ class helpersHandler:
         if (types['video_id']):
             return {'type': 'video', 'id': types['video_id'], 'channel': types['channel']}
 
+        if (types['channel']):
+            return {'type': 'channel', 'channel': types['channel']}
+
         return None
 
-    def buildUri(self, video):
-        channel = video['channel'].replace(":", "#")
-        videoId = video['id'].replace(":", "#")
-        retUri = 'lbry://@%s/%s' % (channel, videoId)
+    def buildUri(self, video, type = "video"):
+        try:
+            channel = video['channel'].replace(":", "#")
+        except KeyError:
+            pass
+
+        try:
+            videoId = video['id'].replace(":", "#")
+        except KeyError:
+            pass
+
+        if (type == 'channel'):
+            return 'lbry://@%s' % (channel)
         
-        return retUri
+        return 'lbry://@%s/%s' % (channel, videoId)
+    
+    def buildHttpUrl(self, uri):
+        uri = uri.replace("lbry://", "https://lbry.tv/")
+        return uri.replace("#", ":")
 
 def main(argv):
     lbrytvApi = lbrytvAPIHandler()
@@ -91,6 +165,7 @@ def main(argv):
     argParser = argparse.ArgumentParser(description=cmnHandler.getScriptDescription('lbry.tv'), epilog=cmnHandler.getScriptEpilog(),
                                         formatter_class=argparse.RawDescriptionHelpFormatter)
     argParser.add_argument('-u', '--url', action='store', dest='url', help='The video url')
+    argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     args = argParser.parse_args()
 
@@ -99,8 +174,28 @@ def main(argv):
     if (args.url):
         video = helpers.getVideoType(args.url)
 
+    if (args.channelvideos):
+        uri = helpers.buildUri(video, 'channel')
+        channelInfo = lbrytvApi.getChannelInfoByName(uri)
+
+        try:
+            claimId = channelInfo['result'][uri]['claim_id']
+            videoList = lbrytvApi.getVideosByClaimId(claimId)
+            print "%-90s\t %-20s\t %s" % ('URL', 'Recorded at', 'Title')
+            print "%s" % ('-'*200)
+            for item in videoList['result']['items']:
+                print "%-90s\t %-20s\t %s" % (helpers.buildHttpUrl(item['canonical_url']), datetime.fromtimestamp(int(item['value']['release_time'])), cmnHandler.uniStrip(item['value']['title']))
+        except KeyError:
+            try: 
+                print channelInfo['result'][uri]['error']['text']
+            except KeyError:
+                print "There was an error with the channel! Please, check that it is right."
+            
+
+        sys.exit()
+
     if (video['type'] == 'video'):
-        uri = helpers.buildUri(video)
+        uri = helpers.buildUri(video, 'video')
         streams = lbrytvApi.getVideoInfoByUri(uri)
 
         video = streams['result']['streaming_url']
