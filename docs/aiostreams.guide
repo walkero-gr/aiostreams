@@ -565,7 +565,7 @@ No private info is sent by this script to wasd.tv.
 @{jleft}@{lindent 3}
 @{b}Lbry.tv@{ub}
 
-This script supports @{"lbry.tv" SYSTEM "c:URLOpen https://lbry.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports @{"lbry.tv" SYSTEM "c:URLOpen https://lbry.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. Lbry.tv doesn't provide other video qualities than 1080p, so for now you cannot set the video quality.
 
 With this script you can: 
 * watch recorded videos
@@ -574,6 +574,9 @@ With this script you can:
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
   -u URL, --url URL     The video/channel url
+  -cv, --channel-videos
+                        Request the recorded videos of a channel. The -u
+                        argument is mandatory.
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
 
