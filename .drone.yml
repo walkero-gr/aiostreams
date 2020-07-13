@@ -28,7 +28,7 @@
   - name: upload-to-ftp
     image: cschlosser/drone-ftps
     hostname: walkero.duckdns.org:21
-    secrets: [ ftp_username, ftp_password ]
+    secrets: [ FTP_USERNAME, FTP_PASSWORD ]
     secure: false
     dest_dir: /new
     include:
