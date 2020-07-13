@@ -33,6 +33,7 @@
       FTP_PASSWORD:
         from_secret: FTP_PASSWORD
       PLUGIN_HOSTNAME: walkero.duckdns.org:21
+      PLUGIN_DEST_DIR: /new
       PLUGIN_SECURE: false
       PLUGIN_VERIFY: false
       PLUGIN_INCLUDE: ^\.lha/$
