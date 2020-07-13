@@ -1,0 +1,34 @@
+---
+  kind: pipeline
+  type: docker
+  name: release-iGame
+
+  steps:
+  - name: set-file-attributes
+    pull: always
+    image: walkero/docker4amigavbcc:latest-base
+    commands:
+      - cd /drone/src
+      - mkdir aiostreams
+      - mv ./docs ./aiostreams/
+      - mv ./simplejson ./aiostreams/
+      - mv ./*.py ./aiostreams/
+      - mv ./*.py.examples ./aiostreams/
+      - mv ./*.info ./aiostreams/
+      - mv ./*.md ./aiostreams/docs/
+      - mv LICENSE ./aiostreams/docs/
+      - lha -aq2o6 aiostreams-$(DRONE_TAG).lha aiostreams/
+  - name: deploy-all-binary
+    pull: always
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: GITHUB_RELEASE_API_KEY
+      files:
+        - "aiostreams-*.lha"
+      title: "aiostreams release ${DRONE_TAG}"
+
+  trigger:
+    event:
+      include:
+        - tag
