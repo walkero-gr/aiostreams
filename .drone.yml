@@ -37,7 +37,7 @@
       PLUGIN_SECURE: false
       PLUGIN_VERIFY: false
     #   PLUGIN_EXCLUDE: ^([a-z,A-Z,0-9]*.(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig)|docs|.editorconfig|http|LICENSE|simplejson)$
-      PLUGIN_INCLUDE: ^[a-z,A-Z,0-9]*\.lha/$
+      PLUGIN_INCLUDE: ^\[a-z,A-Z,0-9\]*\.lha/$
 
   trigger:
     event:
