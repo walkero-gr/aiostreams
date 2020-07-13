@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Cleared unused variables from scripts
 
+### Fixed
+- Fixed Vimeo script to support Videos with GUID
+
 
 ## [1.5] - 2020-01-01
 ### Added

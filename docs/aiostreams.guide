@@ -577,13 +577,27 @@ With this script you can:
   -cv, --channel-videos
                         Request the recorded videos of a channel. The -u
                         argument is mandatory.
+  -sv SEARCHVIDEO, --search-video SEARCHVIDEO
+                        Search recorded videos based on description
+  -sc SEARCHCHANNEL, --search-channel SEARCHCHANNEL
+                        Search channels based on description
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
 
 @{lindent 3}
 @{u}Examples:@{uu}
 Watch a recorded video, like below
-@{b}lbry.py -u https://lbry.tv/@channelname/videoname@{ub}
+@{b}lbrytv.py -u https://lbry.tv/@channelname/videoname@{ub}
+@{b}lbrytv.py -u https://lbry.tv/@janbeta:b/recreating-my-amiga-500-setup-episode-iv:8@{ub}
+
+Search for videos based on a string, like below
+@{b}lbrytv.py -sv "Amiga 500"@{ub}
+
+Search for channels based on a string, like below
+@{b}lbrytv.py -sc "keasigmadelta"@{ub}
+
+List channel videos, like below
+@{b}lbrytv.py -cv -u https://lbry.tv/@KeaSigmaDelta:9@{ub}
 
 @{u}Privacy:@{uu}
 No private info is sent by this script to lbry.tv.
