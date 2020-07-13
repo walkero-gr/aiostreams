@@ -5,7 +5,6 @@
 
   steps:
   - name: create-archive
-    pull: always
     image: walkero/docker4amigavbcc:latest-base
     commands:
       - cd /drone/src
@@ -18,15 +17,23 @@
       - mv ./*.md ./aiostreams/docs/
       - mv LICENSE ./aiostreams/docs/
       - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
-  - name: deploy-on-repo
-    pull: always
-    image: plugins/github-release
-    settings:
-      api_key:
-        from_secret: GITHUB_RELEASE_API_KEY
-      files:
-        - "aiostreams-*.lha"
-      title: "${DRONE_TAG} release"
+#   - name: deploy-on-repo
+#     image: plugins/github-release
+#     settings:
+#       api_key:
+#         from_secret: GITHUB_RELEASE_API_KEY
+#       files:
+#         - "aiostreams-*.lha"
+#       title: "${DRONE_TAG} release"
+    - name: upload-to-ftp
+        image: cschlosser/drone-ftps
+        hostname: walkero.duckdns.org:21
+        secrets: [ ftp_test_username, ftp_test_password ]
+        secure: false
+        dest_dir: /new
+        include:
+            - ^aiostreams-*.lha$
+
 
   trigger:
     event:
