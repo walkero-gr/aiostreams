@@ -10,11 +10,11 @@
       - cd /drone/src
       - mkdir aiostreams
       - mv ./docs ./aiostreams/
-      - mv ./simplejson ./aiostreams/
-      - mv ./*.py ./aiostreams/
-      - mv ./*.py.examples ./aiostreams/
-      - mv ./*.info ./aiostreams/
-      - mv ./*.md ./aiostreams/docs/
+    #   - mv ./simplejson ./aiostreams/
+    #   - mv ./*.py ./aiostreams/
+    #   - mv ./*.py.examples ./aiostreams/
+    #   - mv ./*.info ./aiostreams/
+    #   - mv ./*.md ./aiostreams/docs/
       - mv LICENSE ./aiostreams/docs/
       - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
 #   - name: deploy-on-repo
