@@ -36,6 +36,7 @@
       PLUGIN_DEST_DIR: /new
       PLUGIN_SECURE: false
       PLUGIN_VERIFY: false
+      PLUGIN_EXCLUDE: ^\.git/$
       PLUGIN_INCLUDE: ^\.lha/$
 
   trigger:
