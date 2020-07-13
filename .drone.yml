@@ -25,14 +25,14 @@
 #       files:
 #         - "aiostreams-*.lha"
 #       title: "${DRONE_TAG} release"
-    - name: upload-to-ftp
-        image: cschlosser/drone-ftps
-        hostname: walkero.duckdns.org:21
-        secrets: [ ftp_test_username, ftp_test_password ]
-        secure: false
-        dest_dir: /new
-        include:
-            - ^aiostreams-*.lha$
+  - name: upload-to-ftp
+    image: cschlosser/drone-ftps
+    hostname: walkero.duckdns.org:21
+    secrets: [ ftp_test_username, ftp_test_password ]
+    secure: false
+    dest_dir: /new
+    include:
+      - ^aiostreams-*.lha$
 
 
   trigger:
