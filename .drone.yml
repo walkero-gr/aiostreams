@@ -36,7 +36,7 @@
       PLUGIN_DEST_DIR: /raid1/data/webserv_ftp/new
       PLUGIN_SECURE: false
       PLUGIN_VERIFY: false
-      PLUGIN_EXCLUDE: ^\[a-z,A-Z,0-9\]*\.(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig)$
+      PLUGIN_EXCLUDE: ^\[a-z,A-Z,0-9\]*\.\(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig\)$
     #   PLUGIN_EXCLUDE: ^([a-z,A-Z,0-9]*.(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig)|docs|.editorconfig|http|LICENSE|simplejson)$
     #   PLUGIN_INCLUDE: ^\[a-z,A-Z,0-9\]*\.lha/$
 
