@@ -36,7 +36,13 @@
       PLUGIN_DEST_DIR: /raid1/data/webserv_ftp/new
       PLUGIN_SECURE: false
       PLUGIN_VERIFY: false
-      PLUGIN_EXCLUDE: ^\.git/$
+      PLUGIN_EXCLUDE: 
+        - ^\.git/$
+        - ^\.vscode/$
+        - ^\.drone.yml/$
+        - ^\.editorconfig/$
+        - ^\.gitignore/$
+        - ^*\.py/$
     #   PLUGIN_INCLUDE: ^\.lha/$
 
   trigger:
