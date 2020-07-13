@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [unreleased]
+## [1.6] - 2020-07-13
 ### Added
 - Lbry.tv script added
 
