@@ -1,10 +1,10 @@
 ---
   kind: pipeline
   type: docker
-  name: release-iGame
+  name: release-aiostreams
 
   steps:
-  - name: set-file-attributes
+  - name: create-archive
     pull: always
     image: walkero/docker4amigavbcc:latest-base
     commands:
@@ -17,8 +17,8 @@
       - mv ./*.info ./aiostreams/
       - mv ./*.md ./aiostreams/docs/
       - mv LICENSE ./aiostreams/docs/
-      - lha -aq2o6 aiostreams-$(DRONE_TAG).lha aiostreams/
-  - name: deploy-all-binary
+      - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
+  - name: deploy-on-repo
     pull: always
     image: plugins/github-release
     settings:
@@ -26,7 +26,7 @@
         from_secret: GITHUB_RELEASE_API_KEY
       files:
         - "aiostreams-*.lha"
-      title: "aiostreams release ${DRONE_TAG}"
+      title: "${DRONE_TAG} release"
 
   trigger:
     event:
