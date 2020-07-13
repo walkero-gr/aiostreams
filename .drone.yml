@@ -42,4 +42,4 @@
   trigger:
     event:
       include:
-        - tag
+        - push
