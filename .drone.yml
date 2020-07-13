@@ -37,7 +37,7 @@
       PLUGIN_SECURE: false
       PLUGIN_VERIFY: false
       PLUGIN_EXCLUDE: ^\.git/$
-      PLUGIN_INCLUDE: ^\.lha/$
+    #   PLUGIN_INCLUDE: ^\.lha/$
 
   trigger:
     event:
