@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.6.1] - 2020-07-15
+### Fixed
+- Fixed Lbry.tv under AmigaOS 4 to use ffplay and not mplayer on video playback
+
+
 ## [1.6] - 2020-07-13
 ### Added
 - Lbry.tv script added

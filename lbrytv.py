@@ -287,7 +287,7 @@ def main(argv):
         video = streams['result']['streaming_url']
         if (video):
             if cfg.autoplay:
-                cmnHandler.videoAutoplay(video, 'video')
+                cmnHandler.videoAutoplay(video, 'list')
         else:
             print "There is no video available!"
 
