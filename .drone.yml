@@ -26,13 +26,13 @@
 #       files:
 #         - "./aiostreams-*.lha"
 #       title: "${DRONE_TAG} release"
-  - name: prepare-aminet-release
+  - name: Prepare Aminet release
     image: walkero/docker4amigavbcc:latest-base
     commands:
       - mkdir aminet-release
       - cp aiostreams-${DRONE_TAG}.lha ./aminet-release/aiostreams.lha
       - cp aminet.readme ./aminet-release/aiostreams.readme
-  - name: upload-to-aminet
+  - name: Upload to Aminet
     image: cschlosser/drone-ftps
     environment:
       FTP_USERNAME:
@@ -52,7 +52,8 @@
       - mkdir os4depot-release
       - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
       - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
-  - name: upload-to-os4depot
+      - sed -i 's/OS4DEPOT_PASSPHRASE/linux/' ./os4depot-release/aiostreams_lha.readme
+  - name: Upload to OS4Depot
     image: cschlosser/drone-ftps
     environment:
       FTP_USERNAME:
@@ -60,7 +61,7 @@
       FTP_PASSWORD:
         from_secret: FTP_PASSWORD
       PLUGIN_HOSTNAME: walkero.duckdns.org:21
-      PLUGIN_SRC_DIR: /aminet-release
+      PLUGIN_SRC_DIR: /os4depot-release
       PLUGIN_DEST_DIR: ./new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
