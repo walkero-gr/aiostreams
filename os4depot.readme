@@ -11,7 +11,7 @@ requirements: Python 2.5, pythonssl, ffplay, mplayer, emotion
 license: Freeware
 minosversion: 4.1
 distribute: yes
-passphrase: OS4DEPOT_PASSPHRASE
+passphrase: ${OS4DEPOT_PASSPHRASE}
 hend:
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
 
