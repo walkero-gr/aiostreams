@@ -34,7 +34,7 @@
       FTP_PASSWORD:
         from_secret: FTP_PASSWORD
       PLUGIN_HOSTNAME: walkero.duckdns.org:21
-      PLUGIN_SRC_DIR: ./release
+      PLUGIN_SRC_DIR: /release
       PLUGIN_DEST_DIR: /raid1/data/webserv_ftp/new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
