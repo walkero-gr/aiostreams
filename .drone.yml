@@ -47,7 +47,8 @@
   - name: Prepare OS4Depot release
     image: walkero/docker4amigavbcc:latest-base
     environment:
-        OS4DEPOT_PASSPHRASE: "This is a test passphrase"
+        OS4DEPOT_PASSPHRASE: 
+            from_secret: OS4DEPOT_PASSPHRASE_TEST
     commands:
       - mkdir os4depot-release
       - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
