@@ -16,26 +16,28 @@
       - mv ./*.info ./aiostreams/
       - mv ./*.md ./aiostreams/docs/
       - mv LICENSE ./aiostreams/docs/
-      - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
-  - name: deploy-on-repo
-    image: plugins/github-release
-    settings:
-      api_key:
-        from_secret: GITHUB_RELEASE_API_KEY
-      files:
-        - "aiostreams-*.lha"
-      title: "${DRONE_TAG} release"
-#   - name: upload-to-ftp
-#     image: cschlosser/drone-ftps
-#     environment:
-#       FTP_USERNAME:
-#         from_secret: FTP_USERNAME
-#       FTP_PASSWORD:
-#         from_secret: FTP_PASSWORD
-#       PLUGIN_HOSTNAME: walkero.duckdns.org:21
-#       PLUGIN_DEST_DIR: /raid1/data/webserv_ftp/new
-#       PLUGIN_SECURE: false
-#       PLUGIN_VERIFY: false
+      - mkdir release
+      - lha -aq2o6 ./release/aiostreams-${DRONE_TAG}.lha aiostreams/
+#   - name: deploy-on-repo
+#     image: plugins/github-release
+#     settings:
+#       api_key:
+#         from_secret: GITHUB_RELEASE_API_KEY
+#       files:
+#         - "./release/aiostreams-*.lha"
+#       title: "${DRONE_TAG} release"
+  - name: upload-to-ftp
+    image: cschlosser/drone-ftps
+    environment:
+      FTP_USERNAME:
+        from_secret: FTP_USERNAME
+      FTP_PASSWORD:
+        from_secret: FTP_PASSWORD
+      PLUGIN_HOSTNAME: walkero.duckdns.org:21
+      PLUGIN_SRC_DIR: ./release
+      PLUGIN_DEST_DIR: /raid1/data/webserv_ftp/new
+      PLUGIN_SECURE: "false"
+      PLUGIN_VERIFY: "false"
 #       PLUGIN_EXCLUDE: ^\[a-z,A-Z,0-9\]*\.\(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig\)$
     #   PLUGIN_EXCLUDE: ^([a-z,A-Z,0-9]*.(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig)|docs|.editorconfig|http|LICENSE|simplejson)$
     #   PLUGIN_INCLUDE: ^\[a-z,A-Z,0-9\]*\.lha/$
@@ -43,4 +45,4 @@
   trigger:
     event:
       include:
-        - tag
+        - push
