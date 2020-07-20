@@ -44,6 +44,26 @@
       PLUGIN_DEST_DIR: ./new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
+  - name: Prepare OS4Depot release
+    image: walkero/docker4amigavbcc:latest-base
+    environment:
+        OS4DEPOT_PASSPHRASE: "This is a test passphrase"
+    commands:
+      - mkdir os4depot-release
+      - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
+      - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
+  - name: upload-to-os4depot
+    image: cschlosser/drone-ftps
+    environment:
+      FTP_USERNAME:
+        from_secret: FTP_USERNAME
+      FTP_PASSWORD:
+        from_secret: FTP_PASSWORD
+      PLUGIN_HOSTNAME: walkero.duckdns.org:21
+      PLUGIN_SRC_DIR: /aminet-release
+      PLUGIN_DEST_DIR: ./new
+      PLUGIN_SECURE: "false"
+      PLUGIN_VERIFY: "false"
 
   trigger:
     event:
