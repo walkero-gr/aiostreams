@@ -54,6 +54,7 @@
       - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
       - echo ${OS4DEPOT_PASSPHRASE}
       - echo "-----------------------------"
+      - printenv
       - sed -i "s/OS4DEPOT_PASSPHRASE/${OS4DEPOT_PASSPHRASE}/" ./os4depot-release/aiostreams_lha.readme
   - name: Upload to OS4Depot
     image: cschlosser/drone-ftps
