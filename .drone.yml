@@ -35,7 +35,7 @@
         from_secret: FTP_PASSWORD
       PLUGIN_HOSTNAME: walkero.duckdns.org:21
       PLUGIN_SRC_DIR: /release
-      PLUGIN_DEST_DIR: /new
+      PLUGIN_DEST_DIR: ./new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
 #       PLUGIN_EXCLUDE: ^\[a-z,A-Z,0-9\]*\.\(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig\)$
