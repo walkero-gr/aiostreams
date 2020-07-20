@@ -48,14 +48,11 @@
     image: walkero/docker4amigavbcc:latest-base
     environment:
         OS4DEPOT_PASSPHRASE: 
-            from_secret: OS4DEPOT_PASSPHRASE_TEST
+            from_secret: OS4DEPOT_PASSPHRASE
     commands:
       - mkdir os4depot-release
       - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
       - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
-      - echo $OS4DEPOT_PASSPHRASE
-      - echo "-----------------------------"
-    #   - printenv
       - sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
   - name: Upload to OS4Depot
     image: cschlosser/drone-ftps
