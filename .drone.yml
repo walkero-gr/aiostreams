@@ -9,6 +9,7 @@
     commands:
       - cd /drone/src
       - mkdir aiostreams
+      - chmod 755 dailymotion.py dlive.py lbrytv.py mixer.py peertube.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
       - mv ./docs ./aiostreams/
       - mv ./simplejson ./aiostreams/
       - mv ./*.py ./aiostreams/
@@ -35,11 +36,9 @@
 #   - name: Upload to Aminet
 #     image: cschlosser/drone-ftps
 #     environment:
-#       FTP_USERNAME:
-#         from_secret: FTP_USERNAME
-#       FTP_PASSWORD:
-#         from_secret: FTP_PASSWORD
-#       PLUGIN_HOSTNAME: walkero.duckdns.org:21
+#       FTP_USERNAME: "anonymous"
+#       FTP_PASSWORD: "walkero@gmail.com"
+#       PLUGIN_HOSTNAME: main.aminet.net:21
 #       PLUGIN_SRC_DIR: /aminet-release
 #       PLUGIN_DEST_DIR: ./new
 #       PLUGIN_SECURE: "false"
@@ -54,7 +53,17 @@
       - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
       - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
       - sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
-  - name: Upload to OS4Depot
+#   - name: Upload to OS4Depot
+#     image: cschlosser/drone-ftps
+#     environment:
+#       FTP_USERNAME: "ftp"
+#       FTP_PASSWORD: ""
+#       PLUGIN_HOSTNAME: os4depot.net:21
+#       PLUGIN_SRC_DIR: /os4depot-release
+#       PLUGIN_DEST_DIR: ./upload
+#       PLUGIN_SECURE: "false"
+#       PLUGIN_VERIFY: "false"
+  - name: Upload to TEST FTP
     image: cschlosser/drone-ftps
     environment:
       FTP_USERNAME:
