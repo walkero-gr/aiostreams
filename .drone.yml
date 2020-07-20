@@ -4,7 +4,7 @@
   name: release-aiostreams
 
   steps:
-  - name: create-archive
+  - name: create-release-archive
     image: walkero/docker4amigavbcc:latest-base
     commands:
       - cd /drone/src
@@ -17,16 +17,22 @@
       - mv ./*.md ./aiostreams/docs/
       - mv LICENSE ./aiostreams/docs/
       - mkdir release
-      - lha -aq2o6 ./release/aiostreams-${DRONE_TAG}.lha aiostreams/
+      - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
 #   - name: deploy-on-repo
 #     image: plugins/github-release
 #     settings:
 #       api_key:
 #         from_secret: GITHUB_RELEASE_API_KEY
 #       files:
-#         - "./release/aiostreams-*.lha"
+#         - "./aiostreams-*.lha"
 #       title: "${DRONE_TAG} release"
-  - name: upload-to-ftp
+  - name: prepare-aminet-release
+    image: walkero/docker4amigavbcc:latest-base
+    commands:
+      - mkdir aminet-release
+      - cp aiostreams-${DRONE_TAG}.lha ./aminet-release/aiostreams.lha
+      - cp aminet.readme ./aminet-release/aiostreams.readme
+  - name: upload-to-aminet
     image: cschlosser/drone-ftps
     environment:
       FTP_USERNAME:
@@ -34,13 +40,10 @@
       FTP_PASSWORD:
         from_secret: FTP_PASSWORD
       PLUGIN_HOSTNAME: walkero.duckdns.org:21
-      PLUGIN_SRC_DIR: /release
+      PLUGIN_SRC_DIR: /aminet-release
       PLUGIN_DEST_DIR: ./new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
-#       PLUGIN_EXCLUDE: ^\[a-z,A-Z,0-9\]*\.\(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig\)$
-    #   PLUGIN_EXCLUDE: ^([a-z,A-Z,0-9]*.(pyc|py|info|yml|gitignore|git|md|vscode|examples|editorconfig)|docs|.editorconfig|http|LICENSE|simplejson)$
-    #   PLUGIN_INCLUDE: ^\[a-z,A-Z,0-9\]*\.lha/$
 
   trigger:
     event:
