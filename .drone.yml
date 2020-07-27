@@ -1,6 +1,55 @@
 ---
   kind: pipeline
   type: docker
+  name: test-release-aiostreams
+
+  steps:
+  - name: create-test-archive
+    image: walkero/docker4amigavbcc:latest-base
+    commands:
+      - cd /drone/src
+      - mkdir aiostreams
+      - chmod 755 dailymotion.py dlive.py lbrytv.py mixer.py peertube.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
+      - mv ./docs ./aiostreams/
+      - mv ./simplejson ./aiostreams/
+      - mv ./*.py ./aiostreams/
+      - mv ./*.py.examples ./aiostreams/
+      - mv ./*.info ./aiostreams/
+      - mv ./*.md ./aiostreams/docs/
+      - mv LICENSE ./aiostreams/docs/
+      - mkdir release
+      - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
+  - name: Prepare test release
+    image: walkero/docker4amigavbcc:latest-base
+    environment:
+        OS4DEPOT_PASSPHRASE: 
+            from_secret: OS4DEPOT_PASSPHRASE
+    commands:
+      - mkdir os4depot-release
+      - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
+      - cp os4depot.readme ./os4depot-release/os4depot.readme
+      - cp aminet.readme ./aminet-release/aminet.readme
+  - name: Upload to TEST FTP
+    image: cschlosser/drone-ftps
+    environment:
+      FTP_USERNAME:
+        from_secret: FTP_USERNAME
+      FTP_PASSWORD:
+        from_secret: FTP_PASSWORD
+      PLUGIN_HOSTNAME: walkero.duckdns.org:21
+      PLUGIN_SRC_DIR: /os4depot-release
+      PLUGIN_DEST_DIR: ./new
+      PLUGIN_SECURE: "false"
+      PLUGIN_VERIFY: "false"
+
+  trigger:
+    event:
+      include:
+        - push
+
+---
+  kind: pipeline
+  type: docker
   name: release-aiostreams
 
   steps:
@@ -19,30 +68,30 @@
       - mv LICENSE ./aiostreams/docs/
       - mkdir release
       - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
-#   - name: deploy-on-repo
-#     image: plugins/github-release
-#     settings:
-#       api_key:
-#         from_secret: GITHUB_RELEASE_API_KEY
-#       files:
-#         - "./aiostreams-*.lha"
-#       title: "${DRONE_TAG} release"
-#   - name: Prepare Aminet release
-#     image: walkero/docker4amigavbcc:latest-base
-#     commands:
-#       - mkdir aminet-release
-#       - cp aiostreams-${DRONE_TAG}.lha ./aminet-release/aiostreams.lha
-#       - cp aminet.readme ./aminet-release/aiostreams.readme
-#   - name: Upload to Aminet
-#     image: cschlosser/drone-ftps
-#     environment:
-#       FTP_USERNAME: "anonymous"
-#       FTP_PASSWORD: "walkero@gmail.com"
-#       PLUGIN_HOSTNAME: main.aminet.net:21
-#       PLUGIN_SRC_DIR: /aminet-release
-#       PLUGIN_DEST_DIR: ./new
-#       PLUGIN_SECURE: "false"
-#       PLUGIN_VERIFY: "false"
+  - name: deploy-on-repo
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: GITHUB_RELEASE_API_KEY
+      files:
+        - "./aiostreams-*.lha"
+      title: "${DRONE_TAG} release"
+  - name: Prepare Aminet release
+    image: walkero/docker4amigavbcc:latest-base
+    commands:
+      - mkdir aminet-release
+      - cp aiostreams-${DRONE_TAG}.lha ./aminet-release/aiostreams.lha
+      - cp aminet.readme ./aminet-release/aiostreams.readme
+  - name: Upload to Aminet
+    image: cschlosser/drone-ftps
+    environment:
+      FTP_USERNAME: "anonymous"
+      FTP_PASSWORD: "walkero@gmail.com"
+      PLUGIN_HOSTNAME: main.aminet.net:21
+      PLUGIN_SRC_DIR: /aminet-release
+      PLUGIN_DEST_DIR: ./new
+      PLUGIN_SECURE: "false"
+      PLUGIN_VERIFY: "false"
   - name: Prepare OS4Depot release
     image: walkero/docker4amigavbcc:latest-base
     environment:
@@ -53,30 +102,18 @@
       - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
       - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
       - sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
-#   - name: Upload to OS4Depot
-#     image: cschlosser/drone-ftps
-#     environment:
-#       FTP_USERNAME: "ftp"
-#       FTP_PASSWORD: ""
-#       PLUGIN_HOSTNAME: os4depot.net:21
-#       PLUGIN_SRC_DIR: /os4depot-release
-#       PLUGIN_DEST_DIR: ./upload
-#       PLUGIN_SECURE: "false"
-#       PLUGIN_VERIFY: "false"
-  - name: Upload to TEST FTP
+  - name: Upload to OS4Depot
     image: cschlosser/drone-ftps
     environment:
-      FTP_USERNAME:
-        from_secret: FTP_USERNAME
-      FTP_PASSWORD:
-        from_secret: FTP_PASSWORD
-      PLUGIN_HOSTNAME: walkero.duckdns.org:21
+      FTP_USERNAME: "ftp"
+      FTP_PASSWORD: ""
+      PLUGIN_HOSTNAME: os4depot.net:21
       PLUGIN_SRC_DIR: /os4depot-release
-      PLUGIN_DEST_DIR: ./new
+      PLUGIN_DEST_DIR: ./upload
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
 
   trigger:
     event:
       include:
-        - push
+        - tag
