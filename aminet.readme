@@ -2,7 +2,7 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      1.6.1
+Version:      1.6.2
 Architecture: ppc-amigaos; ppc-morphos
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
@@ -46,9 +46,11 @@ You can find the todo list and the status of them at:
 https://github.com/walkero-gr/aiostreams/projects/1
 
 
-
 Changelog
 -------------
+v1.6.2
+* Added automated release process to OS4Depot and Aminet
+
 v1.6.1
 * Fixed Lbry.tv under AmigaOS 4 to use ffplay and not mplayer on video playback
 

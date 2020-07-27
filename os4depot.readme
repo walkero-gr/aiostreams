@@ -1,6 +1,6 @@
 name: aiostreams
 description: Stream video from major online platforms
-version: 1.6.1
+version: 1.6.2
 author: George Sokianos
 submitter: George Sokianos
 email: walkero@gmail.com
@@ -51,9 +51,11 @@ You can find the todo list and the status of them at:
 https://github.com/walkero-gr/aiostreams/projects/1
 
 
-
 Changelog
 -------------
+v1.6.2
+* Added automated release process to OS4Depot and Aminet
+
 v1.6.1
 * Fixed Lbry.tv under AmigaOS 4 to use ffplay and not mplayer on video playback
 
