@@ -25,10 +25,10 @@
         OS4DEPOT_PASSPHRASE: 
             from_secret: OS4DEPOT_PASSPHRASE
     commands:
-      - mkdir os4depot-release
-      - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
-      - cp os4depot.readme ./os4depot-release/os4depot.readme
-      - cp aminet.readme ./aminet-release/aminet.readme
+      - mkdir test-release
+      - cp aiostreams-${DRONE_TAG}.lha ./test-release/aiostreams.lha
+      - cp os4depot.readme ./test-release/os4depot.readme
+      - cp aminet.readme ./test-release/aminet.readme
   - name: Upload to TEST FTP
     image: cschlosser/drone-ftps
     environment:
@@ -37,7 +37,7 @@
       FTP_PASSWORD:
         from_secret: FTP_PASSWORD
       PLUGIN_HOSTNAME: walkero.duckdns.org:21
-      PLUGIN_SRC_DIR: /os4depot-release
+      PLUGIN_SRC_DIR: /test-release
       PLUGIN_DEST_DIR: ./new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
