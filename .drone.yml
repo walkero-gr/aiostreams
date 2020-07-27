@@ -93,6 +93,7 @@
       PLUGIN_DEST_DIR: ./new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
+      PLUGIN_CHMOD: "false"
   - name: Prepare OS4Depot release
     image: walkero/docker4amigavbcc:latest-base
     environment:
@@ -113,6 +114,7 @@
       PLUGIN_DEST_DIR: ./upload
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
+      PLUGIN_CHMOD: "false"
 
   trigger:
     event:
