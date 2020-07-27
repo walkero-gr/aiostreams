@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [future release]
+### Removed
+- Removed Mixer.com script as it shut down
 
 ## [1.6.2] - 2020-07-27
 ### Added

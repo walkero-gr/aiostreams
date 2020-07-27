@@ -14,7 +14,7 @@
 @{b}All In One streams@{ub}
 @{i}v1.6.2 (2020-07-27)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
-All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
+All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and lbry.tv.
 
 All the scripts should be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
 
@@ -26,7 +26,6 @@ Some of these networks have a search API, and you can use them to find available
 @{"Configure" LINK "Configure"}
 @{"Shell usage" LINK "Usage"}
 @{tab}@{"Twitch.tv" LINK "Twitch.tv"}
-@{tab}@{"Mixer.com" LINK "Mixer.com"}
 @{tab}@{"YouTube.com" LINK "YouTube.com"}
 @{tab}@{"Vimeo.com" LINK "Vimeo.com"}
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
@@ -122,7 +121,6 @@ The available parameters are:
 You will also find a file named @{b}vqw.py@{ub}. There are the video qualities for each network. You can set the order of the stream and video qualities, which means that the first available will be served.
 
 * @{b}twitchVQW:@{ub} Set the preffered sort of video qualities for the Twitch.tv network.
-* @{b}mixerVQW:@{ub} Set the preffered sort of video qualities for the Mixer.com network.
 * @{b}vimeoVQW:@{ub} Set the preffered sort of video qualities for the Vimeo.com network.
 * @{b}dailymotionVQW:@{ub} Set the preffered sort of video qualities for the Dailymotion.com network.
 * @{b}ytVQW:@{ub} Set the preffered sort of video qualities for the recorded videos from YouTube.com.
@@ -143,7 +141,6 @@ All the scripts have a common way of usage, and I am trying to keep it that way,
 You can find usage information in the following sections, separated by network.
 @{lindent 10}
 @{"Twitch.tv" LINK "Twitch.tv"}
-@{"Mixer.com" LINK "Mixer.com"}
 @{"Vimeo.com" LINK "Vimeo.com"}
 @{"YouTube.com" LINK "YouTube.com"}
 @{"Dailymotion.com" LINK "Dailymotion.com"}
@@ -155,7 +152,7 @@ You can find usage information in the following sections, separated by network.
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
-The problem right now is that the supported networks, like Twitch.tv and Mixer.com, do not render right at the available browsers. That's why you can use @{"aiostreams website" SYSTEM "c:URLOpen https://aiostreams.amiga-projects.net" where you can find the same content from Twitch and Mixer, but it works on every browser like IBrowse 2.5 and Aweb PPC.
+The problem right now is that the supported networks, like Twitch.tv and Lbry.tv, do not render right at the available browsers. That's why you can use @{"aiostreams website" SYSTEM "c:URLOpen https://aiostreams.amiga-projects.net" where you can find the same content from Twitch, but it works on every browser like IBrowse 2.5 and Aweb PPC.
 
 @endnode
 @node "Twitch.tv" "Twitch.tv"
@@ -221,66 +218,6 @@ List the 50 Top Streams based on the viewers, like below
 @{u}Privacy:@{uu}
 The script uses secure HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
 * Your public IP
-
-@endnode
-@node "Mixer.com" "Mixer.com"
-@prev "Usage"
-@{jleft}@{lindent 3}
-@{b}Mixer.com@{ub}
-
-This script supports @{"Mixer.com" SYSTEM "c:URLOpen https://mixer.com"} website and it's available API. 
-If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-sg, --search-game@{ub}.
-
-With this script you can: 
-* watch live streams
-* watch channels' recorded videos
-* search channels by game title that are live and streaming
-* get a list of the available recorded videos by channel
-* get a list of the Top Streams and Top Games, based on the viewers
-* autoplay videos with ffplay, mplayer or other players
-
-@{u}Shell parameters:@{uu}
-  -h, --help            show this help message and exit
-  -u URL, --url URL     The video/channel url from mixer.com
-  -q QUALITY, --quality QUALITY
-                        Set the preffered video quality. This is optional. If
-                        not set or if it is not available the default quality
-                        weight will be used.
-  -ts, --top-streams    Get a list of the current Top Live Streams, based on
-                        the number of viewers
-  -tg, --top-games      Get a list of the current Top Games with live streams
-                        available, based on the number of viewers
-  -sg SEARCHGAME, --search-game SEARCHGAME
-                        Search for available streams based on game title
-  -cv, --channel-videos
-                        Request the recorded videos of a channel. The -u
-                        argument is mandatory.
-  -shh, --silence       If this is set, the script will not output anything,
-                        except of errors.
-
-@{u}Available video qualities:@{uu}
-At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
-Usually, the recorded videos are available only on 720p resolution.
-
-@{lindent 3}
-@{u}Examples:@{uu}
-Watch a live channel streaming, like below
-@{b}mixer.py -u https://mixer.com/channelname@{ub}
-
-Watch a recorded video, like below
-@{b}mixer.py -u https://mixer.com/channelname?vod=1234567890@{ub}
-
-Watch a live channel streaming at specific video quality, if this is available, like below
-@{b}mixer.py -u https://mixer.com/channelname -q 720p@{ub}
-
-Search for a keyword or a game title. Include the value in double quotes, like below:
-@{b}mixer.py -sg "game title"@{ub}
-
-List the last 50 videos of a channel, like below
-@{b}mixer.py -u https://mixer.com/channelname -cv@{ub}
-
-@{u}Privacy:@{uu}
-No private info is sent by this script to Mixer.com API.
 
 @endnode
 @node "Vimeo.com" "Vimeo.com"

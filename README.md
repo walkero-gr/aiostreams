@@ -1,5 +1,5 @@
 # aiostreams
-All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Mixer.com.
+All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Lbry.tv.
 
 All the scripts should be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
 
@@ -9,7 +9,6 @@ All the scripts are developed and fully tested under AmigaOS 4.1 FE and MorphOS 
 
 ### Supported networks:
 * [Twitch.tv](https://www.twitch.tv/)
-* [Mixer.com](https://mixer.com/)
 * [YouTube.com](https://youtube.com/)
 * [Vimeo.com](https://vimeo.com/)
 * [Dailymotion.com](https://www.dailymotion.com)

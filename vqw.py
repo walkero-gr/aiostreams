@@ -13,14 +13,6 @@ twitchVQW = [
     "audio_only"
 ]
 
-mixerVQW = [
-    "480p",
-    "320p",
-    "160p",
-    "720p",
-    "1080p"
-]
-
 vimeoVQW = [
     "360p",
     "240p",

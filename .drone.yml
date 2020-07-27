@@ -9,7 +9,7 @@
     commands:
       - cd /drone/src
       - mkdir aiostreams
-      - chmod 755 dailymotion.py dlive.py lbrytv.py mixer.py peertube.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
+      - chmod 755 dailymotion.py dlive.py lbrytv.py peertube.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
       - mv ./docs ./aiostreams/
       - mv ./simplejson ./aiostreams/
       - mv ./*.py ./aiostreams/
@@ -59,7 +59,7 @@
     commands:
       - cd /drone/src
       - mkdir aiostreams
-      - chmod 755 dailymotion.py dlive.py lbrytv.py mixer.py peertube.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
+      - chmod 755 dailymotion.py dlive.py lbrytv.py peertube.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
       - mv ./docs ./aiostreams/
       - mv ./simplejson ./aiostreams/
       - mv ./*.py ./aiostreams/
