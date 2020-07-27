@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.6.2] - 2020-07-27
+### Added
+- Added automated release process to OS4Depot and Aminet
+
+
 ## [1.6.1] - 2020-07-15
 ### Fixed
 - Fixed Lbry.tv under AmigaOS 4 to use ffplay and not mplayer on video playback
