@@ -41,6 +41,7 @@
       PLUGIN_DEST_DIR: ./new
       PLUGIN_SECURE: "false"
       PLUGIN_VERIFY: "false"
+      PLUGIN_CLEAN_DIR: "true"
 
   trigger:
     event:
