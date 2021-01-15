@@ -322,9 +322,9 @@ def main(argv):
             vUrlParsed = urlparse.parse_qs(videoInfo)
             playerResponse = vUrlParsed['player_response']
             response = json.loads(playerResponse[0])
-            
+
             if response['playabilityStatus']['status'] != "OK":
-                print response['playabilityStatus']['reason']
+                print cmnHandler.uniStrip(response['playabilityStatus']['reason'])
                 sys.exit()
 
             useCipher = False
