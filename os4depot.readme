@@ -1,6 +1,6 @@
 name: aiostreams
 description: Stream video from major online platforms
-version: 1.6.2
+version: 1.7
 author: George Sokianos
 submitter: George Sokianos
 email: walkero@gmail.com
@@ -67,6 +67,10 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Changelog
 -------------
+v1.7
+* Fixed skaitv live script
+* Removed Mixer.com script as it shut down
+
 v1.6.2
 * Added automated release process to OS4Depot and Aminet
 

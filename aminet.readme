@@ -2,7 +2,7 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      1.6.2
+Version:      1.7
 Architecture: ppc-amigaos; ppc-morphos
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
@@ -62,6 +62,10 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Changelog
 -------------
+v1.7
+* Fixed skaitv live script
+* Removed Mixer.com script as it shut down
+
 v1.6.2
 * Added automated release process to OS4Depot and Aminet
 
