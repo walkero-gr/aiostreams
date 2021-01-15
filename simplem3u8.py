@@ -23,7 +23,7 @@ class parseHandler:
                     val = val.replace('"', "")
                     retList[listCnt][attr.lower()] = val.lower()
 
-            if (line.startswith(('https://', 'http://', '../'))):
+            if (line.startswith(('https://', 'http://', '../', 'index_'))):
                 retList[listCnt]['uri'] = line
                 listCnt += 1
                 retList[listCnt] = {}

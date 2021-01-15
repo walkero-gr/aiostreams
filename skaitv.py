@@ -1,7 +1,8 @@
 #!python
 # coding=utf-8
-import cfg, cmn
+import cfg, cmn, vqw
 import urllib, urllib2, sys, argparse, re, string
+import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
@@ -26,12 +27,13 @@ _url_re = re.compile(r"""
 
 class skaiAPIHandler:
     def __init__(self):
-        self.baseurl = 'http://www.skaitv.gr'
+        self.baseurl = 'https://www.skaitv.gr'
 
         return None
 
     def getURL(self, url):
         request = urllib2.Request(url)
+        request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
         try:
             response = urllib2.urlopen(request)
             retData = response.read()
@@ -54,24 +56,33 @@ class skaiAPIHandler:
         endpoint = "episode/%s/%s/%s/%s" % (parsedUrl['categ'], parsedUrl['caption2'], parsedUrl['caption'], parsedUrl['clip'])
         responseHtml = self.call(endpoint)
         if responseHtml:
-            return self.getJsonData(responseHtml)
+            return self.getJsonData(responseHtml, False)
         return None
 
     def getLiveInfo(self, parsedUrl):
         endpoint = "live"
         responseHtml = self.call(endpoint)
         if responseHtml:
-            return self.getJsonData(responseHtml)
+            return self.getJsonData(responseHtml, True)
         return None
     
-    def getJsonData(self, html):
-        start = html.find('var data = ')
-        end = html.find('initPlayer', start)
-        end = end-46
-        return json.loads(html[start+11:end])
+    def getJsonData(self, html, isLive):
+        start = html.find('var data = ') + 11
+        if isLive:
+            end = html.find('"live"};', start) + 7
+        else:
+            end = html.find('}};', start) + 2
+
+        return json.loads(html[start:end])
 
 
 class helpersHandler:
+    def __init__(self):
+        self.cambria4Url = "https://skai-live-back.siliconweb.com/media/cambria4"
+        self.videoStream = "http://videostream.skai.gr"
+
+        return None
+
     def parseURL(self, url):
         try:
             return _url_re.match(url).groupdict()
@@ -92,12 +103,23 @@ class helpersHandler:
         return None
 
     def buildM3U8Uri(self, media):
-        vsUrl = "http://videostream.skai.gr"
         slash = "/"
         if (media.startswith(('/'))):
             slash = ""
 
-        return "%s%s%s.m3u8" % (vsUrl, slash, media)
+        return "%s%s%s.m3u8" % (self.videoStream, slash, media)
+
+    def getPrefferedVideoURL(self, data):
+        sm3u8Parser = sm3u8.parseHandler()
+        playlists = sm3u8Parser.parse(data)
+
+        for quality in vqw.skaiVQW:
+            for idx in playlists:
+                if (playlists[idx]):
+                    streamUri = playlists[idx]['uri']
+                    if (streamUri.find(quality) >= 0):
+                        return "%s/%s" % (self.cambria4Url, streamUri)
+        return None
 
 
 def main(argv):
@@ -188,10 +210,16 @@ def main(argv):
                 sys.exit()
 
             if livestreamUrl:
-                if cfg.verbose and (args.silence != True):
-                    print "\nLivestream: %s" % (livestreamUrl)
-                if cfg.autoplay:
-                    print "Use youtube script to autoplay this live stream:\nyoutube.py -u %s" % (livestreamUrl)
+                m3u8Response = skaiApi.getURL(livestreamUrl)
+                if (m3u8Response):
+                    uri = helpers.getPrefferedVideoURL(m3u8Response)
+                    if uri:
+                        if cfg.verbose and (args.silence != True):
+                            print "%s" % (uri)
+                        if cfg.autoplay:
+                            cmnHandler.videoAutoplay(uri, 'list')
+                    else:
+                        print "Not valid video found"
 
     sys.exit()
 
