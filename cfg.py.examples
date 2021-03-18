@@ -15,20 +15,30 @@ vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
 sPlayer = "APPDIR:ffplay"
 sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"
 
+# AmigaOS 4.1 FE audio players
+aPlayer = "APPDIR:AmigaAmp3"
+aPlayerArgs = ""
+
 # AmigaOS 4.1 FE Emotion player
 vPlayer = "APPDIR:emotion"
 vPlayerArgs = ""
 sPlayer = "APPDIR:emotion"
 sPlayerArgs = ""
+aPlayer = "APPDIR:emotion"
+aPlayerArgs = ""
 
 # MacOS X video players
 vPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
 vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 sPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
 sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+aPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
+aPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 
 # Linux video players
 vPlayer = "/usr/bin/vlc"
 vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 sPlayer = "/usr/bin/vlc"
 sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+aPlayer = "/usr/bin/vlc"
+aPlayerArgs = "-f --no-video-title-show 2> /dev/null"

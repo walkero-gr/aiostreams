@@ -41,12 +41,21 @@ class cmnHandler:
             return None
 
     def videoAutoplay(self, uri, videoType = 'list'):
+        player = cfg.vPlayer
+        playerArgs = cfg.vPlayerArgs
+        
         if (videoType == 'list'):
             player = cfg.sPlayer
             playerArgs = cfg.sPlayerArgs
+
+        if (userOS == 'ppc-amiga'):
+            amiga.system( "Run <>NIL: %s %s %s" % (player, uri, playerArgs) )
         else:
-            player = cfg.vPlayer
-            playerArgs = cfg.vPlayerArgs
+            os.system( '%s "%s" %s' % (player, uri, playerArgs) )
+
+    def audioAutoplay(self, uri):
+        player = cfg.aPlayer
+        playerArgs = cfg.aPlayerArgs
 
         if (userOS == 'ppc-amiga'):
             amiga.system( "Run <>NIL: %s %s %s" % (player, uri, playerArgs) )
