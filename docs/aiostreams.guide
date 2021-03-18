@@ -152,7 +152,7 @@ You can find usage information in the following sections, separated by network.
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
-The problem right now is that the supported networks, like Twitch.tv and Lbry.tv, do not render right at the available browsers. That's why you can use @{"aiostreams website" SYSTEM "c:URLOpen https://aiostreams.amiga-projects.net" where you can find the same content from Twitch, but it works on every browser like IBrowse 2.5 and Aweb PPC.
+The problem right now is that the supported networks, like Twitch.tv and Lbry.tv, do not render right at the available browsers. That's why you can use @{"aiostreams website" SYSTEM "c:URLOpen https://aiostreams.amiga-projects.net"} where you can find the same content from Twitch, but it works on every browser like IBrowse 2.5 and Aweb PPC.
 
 @endnode
 @node "Twitch.tv" "Twitch.tv"
