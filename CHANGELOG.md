@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.1] - 2021-03-19
+### Added
+- Added radio.py script
+
+### Changed
+- Changes on skaitv script to use aiostreams api site
+
 ## [1.7] - 2021-01-15
 ### Fixed
 - Fixed skaitv live script

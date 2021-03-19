@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.7 (2021-01-15)
+@$VER: 1.7.1 (2021-03-19)
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,9 +12,9 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.7 (2021-01-15)@{ui}
+@{i}v1.7.1 (2021-03-19)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
-All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and lbry.tv.
+All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and lbry.tv. Also, there is a radio script that helps you discover and play online radio stations from all around the world.
 
 All the scripts should be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
 
@@ -34,6 +34,7 @@ Some of these networks have a search API, and you can use them to find available
 @{tab}@{"PeerTube" LINK "PeerTube"}
 @{tab}@{"Wasd.tv" LINK "Wasd.tv"}
 @{tab}@{"Lbry.tv" LINK "Lbry.tv"}
+@{tab}@{"Radio" LINK "Radio"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Troubleshooting" LINK "Troubleshooting"}
@@ -149,6 +150,7 @@ You can find usage information in the following sections, separated by network.
 @{"PeerTube" LINK "PeerTube"}
 @{"Wasd.tv" LINK "Wasd.tv"}
 @{"Lbry.tv" LINK "Lbry.tv"}
+@{"Radio" LINK "Radio"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
@@ -540,6 +542,65 @@ List channel videos, like below
 No private info is sent by this script to lbry.tv.
 
 @endnode
+@node "Radio" "Radio"
+@prev "Usage"
+@{jleft}@{lindent 3}
+@{b}Radio@{ub}
+
+This script provides information and plays automatically online radio stations. You can search for radio stations based on Country, Language, Genre and name.
+
+With this script you can: 
+* search for radio stations based on Country, Language, Genre and name
+* autoplay radio stations
+* get information for a radio station
+* get a list of available countries and the number of stations for them
+
+@{u}Shell parameters:@{uu}
+  -h, --help            show this help message and exit
+  -lc, --list-countries
+                        List the available countries
+  -src, --search        Initiate search for radio stations
+  -pl, --play           Automatically play a radio station. Use --uuid to set
+                        the station.
+  -sn STATIONNAME, --station-name STATIONNAME
+                        Filter stations based on name. This is used with
+                        --search argument.
+  -sg STATIONGENRE, --station-genre STATIONGENRE
+                        Filter stations based on genre. This is used with
+                        --search argument.
+  -sc STATIONCOUNTRY, --station-country STATIONCOUNTRY
+                        Filter stations based on country. This is used with
+                        --search argument.
+  -sl STATIONLANGUAGE, --station-language STATIONLANGUAGE
+                        Filter stations based on language. This is used with
+                        --search argument.
+  -id STATIONUUID, --uuid STATIONUUID
+                        Autoplay the station based on the UUID. This is used
+                        with --play argument.
+  -shh, --silence       If this is set, the script will not output anything,
+                        except of errors.
+
+@{lindent 3}
+@{u}Examples:@{uu}
+List available countries
+@{b}radio.py -lc@{ub}
+
+Search for radio stations in United States playing country
+@{b}radio.py -src -sg country -sc "United States"@{ub}
+
+Search for radio stations in Great Britain playing rock speaking English
+@{b}radio.py -src -sl English -sg rock -sc Britain@{ub}
+
+Search for radio stations having "Planet" in their name
+@{b}radio.py -src -sn "Planet"@{ub}
+
+Play Planet Rock station
+@{b}radio.py -pl -id 9619cc6c-0601-11e8-ae97-52543be04c81@{ub}
+
+@{u}Privacy:@{uu}
+No private info is sent by this script.
+
+@endnode
 
 @node "Todo" "Todo"
 @prev "Usage"
@@ -563,6 +624,10 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+v1.7.1
+* Changes on skaitv script to use aiostreams api site
+* Added new radio script
 
 v1.7
 * Fixed skaitv live script

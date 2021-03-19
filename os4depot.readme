@@ -1,6 +1,6 @@
 name: aiostreams
 description: Stream video from major online platforms
-version: 1.7
+version: 1.7.1
 author: George Sokianos
 submitter: George Sokianos
 email: walkero@gmail.com
@@ -15,7 +15,8 @@ passphrase: OS4DEPOT_PASSPHRASE
 hend:
 All In One streams (aiostreams) is a pack of scripts, written in Python, that
 can be used to stream and watch videos from different online networks, like
-Twitch.tv and Mixer.com.
+Twitch.tv and Mixer.com. Also, there is a radio script that helps you discover
+and play online radio stations from all around the world.
 
 All the scripts should be used from the shell, as well as from any web browser
 that support execution of scripts. It is really easy to configure a link context
@@ -67,6 +68,10 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Changelog
 -------------
+v1.7.1
+* Changes on skaitv script to use aiostreams api site
+* Added new radio script
+
 v1.7
 * Fixed skaitv live script
 * Removed Mixer.com script as it shut down
