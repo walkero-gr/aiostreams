@@ -35,10 +35,18 @@ sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 aPlayer = "~/Applications/VLC.app/Contents/MacOS/VLC"
 aPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 
-# Linux video players
+# Linux VLC player
 vPlayer = "/usr/bin/vlc"
 vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 sPlayer = "/usr/bin/vlc"
 sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
 aPlayer = "/usr/bin/vlc"
 aPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+
+# Linux MPV player
+vPlayer = "/usr/bin/mpv"
+vPlayerArgs = "--title='aiostreams' --really-quiet"
+sPlayer = "/usr/bin/mpv"
+sPlayerArgs = "--title='aiostreams' --really-quiet"
+aPlayer = "/usr/bin/mpv"
+aPlayerArgs = "--title='aiostreams' --really-quiet"
