@@ -9,7 +9,7 @@
     commands:
       - cd /drone/src
       - mkdir aiostreams
-      - chmod 755 dailymotion.py dlive.py lbrytv.py peertube.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
+      - chmod 755 dailymotion.py dlive.py lbrytv.py peertube.py radio.py skaitv.py twitch.py vimeo.py wasd.py youtube.py
       - mv ./docs ./aiostreams/
       - mv ./simplejson ./aiostreams/
       - mv ./*.py ./aiostreams/
@@ -29,19 +29,19 @@
       - cp aiostreams-${DRONE_TAG}.lha ./test-release/aiostreams.lha
       - cp os4depot.readme ./test-release/os4depot.readme
       - cp aminet.readme ./test-release/aminet.readme
-  - name: Upload to TEST FTP
-    image: cschlosser/drone-ftps
-    environment:
-      FTP_USERNAME:
-        from_secret: FTP_USERNAME
-      FTP_PASSWORD:
-        from_secret: FTP_PASSWORD
-      PLUGIN_HOSTNAME: walkero.duckdns.org:21
-      PLUGIN_SRC_DIR: /test-release
-      PLUGIN_DEST_DIR: ./new
-      PLUGIN_SECURE: "false"
-      PLUGIN_VERIFY: "false"
-      PLUGIN_CLEAN_DIR: "true"
+#   - name: Upload to TEST FTP
+#     image: cschlosser/drone-ftps
+#     environment:
+#       FTP_USERNAME:
+#         from_secret: FTP_USERNAME
+#       FTP_PASSWORD:
+#         from_secret: FTP_PASSWORD
+#       PLUGIN_HOSTNAME: walkero.duckdns.org:21
+#       PLUGIN_SRC_DIR: /test-release
+#       PLUGIN_DEST_DIR: ./new
+#       PLUGIN_SECURE: "false"
+#       PLUGIN_VERIFY: "false"
+#       PLUGIN_CLEAN_DIR: "true"
 
   trigger:
     event:
