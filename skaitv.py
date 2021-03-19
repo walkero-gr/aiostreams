@@ -27,7 +27,7 @@ _url_re = re.compile(r"""
 
 class skaiAPIHandler:
     def __init__(self):
-        self.baseurl = 'https://www.skaitv.gr'
+        self.baseurl = 'http://aiostreams.amiga-projects.net/v1/skaitv'
 
         return None
 
@@ -54,16 +54,16 @@ class skaiAPIHandler:
 
     def getVideoInfo(self, parsedUrl):
         endpoint = "episode/%s/%s/%s/%s" % (parsedUrl['categ'], parsedUrl['caption2'], parsedUrl['caption'], parsedUrl['clip'])
-        responseHtml = self.call(endpoint)
-        if responseHtml:
-            return self.getJsonData(responseHtml, False)
+        responseData = self.call(endpoint)
+        if responseData:
+            return json.loads(responseData)
         return None
 
     def getLiveInfo(self, parsedUrl):
         endpoint = "live"
-        responseHtml = self.call(endpoint)
-        if responseHtml:
-            return self.getJsonData(responseHtml, True)
+        responseData = self.call(endpoint)
+        if responseData:
+            return json.loads(responseData)
         return None
     
     def getJsonData(self, html, isLive):
