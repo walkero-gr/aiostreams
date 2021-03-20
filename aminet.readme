@@ -3,7 +3,7 @@ Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
 Version:      1.7.1
-Architecture: ppc-amigaos; ppc-morphos
+Architecture: generic
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
 Replaces:     util/batch/aiostreams.lha
