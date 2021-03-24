@@ -50,3 +50,19 @@ sPlayer = "/usr/bin/mpv"
 sPlayerArgs = "--title='aiostreams' --really-quiet"
 aPlayer = "/usr/bin/mpv"
 aPlayerArgs = "--title='aiostreams' --really-quiet"
+
+# Windows10 For "C:\Program Files (x86)" VLC player
+vPlayer = "start C:\PROGRA~2\VideoLAN\VLC\\vlc.exe"
+vPlayerArgs = "-f --no-video-title-show"
+sPlayer = "start C:\PROGRA~2\VideoLAN\VLC\\vlc.exe"
+sPlayerArgs = "-f --no-video-title-show"
+aPlayer = "start C:\PROGRA~2\VideoLAN\VLC\\vlc.exe"
+aPlayerArgs = "-f --no-video-title-show"
+
+# Windows10 For "C:\Program Files" VLC player
+vPlayer = "start C:\PROGRA~1\VideoLAN\VLC\\vlc.exe"
+vPlayerArgs = "-f --no-video-title-show"
+sPlayer = "start C:\PROGRA~1\VideoLAN\VLC\\vlc.exe"
+sPlayerArgs = "-f --no-video-title-show"
+aPlayer = "start C:\PROGRA~1\VideoLAN\VLC\\vlc.exe"
+aPlayerArgs = "-f --no-video-title-show"
