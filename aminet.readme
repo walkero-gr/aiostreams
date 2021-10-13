@@ -2,7 +2,7 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      1.7.1
+Version:      1.7.2
 Architecture: generic
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
@@ -63,6 +63,10 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Changelog
 -------------
+v1.7.2
+* A lot of changes to make YouTube work again. There were changes to vqw.py 
+  file, so first backup the one you use
+
 v1.7.1
 * Changes on skaitv script to use aiostreams api site
 * Added new radio script

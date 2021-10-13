@@ -32,34 +32,31 @@ dailymotionVQW = [
 ]
 
 ytVQW = [
-    43,			# 360p mp4, audio quality medium
-    18,			# 360p mp4, audio quality low
-    22,			# 720p mp4, audio quality medium
-    # 135,		# 480p mp4
-    # 244,		# 480p webm
-    # 134,		# 360p mp4
-    # 243,		# 360p webm
-    # 242,		# 240p mp4
-    # 136,		# 240p webm
-    # 160,		# 144p mp4
-    # 278,		# 144p webm
-    # 136,		# 720p mp4
-    # 247,		# 720p webm
-    # 137,		# 1080p mp4
-    # 248,		# 1080p webm
+    22,			# 720p, mp4, audio quality medium
+    43,			# 360p, mp4, audio quality medium
+    18,			# 360p, mp4, audio quality low
+    135,		# 480p, mp4, no audio
+    91,         # 144p, avc1.42c00b, mp4a.40.5
+    92,         # 240p, avc1.4d4015, mp4a.40.5
+    93,         # 360p, avc1.4d401e, mp4a.40.2
+    94,         # 480p, avc1.4d401f, mp4a.40.2
+    95,         # 720p, avc1.4d401f, mp4a.40.2
+    96,         # 1080p, avc1.640028, mp4a.40.2
+    # 244,		# 480p, webm, no audio
+    # 134,		# 360p, mp4, no audio
+    # 243,		# 360p, webm, no audio
+    # 133,		# 240p, mp4, no audio
+    # 242,		# 240p, webm, no audio
+    # 160,		# 144p, mp4, no audio
+    # 278,		# 144p, webm, no audio
+    # 136,		# 720p, mp4, no audio
+    # 247,		# 720p, webm, no audio
+    # 137,		# 1080p, mp4, no audio
+    # 248,		# 1080p, webm, no audio
     # 140,		# mp4, audio only, 44100, medium
     # 249,		# webm, audio only, 48000, low
     # 250,		# webm, audio only, 48000, low
     # 251,		# webm, audio only, 48000, medium
-]
-
-ytLiveVQW = [
-    480,		# 480p mp4
-    360,		# 360p mp4
-    240,		# 240p mp4
-    144,		# 144p mp4
-    720,		# 720p mp4
-    1080		# 1080p mp4
 ]
 
 dliveVQW = [

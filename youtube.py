@@ -167,6 +167,16 @@ class aiostreamsapiHandler:
 
         return self.getURL(url)
 
+    def getVideoInfo(self, videoId):
+        endpoint = "get_video_info"
+        query = {
+            "video_id": videoId
+        }
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return responseData
+        return None
+
     def getKey(self):
         endpoint = "getkey"
         responseData = self.call(endpoint)
@@ -188,30 +198,21 @@ class helpersHandler:
 
         return None
 
-    def getPrefferedVideoURL(self, data, isLive = False, isCiphered = False):
-        if isLive:
-            sm3u8Parser = sm3u8.parseHandler()
-            data = sm3u8Parser.parse(data)
-            for quality in vqw.ytLiveVQW:
-                for idx in data:
-                    streamQuality = data[idx]['resolution']
-                    if (streamQuality.find(str(quality)) >= 0):
-                        return data[idx]['uri']
-
+    def getPrefferedVideoURL(self, data, isLive = False):
         for quality in vqw.ytVQW:
             for idx in data:
-                if (quality == idx['itag']):
+                if (quality == int(idx['format_id'])):
                     try: 
                         return idx['url']
                     except KeyError:
                         pass
-                    if isCiphered:
-                        try:
-                            return self.getURLFromCipher(idx['cipher'])
-                        except KeyError:
-                            print "Cipher does not exist"
 
         return None
+
+    def printVideoFormats(self, data):
+        print "\nAvailable formats"
+        for idx in data:
+            print "%s - %sp\t %s, %s" % (idx['format_id'], idx['height'], idx['vcodec'], idx['acodec'])
 
     def getURLFromCipher(self, cipher):
         cipherParsed = urlparse.parse_qs(cipher)
@@ -317,53 +318,26 @@ def main(argv):
     # Return info for recorded/live video and stream it
     # 
     if (videoId):
-        videoInfo = ytApi.getVideoInfo(videoId)
+        videoInfo = aiostreamsapi.getVideoInfo(videoId)
         if videoInfo:
-            vUrlParsed = urlparse.parse_qs(videoInfo)
-            playerResponse = vUrlParsed['player_response']
-            response = json.loads(playerResponse[0])
+            response = json.loads(videoInfo)
 
-            if response['playabilityStatus']['status'] != "OK":
-                print cmnHandler.uniStrip(response['playabilityStatus']['reason'])
-                sys.exit()
-
-            useCipher = False
             isLive = False
             try:
-                if (response['videoDetails']['isLive']):
+                if (response['is_live']):
                     isLive = True
             except KeyError:
                 pass
 
-            try:
-                if (response['videoDetails']['useCipher']):
-                    useCipher = True
-                    print "This video is protected. Protected videos are not currently supported!"
-                    sys.exit()
-            except KeyError:
-                pass
-
             if (args.silence != True):
-                print "Title: %s" % (cmnHandler.uniStrip(response['videoDetails']['title']))
-                print "Author: %s" % (cmnHandler.uniStrip(response['videoDetails']['author']))
-                if (isLive == False):
-                    print "Length: %ssec" % (response['videoDetails']['lengthSeconds'])
-                    print "%-5s\t %-10s\t %-16s\t %-10s\t %s" % ('TagID', 'Quality', 'Audio Quality', 'Resolution', 'Mime type')
-                    print "%s" % ('-'*120)
-                    for format in response['streamingData']['formats']:
-                        print "%-5s\t %-10s\t %-16s\t %sx%s\t %s" % (format['itag'], format['qualityLabel'], format['audioQuality'], format['width'], format['height'], format['mimeType'])
-                
-                if (response['videoDetails']['isLiveContent']):
-                    print "Live streaming with %s viewers" % (response['videoDetails']['viewCount'])
-                        
-                print "\nDescription:\n%s\n%s" % ('-'*30, cmnHandler.uniStrip(response['videoDetails']['shortDescription']))
-                
-            if (isLive):
-                videoFormats = ytApi.getLiveStreams(response['streamingData']['hlsManifestUrl'])
-            else:
-                videoFormats = response['streamingData']['formats']
-            uri = helpers.getPrefferedVideoURL(videoFormats, isLive, useCipher)
-                    
+                print "Title: %s" % (cmnHandler.uniStrip(response['title']))
+
+            if cfg.verbose and (args.silence != True):
+                helpers.printVideoFormats(response['formats'])
+
+            videoFormats = response['formats']
+            uri = helpers.getPrefferedVideoURL(videoFormats, isLive)
+
             if (uri):
                 if cfg.verbose and (args.silence != True):
                     print "\n%s" % (uri)

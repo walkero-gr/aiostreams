@@ -1,6 +1,6 @@
 name: aiostreams
 description: Stream video from major online platforms
-version: 1.7.1
+version: 1.7.2
 author: George Sokianos
 submitter: George Sokianos
 email: walkero@gmail.com
@@ -68,6 +68,10 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Changelog
 -------------
+v1.7.2
+* A lot of changes to make YouTube work again. There were changes to vqw.py 
+  file, so first backup the one you use
+
 v1.7.1
 * Changes on skaitv script to use aiostreams api site
 * Added new radio script

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.2] - 2021-10-13
+### Fixed
+- A lot of changes to make YouTube work again. There were changes to vqw.py file, so first backup the one you use
+
 ## [1.7.1] - 2021-03-19
 ### Added
 - Added radio.py script
