@@ -144,11 +144,11 @@ def main(argv):
             uri = stationData[0]['url_resolved']
             if (args.silence != True):
                 print "%s\nCountry: %s\nLanguage: %s\nGenre tags: %s\nWebsite: %s" % (
-                    stationData[0]['name'],
-                    stationData[0]['country'],
-                    stationData[0]['language'],
+					cmnHandler.uniStrip(stationData[0]['name']),
+					stationData[0]['country'],
+					cmnHandler.uniStrip(stationData[0]['language']),
                     stationData[0]['tags'],
-                    stationData[0]['homepage']
+					stationData[0]['homepage']
                 )
 
             if (uri):
