@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.3] - future
+### Added
+- Added a new argument on Youtube script, the -x, that enables extra info on search results and videos
+
 ## [1.7.2] - 2021-10-13
 ### Fixed
 - A lot of changes to make YouTube work again. There were changes to vqw.py file, so first backup the one you use
@@ -130,3 +134,4 @@ All notable changes to this project will be documented in this file.
 
 
 The format of this changelog file is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+

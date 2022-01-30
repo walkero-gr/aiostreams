@@ -7,6 +7,7 @@ import simplem3u8 as sm3u8
 import simplejson as json
 from urllib2 import Request, urlopen, URLError
 from random import random
+from datetime import datetime
 
 cmnHandler = cmn.cmnHandler()
 
@@ -99,7 +100,7 @@ class ytAPIHandler:
             "type": "video",
             "videoDefinition": "any",
             "videoEmbeddable": "true",
-            "fields": "items(id,snippet(channelTitle,description,liveBroadcastContent,title))",
+            "fields": "items(id,snippet(channelTitle,liveBroadcastContent,title,publishedAt))",
             "maxResults": limit
         }
         
@@ -217,6 +218,17 @@ class helpersHandler:
     def getURLFromCipher(self, cipher):
         cipherParsed = urlparse.parse_qs(cipher)
         return cipherParsed['url'][0]
+        
+    def parseDate(self, dtime):
+        result = datetime.strptime(dtime, '%Y-%m-%dT%H:%M:%SZ')
+        return result
+        
+    def parseDuration(self, dtime):
+        result = dtime.replace("PT", '')
+        result = result.replace("H", 'h ')
+        result = result.replace("M", 'm ')
+        result = result.replace("S", 's')
+        return result
 
 def main(argv):
     global aiostreamsapi
@@ -238,6 +250,7 @@ def main(argv):
     argParser.add_argument('-sv', '--search-video', action='store', dest='searchvideo', help='Search recorded videos based on description')
     argParser.add_argument('-ss', '--search-streams', action='store', dest='searchstreams', help='Search live streams based on description')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
+    argParser.add_argument('-x', '--extra-info', action='store_true', default=False, dest='extrainfo', help='Show extra info in search results and video data')
     args = argParser.parse_args()
 
     if (args.silence != True):
@@ -254,10 +267,14 @@ def main(argv):
     if (args.searchvideo):
         searchQuery = args.searchvideo
         result = ytApi.searchVideo(searchQuery)
-        
         if result['items']:
-            print "%-40s\t %-8s\t %s" % ('URL', 'Views', 'Title')
-            print "%s" % ('-'*120)
+            if args.extrainfo:
+                print "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % ('URL', 'Views', 'Channel', 'Date', 'Duration', 'Title')
+                print "%s" % ('-'*200)
+            else:
+                print "%-40s\t %-8s\t %s" % ('URL', 'Views', 'Title')
+                print "%s" % ('-'*120)
+                
             videosDict = dict()
             videoIds = []
             for video in result['items']:
@@ -265,6 +282,8 @@ def main(argv):
                 videosDict[videoId] = dict()
                 videosDict[videoId]['url'] = ''.join(["https://www.youtube.com/watch?v=", videoId])
                 videosDict[videoId]['title'] = cmnHandler.uniStrip(video['snippet']['title'])
+                videosDict[videoId]['channelTitle'] = cmnHandler.uniStrip(video['snippet']['channelTitle'])
+                videosDict[videoId]['publishedAt'] = helpers.parseDate(video['snippet']['publishedAt'])
                 videoIds.append(videoId)
             
             # Get video statistics in one call
@@ -272,9 +291,13 @@ def main(argv):
             for stats in videoStats['items']:
                 videoId = stats['id']
                 videosDict[videoId]['viewCount'] = stats['statistics']['viewCount']
+                videosDict[videoId]['duration'] = helpers.parseDuration(stats['contentDetails']['duration'])
 
             for key, video in videosDict.items():
-                print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
+                if args.extrainfo:
+                    print "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % (video['url'], video['viewCount'], video['channelTitle'], video['publishedAt'], video['duration'], video['title'])
+                else:
+                    print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
         else:
             print "No videos found based on the search query: %s" % (searchQuery)
         sys.exit()
@@ -289,6 +312,7 @@ def main(argv):
         if result['items']:
             print "%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title')
             print "%s" % ('-'*120)
+            
             videosDict = dict()
             videoIds = []
             for video in result['items']:
@@ -332,7 +356,7 @@ def main(argv):
             if (args.silence != True):
                 print "Title: %s" % (cmnHandler.uniStrip(response['title']))
 
-            if cfg.verbose and (args.silence != True):
+            if args.extrainfo and (args.silence != True):
                 helpers.printVideoFormats(response['formats'])
 
             videoFormats = response['formats']
@@ -357,3 +381,4 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
+
