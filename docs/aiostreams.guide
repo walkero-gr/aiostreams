@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.7.3 (2021-03-19)
+@$VER: 1.7.3 (2022-02-14)
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.7.3 (2021-03-19)@{ui}
+@{i}v1.7.3 (2022-02-14)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and lbry.tv. Also, there is a radio script that helps you discover and play online radio stations from all around the world.
 
@@ -174,7 +174,8 @@ With this script you can:
 
 @{u}Shell parameters:@{uu}
   -h, --help            show this help message and exit
-  -u URL, --url URL     The video/channel url from twitch.tv
+  -u URL, --url URL     The video/channel url. If this is found it will start
+                        playing in your video player
   -q QUALITY, --quality QUALITY
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
@@ -184,12 +185,15 @@ With this script you can:
   -tg, --top-games      Get a list of the current Top Games with live streams
                         available, based on the number of viewers
   -sg SEARCHGAME, --search-game SEARCHGAME
-                        Search for available streams based on game title
+                        Get game information based on its name
+  -gv GAMEVIDEOS, --game-videos GAMEVIDEOS
+                        Search for available streams based on game ID
   -cv, --channel-videos
                         Request the recorded videos of a channel. The -u
                         argument is mandatory.
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
+  -x, --extra-info      Show extra info in search results and video data
 
 @{u}Available video qualities:@{uu}
 At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
@@ -203,23 +207,25 @@ Watch a recorded video, like below
 @{b}twitch.py -u https://www.twitch.tv/videos/1234567890@{ub}
 
 Watch a live channel streaming at specific video quality, if this is available, like below
-@{b}twitch.py -u https://www.twitch.tv/channelname -q 720p30@{ub}
+@{b}twitch.py -u https://www.twitch.tv/channelname -q 720p@{ub}
 
 Search for a keyword or a game title. Include the value in double quotes, like below:
 @{b}twitch.py -sg "game title"@{ub}
 
-List the last 50 videos of a channel, like below
+Search for live streams for a specific game based on its ID. Use the @{b}-sg@{ub} or the @{b}-tg@{ub} to find the game IDs.
+@{b}twitch.py -gv 123456789@{ub}
+
+List the latest videos of a channel, like below
 @{b}twitch.py -u https://www.twitch.tv/channelname -cv@{ub}
 
-List the 50 Top Games based on the viewers, like below
+List the Top Games based on the viewers, like below
 @{b}twitch.py -tg@{ub}
 
 List the 50 Top Streams based on the viewers, like below
 @{b}twitch.py -ts@{ub}
 
 @{u}Privacy:@{uu}
-The script uses secure HTTPS URLs to access the Twitch.tv API and shares with the network the following personal info:
-* Your public IP
+The script uses secure HTTPS URLs to access the AIO API and shares no personal information
 
 @endnode
 @node "Vimeo.com" "Vimeo.com"

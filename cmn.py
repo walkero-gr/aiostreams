@@ -7,8 +7,8 @@ try:
 except ImportError:
     pass
 
-aioVer = "1.7.2"
-aioReleaseDate = "2021-10-13"
+aioVer = "1.7.3"
+aioReleaseDate = "2022-02-14"
 userOS = sys.platform
 
 class cmnHandler:
@@ -44,7 +44,7 @@ class cmnHandler:
         player = cfg.vPlayer
         playerArgs = cfg.vPlayerArgs
         
-        if (videoType == 'list'):
+        if (videoType == 'list') or (videoType == 'live'):
             player = cfg.sPlayer
             playerArgs = cfg.sPlayerArgs
 
@@ -73,6 +73,6 @@ You can use this to discover and watch a streaming, using your beloved video pla
     def getScriptEpilog(self):
         descr = "\
 aiostreams is DONATIONWARE.\n\
-If you find this project useful, please consider to donate at https://www.paypal.me/gsokianos\n\
+If you find this project useful, please consider to donate at https://ko-fi.com/walkero\n\
 Your support is much appreciated."
         return descr

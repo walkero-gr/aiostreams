@@ -32,127 +32,9 @@ _url_re = re.compile(r"""
     )?
 """, re.VERBOSE)
 
-class twitchAPIHandler:
-    def __init__(self):
-        self.baseurl = 'https://api.twitch.tv'
-
-        return None
-
-    def getClientId(self):
-        keyData = aiostreamsapi.getKey()
-        return keyData['clientId']
-
-    def getURL(self, url):
-        request = urllib2.Request(url)
-        request.add_header('Accept', 'application/vnd.twitchtv.v5+json')
-        request.add_header('Client-ID', self.getClientId())
-
-        try:
-            response = urllib2.urlopen(request)
-            retData = response.read()
-            response.close()
-            return retData
-        except URLError, e:
-            print e
-        
-        return None
-
-    def call(self, endpoint, query = None):
-        url = "%s/%s" % (self.baseurl, endpoint)
-        if (query):
-            queryArgs = urllib.urlencode(query)
-            url = "%s/%s?%s" % (self.baseurl, endpoint, queryArgs)
-        
-        return self.getURL(url)
-
-    def getChannelInfoByName(self, channelName):
-        endpoint = "kraken/users"
-        query = {
-            "login": channelName
-        }
-        responseData = self.call(endpoint, query)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def getStreamsByChannel(self, id):
-        endpoint = "kraken/streams/%s" % (id)
-        responseData = self.call(endpoint)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def getAccessTokenByChannel(self, channelName):
-        endpoint = "api/channels/%s/access_token.json" % (channelName)
-        responseData = self.call(endpoint)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def getVideoInfoByID(self, videoId):
-        endpoint = "kraken/videos/%s.json" % (videoId)
-        responseData = self.call(endpoint)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def getAccessTokenByVideo(self, videoId):
-        endpoint = "api/vods/%s/access_token.json" % (videoId)
-        responseData = self.call(endpoint)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def searchByGameTitle(self, title, offset = 0, limit = 50):
-        endpoint = "kraken/search/streams"
-        query = {
-            "query": title,
-            "limit": limit,
-            "offset": offset
-        }
-        responseData = self.call(endpoint, query)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def getVideosByChannel(self, channelName):
-        endpoint = "kraken/channels/%s/videos" % (channelName)
-        query = {
-            "limit": 50
-        }
-        responseData = self.call(endpoint, query)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def getTopStreams(self, offset = 0, limit = 50):
-        endpoint = "kraken/streams"
-        query = {
-            "stream_type": "live",
-            "limit": limit,
-            "offset": offset
-        }
-        responseData = self.call(endpoint, query)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-    def getTopGames(self, offset = 0, limit = 50):
-        endpoint = "kraken/games/top"
-        query = {
-            "limit": limit,
-            "offset": offset
-        }
-        responseData = self.call(endpoint, query)
-        if responseData:
-            return json.loads(responseData)
-        return None
-
-
 class aiostreamsapiHandler:
     def __init__(self):
         self.baseurl = 'https://aiostreams.amiga-projects.net/v1/twitch'
-        
         return None
 
     def getURL(self, url):
@@ -176,25 +58,72 @@ class aiostreamsapiHandler:
 
         return self.getURL(url)
 
-    def getStreams(self, id, type):
-        endpoint = "getplaylist"
-        query = {
-            "id": id,
-            "type": type
-        }
+    def getStreams(self, categoryId):
+        endpoint = "getstreams/live"
+        if categoryId > 0:
+            query = {
+                'gameid': categoryId
+            }
+        else:
+            query = {}
+
         responseData = self.call(endpoint, query)
         if responseData:
-            return responseData
+            return json.loads(responseData)
         return None
 
-    def getKey(self):
-        endpoint = "getkey"
-        responseData = self.call(endpoint)
+    def getTopGames(self):
+        endpoint = "getcategories"
+        query = {}
+        responseData = self.call(endpoint, query)
         if responseData:
             return json.loads(responseData)
-        else:
-            print 'Key error: Please contact the developer.'
-            sys.exit()
+        return None
+
+    def searchByGameTitle(self, title):
+        endpoint = "search/games"
+        query = {
+            'query': title
+        }
+
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
+    def searchChannels(self, name):
+        endpoint = "search/channels"
+        query = {
+            'query': name
+        }
+
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
+    def getVideoInfo(self, vid, vtype):
+        endpoint = "video/getinfo"
+        query = {
+            'id': vid,
+            'type': vtype
+        }
+
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
+    def getVideosByChannelId(self, chid):
+        endpoint = "channel/videos"
+        query = {
+            'id': chid
+        }
+
+        responseData = self.call(endpoint, query)
+        if responseData:
+            return json.loads(responseData)
+        return None
 
 
 class helpersHandler:
@@ -205,30 +134,40 @@ class helpersHandler:
         types = self.parseURL(url)
 
         if (types['channel']):
-            return {'type': 'channel', 'id': types['channel']}
+            return {'type': 'live', 'id': types['channel']}
 
         if (types['videos_id']):
             return {'type': 'video', 'id': types['videos_id']}
 
         return None
 
-    def getPrefferedVideoURL(self, data):
-        sm3u8Parser = sm3u8.parseHandler()
-        playlists = sm3u8Parser.parse(data)
-
+    def getPrefferedVideoURL(self, data, isLive = False):
         for quality in vqw.twitchVQW:
-            for idx in playlists:
-                if (playlists[idx]):
-                    if (quality == playlists[idx]['video']):
-                        return playlists[idx]['uri']
-        
+            for idx in data:
+                if (quality == idx['format_id']):
+                    try: 
+                        return idx['url']
+                    except KeyError:
+                        pass
+
+        return None
+    
+    def printVideoFormats(self, data):
+        print "\nAvailable formats"
+        for idx in data:
+            print "%-20s\t%s, %s" % (idx['format_id'], idx['vcodec'], idx['acodec'])
+    
+    def getChannelInfoByName(self, data, name):
+        for item in data:
+            if item['broadcaster_login'] == name:
+                return item
+
         return None
 
 def main(argv):
     global aiostreamsapi
-    aiostreamsapi = aiostreamsapiHandler()
-    twitchApi = twitchAPIHandler()
-    helpers = helpersHandler()
+    aioapi = aiostreamsapiHandler()
+    h = helpersHandler()
 
     video = {'type': ''}
 
@@ -237,112 +176,108 @@ def main(argv):
         sys.exit()
         
     # Parse the arguments
-    argParser = argparse.ArgumentParser(description=cmnHandler.getScriptDescription('twitch.tv'), epilog=cmnHandler.getScriptEpilog(),
-                                        formatter_class=argparse.RawDescriptionHelpFormatter)
-    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url')
+    argParser = argparse.ArgumentParser(
+        description=cmnHandler.getScriptDescription('twitch.tv'), 
+        epilog=cmnHandler.getScriptEpilog(),
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    argParser.add_argument('-u', '--url', action='store', dest='url', help='The video/channel url. If this is found it will start playing in your video player')
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-ts', '--top-streams', action='store_true', default=False, dest='topstreams', help='Get a list of the current Top Live Streams, based on the number of viewers')
     argParser.add_argument('-tg', '--top-games', action='store_true', default=False, dest='topgames', help='Get a list of the current Top Games with live streams available, based on the number of viewers')
-    argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Search for available streams based on game title')
+    argParser.add_argument('-sg', '--search-game', action='store', dest='searchgame', help='Get game information based on its name')
+    argParser.add_argument('-gv', '--game-videos', action='store', dest='gamevideos', help='Search for available streams based on game ID')
     argParser.add_argument('-cv', '--channel-videos', action='store_true', default=False, dest='channelvideos', help='Request the recorded videos of a channel. The -u argument is mandatory.')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
+    argParser.add_argument('-x', '--extra-info', action='store_true', default=False, dest='extrainfo', help='Show extra info in search results and video data')
     args = argParser.parse_args()
 
     if (args.silence != True):
         cmnHandler.showIntroText()
     if (args.url):
-        video = helpers.getVideoType(args.url)
+        video = h.getVideoType(args.url)
     if (args.quality):
         vqw.twitchVQW.insert(0, args.quality)
 
     if (args.topstreams):
-        streamList = twitchApi.getTopStreams()
+        streamList = aioapi.getStreams(0)
         print "%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title')
         print "%s" % ('-'*200)
-        for stream in streamList['streams']:
-            print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (stream['channel']['url'], stream['viewers'], stream['channel']['language'], stream['game'], cmnHandler.uniStrip(stream['channel']['status']))
+        for stream in streamList['data']:
+            print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (
+                'https://twitch.tv/' + stream['user_login'], 
+                stream['viewer_count'], 
+                stream['language'], 
+                stream['game_name'], 
+                cmnHandler.uniStrip(stream['title'])
+            )
 
         sys.exit()
 
     if (args.topgames):
-        gamesList = twitchApi.getTopGames()
-        print "%-50s\t %-10s\t %-10s" % ('Game', 'Viewers', 'Channels')
+        gamesList = aioapi.getTopGames()
+        print "%-12s\t%-50s" % ('ID', 'Game')
+        print "%s" % ('-'*100)
+        for game in gamesList['data']:
+            print "%-12s\t%-50s" % (game['id'], cmnHandler.uniStrip(game['name']))
+
+        sys.exit()
+
+    if (args.gamevideos):
+        streamList = aioapi.getStreams(args.gamevideos)
+        print "%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title')
         print "%s" % ('-'*200)
-        for game in gamesList['top']:
-            print "%-50s\t %-10d\t %-10d" % (cmnHandler.uniStrip(game['game']['name']), game['viewers'], game['channels'])
+        for stream in streamList['data']:
+            print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (
+                'https://twitch.tv/' + stream['user_login'], 
+                stream['viewer_count'], 
+                stream['language'], 
+                stream['game_name'], 
+                cmnHandler.uniStrip(stream['title'])
+            )
 
         sys.exit()
 
     if (args.channelvideos):
-        channelName = video['id']
-        channelUserInfo = twitchApi.getChannelInfoByName(channelName)
-        channelUserId = channelUserInfo['users'][0]['_id']
-        streamList = twitchApi.getVideosByChannel(channelUserId)
-        print "%-36s\t %-20s\t %-50s\t %s" % ('URL', 'Recorded at', 'Available resolutions', 'Title')
-        print "%s" % ('-'*200)
-        for stream in streamList['videos']:
-            resolutions = ', '.join(stream['resolutions'])
-            print "%-36s\t %-20s\t %-50s\t %s" % (stream['url'], stream['recorded_at'], resolutions, cmnHandler.uniStrip(stream['title']))
+        channels = aioapi.searchChannels(video['id'])
+        channelInfo = h.getChannelInfoByName(channels['data'], video['id'])
+
+        if channelInfo['id']:
+            itemsList = aioapi.getVideosByChannelId(channelInfo['id'])
+            print "%-36s\t %-20s\t %-10s\t %s" % ('URL', 'Recorded at', 'Duration', 'Title')
+            print "%s" % ('-'*200)
+            for item in itemsList['data']:
+                print "%-36s\t %-20s\t %-10s\t %s" % (item['url'], item['created_at'], item['duration'], cmnHandler.uniStrip(item['title']))
 
         sys.exit()
 
     if (args.searchgame):
-        gameTitle = args.searchgame
-        streamList = twitchApi.searchByGameTitle(gameTitle)
-        print "%-30s\t %10s\t %-s\t %-6s\t %-50s\t %-s - %-s" % ("Channel name", "Viewers", "Type", "Lang", "Channel URL", "Game name", "Channel status")
-        print "%s" % ('-'*200)
-        for stream in streamList['streams']:
-            channel = stream['channel']
-            print "%-30s\t %10d\t %-s\t %-6s\t %-50s\t %-s - \"%-s\"" % (cmnHandler.uniStrip(channel['display_name']), stream['viewers'], stream['stream_type'], channel['language'], channel['url'], cmnHandler.uniStrip(stream['game']), cmnHandler.uniStrip(channel['status']))
+        items = aioapi.searchByGameTitle(args.searchgame)
+        print "%-12s\t%-50s" % ('ID', 'Game')
+        print "%s" % ('-'*100)
+        for item in items['data']:
+            print "%-12s\t%-50s" % (item['id'], cmnHandler.uniStrip(item['name']))
         
         sys.exit()
 
-    if (video['type'] == 'channel'):
-        channelName = video['id']
-        channelUserInfo = twitchApi.getChannelInfoByName(channelName)
-        channelUserId = channelUserInfo['users'][0]['_id']
-        streams = twitchApi.getStreamsByChannel(channelUserId)
-        if (streams):
-            if (streams['stream']):
-                if (streams['stream']['stream_type'] == 'live'):
-                    m3u8Response = aiostreamsapi.getStreams(channelName, 'channel')
-                    if (m3u8Response):
-                        uri = helpers.getPrefferedVideoURL(m3u8Response)
-                        if uri:
-                            if cfg.verbose and (args.silence != True):
-                                print "%s" % (uri)
-                            if cfg.autoplay:
-                                cmnHandler.videoAutoplay(uri, 'list')
-                        else:
-                            print "Not valid stream found"
-                    else:
-                        print "There was an error with the playlist retrieval"
+    if (video['id']):
+        videoInfo = aioapi.getVideoInfo(video['id'], video['type'])
+        
+        if videoInfo:
+            if args.extrainfo and (args.silence != True):
+                h.printVideoFormats(videoInfo['formats'])
+
+            uri = h.getPrefferedVideoURL(videoInfo['formats'], video['type'])
+
+            if (uri):
+                if cfg.verbose and (args.silence != True):
+                    print "\n%s" % (uri)
+                if cfg.autoplay:
+                    cmnHandler.videoAutoplay(uri, video['type'])
             else:
-                print "There is no Live stream for the channel: %s" % (channelName)
-
-        sys.exit()
-
-    if (video['type'] == 'video'):
-        videoId = video['id']
-
-        streams = twitchApi.getVideoInfoByID(videoId)
-        if (streams):
-            if (streams['viewable'] == 'public'):
-                m3u8Response = aiostreamsapi.getStreams(videoId, 'video')
-                if (m3u8Response):
-                    uri = helpers.getPrefferedVideoURL(m3u8Response)
-                    if uri:
-                        if cfg.verbose and (args.silence != True):
-                            print "%s" % (uri)
-                        if cfg.autoplay:
-                            cmnHandler.videoAutoplay(uri, 'video')
-                    else:
-                        print "Not valid video found"
-                else:
-                    print "There was an error with the playlist retrieval"
-                
+                print "Not valid stream found"
         else:
-            print "There is no video available with ID: %s" % (videoId)
+            print "There is no Live stream for the channel: %s" % (channelName)
 
         sys.exit()
 
