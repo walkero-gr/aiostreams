@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.7.3] - future
+## [1.7.3] - 2022-02-14
 ### Added
 - Added a new argument on Youtube script, the -x, that enables extra info on search results and videos
 
