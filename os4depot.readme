@@ -1,6 +1,6 @@
 name: aiostreams
 description: Stream video from major online platforms
-version: 1.7.2
+version: 1.7.3
 author: George Sokianos
 submitter: George Sokianos
 email: walkero@gmail.com
@@ -68,6 +68,12 @@ https://github.com/walkero-gr/aiostreams/projects/1
 
 Changelog
 -------------
+v1.7.3
+* Added a new argument on Youtube script, the -x, that enables extra info
+  on search results and videos
+* Updated the Twitch script to use AIO API to get all the data. AIO API
+  works with the latest Twitch API
+
 v1.7.2
 * A lot of changes to make YouTube work again. There were changes to vqw.py 
   file, so first backup the one you use
