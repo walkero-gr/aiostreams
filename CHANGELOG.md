@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.4] - 2022-07-26
+### Fixed
+- Did a fix in YouTube script to avoid SB videos. This was breaking the video selection.
+- Fixed the video throttle in YouTube videos. So now the videos seem to play smoothly.
+
 ## [1.7.3] - 2022-02-14
 ### Added
 - Added a new argument on Youtube script, the -x, that enables extra info on search results and videos

@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.7.3 (2022-02-14)
+@$VER: 1.7.4 (2022-07-26)
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.7.3 (2022-02-14)@{ui}
+@{i}v1.7.4 (2022-07-26)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and lbry.tv. Also, there is a radio script that helps you discover and play online radio stations from all around the world.
 
@@ -632,6 +632,22 @@ If you have any websites that you would like to be supported, please contact me 
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
 
+v1.7.4
+* Did a fix in YouTube script to avoid SB videos. This was breaking the video
+  selection.
+* Fixed the video throttle in YouTube videos. So now the videos seem to play
+  smoothly.
+
+v1.7.3
+* Added a new argument on Youtube script, the -x, that enables extra info
+  on search results and videos
+* Updated the Twitch script to use AIO API to get all the data. AIO API
+  works with the latest Twitch API
+
+v1.7.2
+* A lot of changes to make YouTube work again. There were changes to vqw.py 
+  file, so first backup the one you use
+
 v1.7.1
 * Changes on skaitv script to use aiostreams api site
 * Added new radio script
@@ -740,7 +756,7 @@ My Twitter account is:
 https://twitter.com/gsokianos @{"open" SYSTEM "c:URLOpen https://twitter.com/gsokianos"}
 
 aiostreams is DONATIONWARE. If you find this project useful, you can support it by donating at:
-https://www.paypal.me/gsokianos @{"Donate" SYSTEM "c:URLOpen https://www.paypal.me/gsokianos"}
+https://ko-fi.com/walkero @{"Donate" SYSTEM "c:URLOpen https://ko-fi.com/walkero"}
 
 My PeerTube channels:
 https://peertube.co.uk/accounts/walkero/video-channels @{"open" SYSTEM "c:URLOpen https://peertube.co.uk/accounts/walkero/video-channels"}

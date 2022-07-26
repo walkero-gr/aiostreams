@@ -2,7 +2,7 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      1.7.3
+Version:      1.7.4
 Architecture: generic
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
@@ -46,8 +46,8 @@ Requirements:
 * Pythonssl
 * The Python modules: urllib, urllib2, sys, re, string, random. Usually they
   are part of the python Installation
-* ffplay for the online live streaming videos, or something equivalent
-* mplayer for the online recorded videos, or something equivalent
+* ffplay, mplayer, emotion for the live and recorded video playback or
+  something equivalent
 * internet access
 
 The project is open source and you can find the code at:
@@ -60,9 +60,18 @@ https://github.com/walkero-gr/aiostreams/issues
 You can find the todo list and the status of them at:
 https://github.com/walkero-gr/aiostreams/projects/1
 
+Help me persuade my wife that what I am doing matters
+-----------------------------------------------------------
+https://ko-fi.com/walkero
 
 Changelog
 -------------
+v1.7.4
+* Did a fix in YouTube script to avoid SB videos. This was breaking the video
+  selection.
+* Fixed the video throttle in YouTube videos. So now the videos seem to play
+  smoothly.
+
 v1.7.3
 * Added a new argument on Youtube script, the -x, that enables extra info
   on search results and videos
@@ -81,69 +90,4 @@ v1.7
 * Fixed skaitv live script
 * Removed Mixer.com script as it shut down
 
-v1.6.2
-* Added automated release process to OS4Depot and Aminet
-
-v1.6.1
-* Fixed Lbry.tv under AmigaOS 4 to use ffplay and not mplayer on video playback
-
-v1.6
-* Added Lbry.tv script
-* Cleared unused variables from scripts
-* Fixed Vimeo script to support Videos with GUID
-
-v1.5
-* Added Wasd.tv script
-* Added PeerTube script
-* Fixed skaitv.py script to support the latest changes of the website
-* Changed the place of the video qualities lists by separating them from the
-  configuration file to a new file named vqw.py
-* Added a full changelog file
-* Changed the scripts' descriptions on help request
-
-v1.4.1
-* Changes on dlive script to support AmigaOS 4 and MorphOS. Now you can watch
-  streams and videos on your beloved systems
-* A change on twitch script to be usable with Emotion player under AmigaOS 4
-
-v1.4
-* Dlive.tv script added. Under AmigaOS 4 an SSL error show up. Working on a
-  solution.
-* MorphOS 3.x, MacOS X and Linux systems are now supported with autoplay
-* Various fixes
-
-v1.3
-* YouTube.com script added
-* If the running system is not AmigaOS 4, the returned texts show unicode
-  characters. Otherwise they are stripped
-* Skaitv.gr script updated to support some archived videos and live stream
-* Fixed a config file bug
-* Fixed a bug in Twitch script
-    File "twitch.py", line 192, in getPrefferedVideoURL
-    if (quality == playlists[idx]['video']):
-
-v1.2
-* Vimeo.com script added
-* Dailymotion.com script added
-* Skaitv.gr script added
-* simplem3u8 parser updated to support URLs starting with "../"
-* Added links in the AmigaGuide file, that use URLOpen
-* Added the silence parameter, that prevents the script to output anything,
-  except the errors or the results of a search
-* Documentation updated
-* Removed version per script
-* Added Top Games list in twitch.py script. This returns the 50 Top Games based
-  on the number of viewers.
-* Added Top Streams list in twitch.py script. This returns the 50 Top Streams
-  based on the number of viewers.
-* Increased game search results list to 50 items in twitch.py script.
-
-v1.1
-* Mixer.com script added
-* Cleared a lot of code in twitch.py script
-* Documentation updated
-
-v1.0
-* Initial release
-* Twitch.tv script added
-* Simple m3u8 parser created
+Full changelog is included in the archive.
