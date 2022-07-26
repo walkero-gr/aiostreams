@@ -202,11 +202,14 @@ class helpersHandler:
     def getPrefferedVideoURL(self, data, isLive = False):
         for quality in vqw.ytVQW:
             for idx in data:
-                if (quality == int(idx['format_id'])):
-                    try: 
-                        return idx['url']
-                    except KeyError:
-                        pass
+                try:
+                    if (quality == int(idx['format_id'])):
+                        try: 
+                            return idx['url']
+                        except KeyError:
+                            pass
+                except ValueError:
+                    pass
 
         return None
 
