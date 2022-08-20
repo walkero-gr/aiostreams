@@ -1,16 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.7.5] - future
+## [1.7.5] - 2022-08-23
 ### Added
 - Added -sc argument to the youtube script which can be used to search for
   YouTube channels based on the given description. This returns a list of
   channels titles and their feed URLs
+- Added support for https://yewtu.be invidious server in YouTube script
   
 ## [1.7.4] - 2022-07-26
 ### Fixed
-- Did a fix in YouTube script to avoid SB videos. This was breaking the video selection.
-- Fixed the video throttle in YouTube videos. So now the videos seem to play smoothly.
+- Did a fix in YouTube script to avoid SB videos. This was breaking the video selection
+- Fixed the video throttle in YouTube videos. So now the videos seem to play smoothly
 
 ## [1.7.3] - 2022-02-14
 ### Added

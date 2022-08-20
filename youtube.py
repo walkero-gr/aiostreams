@@ -11,7 +11,7 @@ from datetime import datetime
 
 cmnHandler = cmn.cmnHandler()
 
-_url_re = re.compile(r"""(?x)https?://(?:\w+\.)?youtube\.com
+_url_re = re.compile(r"""(?x)https?://(?:\w+\.)?(youtube|yewtu)\.(com|be)
     (?:
         (?:
             /(?:
