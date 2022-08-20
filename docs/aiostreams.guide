@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.7.4 (2022-07-26)
+@$VER: 1.7.5 (2022-08-23)
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.7.4 (2022-07-26)@{ui}
+@{i}v1.7.5 (2022-08-23)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and lbry.tv. Also, there is a radio script that helps you discover and play online radio stations from all around the world.
 
@@ -87,15 +87,19 @@ Links
 * Download and install @{"mplayer" SYSTEM "c:URLOpen http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer"} package on your system.
 * Unarchive the aiostreams file wherever you want. 
 
-@{u}AmigaOS 3@{uu}
-TBD - In @{"Todo List" LINK "Todo"}
-
 @{u}MorphOS@{uu}
 * Download and install Python using @{"Grunch" SYSTEM "c:openurl URL='http://geit.de/eng_grunch.html'"} (http://geit.de/eng_grunch.html)
 * Unarchive the aiostreams file wherever you want. 
 
-@{u}AROS@{uu}
-TBD - In @{"Todo List" LINK "Todo"}
+@{u}Assign@{uu}
+For your convenience I suggest to create an assign to the folder where you extracted aiostreams. This can be done with the following added in your user-startup
+
+;BEGIN aiostreams
+Assign aiostreams: "Work:Video/aiostreams"
+;END aiostreams
+
+This assign is used by my scripts wherever it is needed. So if you do not want to edit the scripts to add your path to make them work, please add that assign.
+If you don't do it, the first time a script looks for that assign, a requester will show up.
 
 @{u}Have in mind@{uu}
 aiostreams scripts will work even from temporary mounted storage drives, i.e. USB, CDRom or RAM. The scripts do not write anything to the disk, so they don't even need the storage to be writable.
@@ -290,6 +294,8 @@ With this script you can:
                         Search recorded videos based on description
   -ss SEARCHSTREAMS, --search-streams SEARCHSTREAMS
                         Search live streams based on description
+  -sc SEARCHCHANNEL, --search-channel SEARCHCHANNEL
+                        Search channels based on description
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
   -x, --extra-info      Show extra info in search results and video data

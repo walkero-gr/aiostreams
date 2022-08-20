@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.5] - future
+### Added
+- Added -sc argument to the youtube script which can be used to search for
+  YouTube channels based on the given description. This returns a list of
+  channels titles and their feed URLs
+  
 ## [1.7.4] - 2022-07-26
 ### Fixed
 - Did a fix in YouTube script to avoid SB videos. This was breaking the video selection.

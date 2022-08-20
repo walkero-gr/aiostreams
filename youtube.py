@@ -91,6 +91,22 @@ class ytAPIHandler:
     def getLiveStreams(self, m3u8Url):
         return self.getURL(m3u8Url)
 
+    def searchChannel(self, title, limit = 50):
+        endpoint = "search"
+        query = {
+            "order": "relevance",
+            "q": title,
+            "part": "snippet",
+            "type": "channel",
+            "fields": "items(id,snippet(channelTitle))",
+            "maxResults": limit
+        }
+        
+        responseData = self.call(endpoint, query, True)
+        if responseData:
+            return json.loads(responseData)
+        return None
+
     def searchVideo(self, title, limit = 50):
         endpoint = "search"
         query = {
@@ -252,6 +268,7 @@ def main(argv):
     argParser.add_argument('-q', '--quality', action='store', dest='quality', help='Set the preffered video quality. This is optional. If not set or if it is not available the default quality weight will be used.')
     argParser.add_argument('-sv', '--search-video', action='store', dest='searchvideo', help='Search recorded videos based on description')
     argParser.add_argument('-ss', '--search-streams', action='store', dest='searchstreams', help='Search live streams based on description')
+    argParser.add_argument('-sc', '--search-channel', action='store', dest='searchchannel', help='Search channels based on description')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     argParser.add_argument('-x', '--extra-info', action='store_true', default=False, dest='extrainfo', help='Show extra info in search results and video data')
     args = argParser.parse_args()
@@ -339,6 +356,26 @@ def main(argv):
                 print "%-40s\t %-8s\t %s" % (video['url'], videoViewCount, video['title'])
         else:
             print "No live streams found based on the search query: %s" % (searchQuery)
+        sys.exit()
+
+    ############################################################
+    # Search channels By string
+    # 
+    if (args.searchchannel):
+        searchQuery = args.searchchannel
+        result = ytApi.searchChannel(searchQuery)
+        
+        if result['items']:
+            print "%-32s\t%s" % ('Channel', 'RSS url')
+            print "%s" % ('-'*100)
+
+            for item in result['items']:
+                channelId = item['id']['channelId']
+                rssUrl = ''.join(["https://www.youtube.com/feeds/videos.xml?channel_id=", channelId])
+                print "%-32s\t%s" % (cmnHandler.uniStrip(item['snippet']['channelTitle']), rssUrl)
+
+        else:
+            print "No channels found based on the search query: %s" % (searchQuery)
         sys.exit()
 
     ############################################################

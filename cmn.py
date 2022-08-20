@@ -7,8 +7,8 @@ try:
 except ImportError:
     pass
 
-aioVer = "1.7.3"
-aioReleaseDate = "2022-02-14"
+aioVer = "1.7.5"
+aioReleaseDate = "2022-08-23"
 userOS = sys.platform
 
 class cmnHandler:
@@ -76,3 +76,4 @@ aiostreams is DONATIONWARE.\n\
 If you find this project useful, please consider to donate at https://ko-fi.com/walkero\n\
 Your support is much appreciated."
         return descr
+

@@ -1,0 +1,28 @@
+;
+; File:    start_youtube
+;
+;   Copyright (c) 2022, Georgios Sokianos
+;
+;   This file is part of aiostreams package
+;
+; Author:   Georgios Sokianos (walkero@gmail.com)
+; Date:     August 2022
+;
+; Summary of File:
+;
+;   This file contains code that is used to start
+;   youtube python script for a video url.
+;   You can use it URLOpen/OpenURL or from shell.
+;
+;
+
+.KEY url/A
+.BRA {
+.KET }
+
+If NOT "{url}" EQ ""
+  Run <>NIL: APPDIR:python aiostreams:youtube.py -u "{url}"
+Else
+  Echo "An argument is missing"
+EndIf
+
