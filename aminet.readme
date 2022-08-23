@@ -2,7 +2,7 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      1.7.4
+Version:      1.7.5
 Architecture: generic
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
@@ -10,8 +10,8 @@ Replaces:     util/batch/aiostreams.lha
 
 All In One streams (aiostreams) is a pack of scripts, written in Python, that
 can be used to stream and watch videos from different online networks, like
-Twitch.tv and Mixer.com. Also, there is a radio script that helps you discover
-and play online radio stations from all around the world.
+Twitch.tv, YouTube and Vimeo.com. Also, there is a radio script that helps 
+you discover and play online radio stations from all around the world.
 
 All the scripts should be used from the shell, as well as from any web browser
 that support execution of scripts. It is really easy to configure a link
@@ -66,6 +66,16 @@ https://ko-fi.com/walkero
 
 Changelog
 -------------
+v1.7.5
+* Added -sc argument to the youtube script which can be used to search for
+  YouTube channels based on the given description. This returns a list of
+  channels titles and their feed URLs
+* Added support for https://yewtu.be invidious server in YouTube script
+* Fixed dlive script
+* Fixed peertube script
+* Fixed lbrytv script to support odysee.com videos as well
+* Fixed vimeo script
+
 v1.7.4
 * Did a fix in YouTube script to avoid SB videos. This was breaking the video
   selection.

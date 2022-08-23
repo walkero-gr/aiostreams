@@ -638,6 +638,16 @@ If you have any websites that you would like to be supported, please contact me 
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
 
+v1.7.5
+* Added -sc argument to the youtube script which can be used to search for
+  YouTube channels based on the given description. This returns a list of
+  channels titles and their feed URLs
+* Added support for https://yewtu.be invidious server in YouTube script
+* Fixed dlive script
+* Fixed peertube script
+* Fixed lbrytv script to support odysee.com videos as well
+* Fixed vimeo script
+
 v1.7.4
 * Did a fix in YouTube script to avoid SB videos. This was breaking the video
   selection.

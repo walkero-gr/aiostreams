@@ -2,7 +2,7 @@
 [![ko-fi](https://img.shields.io/badge/Buy%20me%20a%20Ko--fi-F16061?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/walkero)
 
 # aiostreams
-All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and Lbry.tv.
+All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv, YouTube and Vimeo.com.
 
 All the scripts should be used from the shell, as well as from any web browser that support execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
 
