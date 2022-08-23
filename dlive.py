@@ -111,7 +111,7 @@ class helpersHandler:
 
     def getUserName(self, jsondata):
         jsonDict = json.loads(jsondata)
-        for key, values in jsonDict['data']['defaultClient'].items():
+        for key, values in jsonDict['defaultClient'].items():
             if (key.startswith('user:')):
                 try:
                     return values['username']
@@ -122,7 +122,7 @@ class helpersHandler:
 
     def getChanneAbout(self, jsondata):
         jsonDict = json.loads(jsondata)
-        for key, values in jsonDict['data']['defaultClient'].items():
+        for key, values in jsonDict['defaultClient'].items():
             if (key.startswith('user:')):
                 try:
                     return values['about']
@@ -133,7 +133,7 @@ class helpersHandler:
 
     def isLiveStream(self, jsondata):
         jsonDict = json.loads(jsondata)
-        for key, values in jsonDict['data']['defaultClient'].items():
+        for key, values in jsonDict['defaultClient'].items():
             if (key.startswith('user:')):
                 try:
                     if values['livestream']:
@@ -145,7 +145,7 @@ class helpersHandler:
 
     def getLiveStreamId(self, jsondata):
         jsonDict = json.loads(jsondata)
-        for key, values in jsonDict['data']['defaultClient'].items():
+        for key, values in jsonDict['defaultClient'].items():
             if (key.startswith('user:')):
                 if values['livestream']:
                     try:
@@ -157,7 +157,7 @@ class helpersHandler:
 
     def getPlaybackUrl(self, jsondata):
         jsonDict = json.loads(jsondata)
-        for key, values in jsonDict['data']['defaultClient'].items():
+        for key, values in jsonDict['defaultClient'].items():
             if (key.startswith('$ROOT_QUERY.pastBroadcast') and key.endswith('})')):
                 try:
                     return values['playbackUrl']

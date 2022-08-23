@@ -13,7 +13,7 @@ _url_re = re.compile(r"""
         (?P<instance>[^/?]+)/
     )
     (?:
-        videos/watch/(?P<video_uuid>[^/?]+)
+        w/(?P<video_uuid>[^/?]+)
     )?
 """, re.VERBOSE)
 
@@ -109,6 +109,9 @@ def main(argv):
 
         if (streams):
             streamFiles = streams['files']
+            if len(streamFiles) == 0:
+                streamFiles = streams['streamingPlaylists'][0]['files']
+
             if streamFiles:
                 uri = helpers.getPrefferedVideoURL(streamFiles)
 

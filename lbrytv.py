@@ -9,7 +9,7 @@ from datetime import datetime
 
 cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
-    http(s)?://lbry\.tv/
+    http(s)?://(lbry|odysee)\.(tv|com)/
     (?:
         @(?P<channel>[^/?]+)
     )

@@ -64,55 +64,13 @@ class helpersHandler:
 
         return None
 
-    def getPreferredVideoURL(self, data):
-        sm3u8Parser = sm3u8.parseHandler()
-        playlists = sm3u8Parser.parse(data)
-        
-        for quality in vqw.vimeoVQW:
-            for idx in playlists:
-                if (playlists[idx]):
-                    streamQuality = self.getQualityByUri(playlists[idx]['uri'])
-                    if streamQuality:
-                        if (streamQuality.find(quality) >= 0):
-                            return playlists[idx]['uri']
-        
-        return None
-
-    def getQualityByUri(self, uri):
-        for idx, quality in videoQualities.items():
-            if (uri.find(str(idx)) >= 0):
-                return quality
-
-        return None
-
-    def getVideoQualities(self, data):
+    def getVideoURI(self, data):
         retData = dict()
-        for stream in data['streams']:
-            streamId = stream['id']
-            try:
-                # When id is a GUID string
-                if(streamId.find('-')):
-                    streamIdArray = streamId.split("-")
-                    streamId = streamIdArray[0]
-            except AttributeError:
-                pass
 
-            retData[streamId] = stream['quality']
-        return retData
-
-    def buildUri(self, cdnurl, uri):
-        uriClean = uri.replace("../", "")
-        cdnSplit = cdnurl.split('/')
-
-        for x in range(2):
-            delIdx = len(cdnSplit) - 1
-            del(cdnSplit[delIdx])
-
-        retUri = '/'.join(cdnSplit)
-        retUri = '%s/%s' % (retUri, uriClean)
-
-        return retUri
-
+        for quality in vqw.vimeoVQW:
+            for stream in data:
+                if quality == stream['quality']:
+                    return stream['url']
 
 def main(argv):
     vimeoApi = vimeoAPIHandler()
@@ -142,28 +100,15 @@ def main(argv):
         videoId = video['id']
         streams = vimeoApi.getVideoInfoByID(videoId)
         videos = streams['request']['files']
-        videoQualities = helpers.getVideoQualities(videos['dash'])
 
-        if (videos['hls']['cdns']):
-            cdns = videos['hls']['cdns']
-            for idx in cdns:
-                if (cdns[idx]['url']):
-                    m3u8Response = vimeoApi.getURL(cdns[idx]['url'])
-                    if (m3u8Response):
-                        break
-
-            if (m3u8Response):
-                uri = helpers.getPreferredVideoURL(m3u8Response)
-                if uri:
-                    playlistUri = helpers.buildUri(cdns[idx]['url'], uri)
-                    if cfg.verbose and (args.silence != True):
-                        print "%s" % (playlistUri)
-                    if cfg.autoplay:
-                        cmnHandler.videoAutoplay(playlistUri, 'list')
-                else:
-                    print "Not valid video found"
+        uri = helpers.getVideoURI(videos['progressive'])
+        if uri:
+            if cfg.verbose and (args.silence != True):
+                print "%s" % (uri)
+            if cfg.autoplay:
+                cmnHandler.videoAutoplay(uri, 'list')
         else:
-            print "There is no video available!"
+            print "Not valid video found"
 
         sys.exit()
 

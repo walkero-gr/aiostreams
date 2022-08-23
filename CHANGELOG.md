@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
   YouTube channels based on the given description. This returns a list of
   channels titles and their feed URLs
 - Added support for https://yewtu.be invidious server in YouTube script
+
+### Fixed
+- Fixed dlive script
+- Fixed peertube script
+- Fixed lbrytv script to support odysee.com videos as well
+- Fixed vimeo script
   
 ## [1.7.4] - 2022-07-26
 ### Fixed
