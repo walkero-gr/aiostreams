@@ -16,7 +16,7 @@ class cmnHandler:
         return "aiostreams v%s (%s) - Developed by George Sokianos\n" % (aioVer, aioReleaseDate)
 
     def showIntroText(self):
-        print self.getIntroVersionText()
+        print (self.getIntroVersionText())
 
     def getUserOS(self):
         return userOS

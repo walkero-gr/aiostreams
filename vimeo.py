@@ -1,11 +1,20 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import urllib, urllib2, sys, argparse, re, string
+import sys, argparse, re
 import simplem3u8 as sm3u8
 import simplejson as json
-from urllib2 import Request, urlopen, URLError
-from random import random
+
+if sys.version_info[0] == 2:
+    import urllib
+    import urllib2
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+
+if sys.version_info[0] == 3:
+    import urllib.parse as urllib
+    import urllib3
+    from urllib.request import Request as urlReq, urlopen as urlOpn
+    from urllib.error import URLError as urlErr
 
 cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
@@ -23,14 +32,14 @@ class vimeoAPIHandler:
         return None
 
     def getURL(self, url):
-        request = urllib2.Request(url)
+        request = urlReq(url)
         try:
-            response = urllib2.urlopen(request)
+            response = urlOpn(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -78,7 +87,7 @@ def main(argv):
     global videoQualities
 
     if len(argv) == 0:
-        print "No arguments given. Use vimeo.py -h for more info.\nThe script must be used from the shell."
+        print ("No arguments given. Use vimeo.py -h for more info.\nThe script must be used from the shell.")
         sys.exit()
         
     # Parse the arguments
@@ -101,16 +110,30 @@ def main(argv):
         streams = vimeoApi.getVideoInfoByID(videoId)
         videos = streams['request']['files']
 
-        uri = helpers.getVideoURI(videos['progressive'])
-        if uri:
-            if cfg.verbose and (args.silence != True):
-                print "%s" % (uri)
-            if cfg.autoplay:
-                cmnHandler.videoAutoplay(uri, 'list')
-        else:
-            print "Not valid video found"
+        if (len(videos['progressive']) > 0):
+            uri = helpers.getVideoURI(videos['progressive'])
+            if uri:
+                if cfg.verbose and (args.silence != True):
+                    print ("%s" % (uri))
+                if cfg.autoplay:
+                    cmnHandler.videoAutoplay(uri, 'list')
+            else:
+                print ("Not valid video found")
+            
+            sys.exit()
 
-        sys.exit()
+        defaultCdn = videos['hls']['default_cdn']
+        if (defaultCdn != ""):
+            uri = videos['hls']['cdns'][defaultCdn]['url']
+            if uri:
+                if cfg.verbose and (args.silence != True):
+                    print ("%s" % (uri))
+                if cfg.autoplay:
+                    cmnHandler.videoAutoplay(uri, 'list')
+            else:
+                print ("Not valid hls found")
+            
+            sys.exit()
 
     sys.exit()
 

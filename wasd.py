@@ -1,11 +1,25 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import cookielib, urllib, urllib2, sys, argparse, re, string
+import sys, argparse, re
 import simplem3u8 as sm3u8
 import simplejson as json
-from urllib2 import Request, urlopen, URLError
-from random import random
+
+if sys.version_info[0] == 2:
+    import urllib, cookielib
+    import urllib2
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+    from urllib2 import HTTPHandler as httpHan, HTTPSHandler as httpsHan, \
+        HTTPCookieProcessor as cookieProc, build_opener as buildOpener
+
+if sys.version_info[0] == 3:
+    import http.cookiejar as cookielib
+    import urllib.parse as urllib
+    import urllib3
+    from urllib.request import Request as urlReq, urlopen as urlOpn
+    from urllib.request import HTTPHandler as httpHan, HTTPSHandler as httpsHan, \
+        HTTPCookieProcessor as cookieProc, build_opener as buildOpener
+    from urllib.error import URLError as urlErr
 
 cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
@@ -26,14 +40,14 @@ class wasdAPIHandler:
         return None
 
     def getURL(self, url):
-        request = urllib2.Request(url)
+        request = urlReq(url)
         try:
-            response = urllib2.urlopen(request)
+            response = urlOpn(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -42,24 +56,24 @@ class wasdAPIHandler:
         authUrl = "%s/auth/anon-token" % (self.baseurl)
         cookies = cookielib.CookieJar()
         handlers = [
-            urllib2.HTTPHandler(),
-            urllib2.HTTPSHandler(),
-            urllib2.HTTPCookieProcessor(cookies)
+            httpHan(),
+            httpsHan(),
+            cookieProc(cookies)
         ]
-        opener = urllib2.build_opener(*handlers)
-        authRequest = urllib2.Request(authUrl)
+        opener = buildOpener(*handlers)
+        authRequest = urlReq(authUrl)
         opener.open(authRequest)
 
         # Request the endpoint
-        request = urllib2.Request(url)
+        request = urlReq(url)
         request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
         try:
             response = opener.open(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -166,15 +180,17 @@ class helpersHandler:
         return None
         
     def clearUri(self, uri):
-        uriSplit = uri.split('#')
-        return uriSplit[0]
+        if (uri.find('#') >= 0):
+            uriSplit = uri.split('#')
+            return uriSplit[0]
+        return uri
 
 def main(argv):
     wasdApi = wasdAPIHandler()
     helpers = helpersHandler()
 
     if len(argv) == 0:
-        print "No arguments given. Use wasd.py -h for more info.\nThe script must be used from the shell."
+        print ("No arguments given. Use wasd.py -h for more info.\nThe script must be used from the shell.")
         sys.exit()
         
     # Parse the arguments
@@ -196,10 +212,10 @@ def main(argv):
 
     if (args.topgames):
         gamesList = wasdApi.getTopGames()
-        print "%-10s\t %-50s\t %-10s\t %-10s" % ('Game ID', 'Game', 'Viewers', 'Streams')
-        print "%s" % ('-'*200)
+        print ("%-10s\t %-50s\t %-10s\t %-10s" % ('Game ID', 'Game', 'Viewers', 'Streams'))
+        print ("%s" % ('-'*200))
         for game in gamesList['result']:
-            print "%-10s\t %-50s\t %-10d\t %-10d" % (game['game_id'], cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count'])
+            print ("%-10s\t %-50s\t %-10d\t %-10d" % (game['game_id'], cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count']))
         sys.exit()
 
     if (args.searchgame):
@@ -212,24 +228,24 @@ def main(argv):
             gameData = wasdApi.searchByGameTitle(gameTitle)
             if gameData['result']['count'] > 1:
                 gamesList = gameData['result']['rows']
-                print "Found more than one game with the title %s. Select the one you want by the Game ID"
-                print "%-10s\t %-50s\t %-10s\t %-10s" % ('Game ID', 'Game', 'Viewers', 'Streams')
-                print "%s" % ('-'*200)
+                print ("Found more than one game with the title %s. Select the one you want by the Game ID")
+                print ("%-10s\t %-50s\t %-10s\t %-10s" % ('Game ID', 'Game', 'Viewers', 'Streams'))
+                print ("%s" % ('-'*200))
                 for game in gamesList:
-                    print "%-10s\t %-50s\t %-10d\t %-10d" % (game['game_id'], cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count'])
+                    print ("%-10s\t %-50s\t %-10d\t %-10d" % (game['game_id'], cmnHandler.uniStrip(game['game_name']), game['viewers_count'], game['stream_count']))
             else:
                 gameId = gameData['result']['rows'][0]['game_id']
 
         if gameId > 0:
             gameStreams = wasdApi.getTopStreamsByGameID(gameId)
             if gameStreams:
-                print "%-36s\t %-10s\t %s" % ('URL', 'Viewers', 'Title')
-                print "%s" % ('-'*200)
+                print ("%-36s\t %-10s\t %s" % ('URL', 'Viewers', 'Title'))
+                print ("%s" % ('-'*200))
                 for stream in gameStreams['result']:
                     streamUrl = "https://wasd.tv/channel/%s" % (stream['channel_id'])
-                    print "%-36s\t %-10d\t %s" % (streamUrl, stream['media_container_streams'][0]['stream_current_viewers'], cmnHandler.uniStrip(stream['media_container_name']))
+                    print ("%-36s\t %-10d\t %s" % (streamUrl, stream['media_container_streams'][0]['stream_current_viewers'], cmnHandler.uniStrip(stream['media_container_name'])))
             else:
-                print "No streams found for the game: %s" % (gameTitle)
+                print ("No streams found for the game: %s" % (gameTitle))
         sys.exit()
 
     if (videoType['channel'] or videoType['video']):
@@ -251,13 +267,13 @@ def main(argv):
                 uri = helpers.clearUri(uri)
                 if uri:
                     if cfg.verbose and (args.silence != True):
-                        print "%s" % (uri)
+                        print ("%s" % (uri))
                     if cfg.autoplay:
                         cmnHandler.videoAutoplay(uri, 'list')
                 else:
-                    print "Not valid video found"
+                    print ("Not valid video found")
         else:
-            print "There is no video available!"
+            print ("There is no video available!")
 
         sys.exit()
 

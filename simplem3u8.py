@@ -1,5 +1,6 @@
 #!python
 import re
+
 ATTRIBUTELISTPATTERN = re.compile(r'''((?:[^,"']|"[^"]*"|'[^']*')+)''')
 
 class parseHandler:
@@ -9,6 +10,7 @@ class parseHandler:
         retList[listCnt] = {}
 
         for line in m3u8Data.splitlines():
+            line=line.decode()
             if (line.startswith("#EXT-X-MEDIA:")):
                 params = self.parseExt(line, "#EXT-X-MEDIA:")
 
@@ -19,9 +21,12 @@ class parseHandler:
             if (line.startswith("#EXT-X-STREAM-INF:")):
                 params = self.parseExt(line, "#EXT-X-STREAM-INF:")
                 for attribute in params:
-                    attr, val = attribute.split("=", 1)
-                    val = val.replace('"', "")
-                    retList[listCnt][attr.lower()] = val.lower()
+                    try:
+                        attr, val = attribute.split("=", 1)
+                        val = val.replace('"', "")
+                        retList[listCnt][attr.lower()] = val.lower()
+                    except ValueError:
+                        pass
 
             if (line.startswith(('https://', 'http://', '../', 'index_'))):
                 retList[listCnt]['uri'] = line
