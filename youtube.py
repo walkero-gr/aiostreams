@@ -1,11 +1,9 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import sys, argparse, re, string, os
+import sys, argparse, re, os
 import myurlparse as urlparse
-import simplem3u8 as sm3u8
 import simplejson as json
-from random import random
 from datetime import datetime
 
 if sys.version_info[0] == 2:

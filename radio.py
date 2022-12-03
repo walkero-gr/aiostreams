@@ -1,9 +1,8 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import sys, argparse, re, string
+import sys, argparse, re
 import simplejson as json
-from random import random
 
 if sys.version_info[0] == 2:
     import urllib

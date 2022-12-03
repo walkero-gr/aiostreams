@@ -1,10 +1,8 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import sys, argparse, re, string
-import simplem3u8 as sm3u8
+import sys, argparse, re
 import simplejson as json
-from random import random
 
 if sys.version_info[0] == 2:
     import urllib
