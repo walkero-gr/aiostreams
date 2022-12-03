@@ -1,10 +1,20 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import urllib, urllib2, sys, argparse, re, string
+import sys, argparse, re, string
 import simplejson as json
-from urllib2 import Request, urlopen, URLError
 from random import random
+
+if sys.version_info[0] == 2:
+    import urllib
+    import urllib2
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+
+if sys.version_info[0] == 3:
+    import urllib.parse as urllib
+    import urllib3
+    from urllib.request import Request as urlReq, urlopen as urlOpn
+    from urllib.error import URLError as urlErr
 
 cmnHandler = cmn.cmnHandler()
 
@@ -15,15 +25,15 @@ class radioAPIHandler:
         return None
 
     def getURL(self, url):
-        request = urllib2.Request(url)
+        request = urlReq(url)
         request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
         try:
-            response = urllib2.urlopen(request)
+            response = urlOpn(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -72,7 +82,7 @@ def main(argv):
     radioApi = radioAPIHandler()
 
     if len(argv) == 0:
-        print "No arguments given. Use radio.py -h for more info.\nThe script must be used from the shell."
+        print ("No arguments given. Use radio.py -h for more info.\nThe script must be used from the shell.")
         sys.exit()
         
     # Parse the arguments
@@ -95,10 +105,10 @@ def main(argv):
     if (args.listCountries):
         countriesData = radioApi.getCountries()
         if countriesData:
-            print "%s\t %s" % ('Stations', 'Country')
-            print "%s" % ('-'*100)
+            print ("%s\t %s" % ('Stations', 'Country'))
+            print ("%s" % ('-'*100))
             for country in countriesData:
-                print "%d\t\t %s" % (country['stationcount'], country['name'])
+                print ("%d\t\t %s" % (country['stationcount'], country['name']))
         
         sys.exit()
 
@@ -114,28 +124,28 @@ def main(argv):
             params.update({'language': args.stationLanguage})
 
         if len(params) == 0:
-            print "Use at least on of the available filters on station search (name, language, country, genre)"
+            print ("Use at least on of the available filters on station search (name, language, country, genre)")
             sys.exit()
 
         stations = radioApi.getStations(params)
         if stations:
-            print "%-24s %-24s %-5s %-7s %-40s %s" % ('Name', 'Country', 'Codec', 'Bitrate', '  ID', 'URL')
-            print "%s" % ('-'*180)
+            print ("%-24s %-24s %-5s %-7s %-40s %s" % ('Name', 'Country', 'Codec', 'Bitrate', '  ID', 'URL'))
+            print ("%s" % ('-'*180))
             for station in stations:
-                print "%-24s %-24s %-5s %-7d %-40s %s" % (
+                print ("%-24s %-24s %-5s %-7d %-40s %s" % (
                     cmnHandler.uniStrip(station['name'])[:22],
                     cmnHandler.uniStrip(station['country'])[:22],
                     station['codec'],
                     station['bitrate'],
                     station['stationuuid'],
                     station['url_resolved']
-                )
+                ))
 
         sys.exit()
 
     if (args.play):
         if not args.stationUUID:
-            print "Please define which station to autoplay by setting the UUID (--uuid) argument."
+            print ("Please define which station to autoplay by setting the UUID (--uuid) argument.")
             sys.exit()
         
 
@@ -143,17 +153,17 @@ def main(argv):
         if stationData:
             uri = stationData[0]['url_resolved']
             if (args.silence != True):
-                print "%s\nCountry: %s\nLanguage: %s\nGenre tags: %s\nWebsite: %s" % (
-					cmnHandler.uniStrip(stationData[0]['name']),
-					stationData[0]['country'],
-					cmnHandler.uniStrip(stationData[0]['language']),
+                print ("%s\nCountry: %s\nLanguage: %s\nGenre tags: %s\nWebsite: %s" % (
+                    cmnHandler.uniStrip(stationData[0]['name']),
+                    stationData[0]['country'],
+                    cmnHandler.uniStrip(stationData[0]['language']),
                     stationData[0]['tags'],
-					stationData[0]['homepage']
-                )
+                    stationData[0]['homepage']
+                ))
 
             if (uri):
                 if cfg.verbose and (args.silence != True):
-                    print "\n%s" % (uri)
+                    print ("\n%s" % (uri))
                 if cfg.autoplay:
                     cmnHandler.audioAutoplay(uri)
         

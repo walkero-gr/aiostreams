@@ -1,13 +1,23 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import urllib, urllib2, sys, argparse, re, string, os
+import sys, argparse, re, string, os
 import myurlparse as urlparse
 import simplem3u8 as sm3u8
 import simplejson as json
-from urllib2 import Request, urlopen, URLError
 from random import random
 from datetime import datetime
+
+if sys.version_info[0] == 2:
+    import urllib
+    import urllib2
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+
+if sys.version_info[0] == 3:
+    import urllib.parse as urllib
+    import urllib3
+    from urllib.request import Request as urlReq, urlopen as urlOpn
+    from urllib.error import URLError as urlErr
 
 cmnHandler = cmn.cmnHandler()
 
@@ -49,15 +59,15 @@ class ytAPIHandler:
         return keyData['clientId']
 
     def getURL(self, url):
-        request = urllib2.Request(url)
+        request = urlReq(url)
         request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
         try:
-            response = urllib2.urlopen(request)
+            response = urlOpn(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -77,11 +87,7 @@ class ytAPIHandler:
     def getVideoInfo(self, videoId):
         endpoint = "get_video_info"
         query = {
-            "video_id": videoId,
-            # "sts": 18143,
-            # "el": "detailpage"
-            # "el": "embedded",
-            # "eurl": "https://youtube.googleapis.com/v/%s" % (videoId)
+            "video_id": videoId
         }
         responseData = self.call(endpoint, query)
         if responseData:
@@ -164,15 +170,15 @@ class aiostreamsapiHandler:
         return None
 
     def getURL(self, url):
-        request = urllib2.Request(url)
+        request = urlReq(url)
 
         try:
-            response = urllib2.urlopen(request)
+            response = urlOpn(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -200,7 +206,7 @@ class aiostreamsapiHandler:
         if responseData:
             return json.loads(responseData)
         else:
-            print 'Key error: Please contact the developer.'
+            print ('Key error: Please contact the developer.')
             sys.exit()
 
 class helpersHandler:
@@ -230,9 +236,12 @@ class helpersHandler:
         return None
 
     def printVideoFormats(self, data):
-        print "\nAvailable formats"
+        print ("\nAvailable formats")
+        print ("%-4s\t%-8s\t%-12s\t%-12s" % ('ID', 'Height', 'VCodec', 'ACodec'))
+        print ("%s" % ('-'*52))
         for idx in data:
-            print "%s - %sp\t %s, %s" % (idx['format_id'], idx['height'], idx['vcodec'], idx['acodec'])
+            print ("%-4s\t%-8s\t%-12s\t%-12s" % (idx['format_id'], idx['height'], idx['vcodec'], idx['acodec']))
+        sys.exit()
 
     def getURLFromCipher(self, cipher):
         cipherParsed = urlparse.parse_qs(cipher)
@@ -256,7 +265,7 @@ def main(argv):
     helpers = helpersHandler()
 
     if len(argv) == 0:
-        print "No arguments given. Use youtube.py -h for more info.\nThe script must be used from the shell."
+        print ("No arguments given. Use youtube.py -h for more info.\nThe script must be used from the shell.")
         sys.exit()
 
     ############################################################
@@ -289,11 +298,11 @@ def main(argv):
         result = ytApi.searchVideo(searchQuery)
         if result['items']:
             if args.extrainfo:
-                print "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % ('URL', 'Views', 'Channel', 'Date', 'Duration', 'Title')
-                print "%s" % ('-'*200)
+                print ("%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % ('URL', 'Views', 'Channel', 'Date', 'Duration', 'Title'))
+                print ("%s" % ('-'*200))
             else:
-                print "%-40s\t %-8s\t %s" % ('URL', 'Views', 'Title')
-                print "%s" % ('-'*120)
+                print ("%-40s\t %-8s\t %s" % ('URL', 'Views', 'Title'))
+                print ("%s" % ('-'*120))
                 
             videosDict = dict()
             videoIds = []
@@ -315,11 +324,14 @@ def main(argv):
 
             for key, video in videosDict.items():
                 if args.extrainfo:
-                    print "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % (video['url'], video['viewCount'], video['channelTitle'], video['publishedAt'], video['duration'], video['title'])
+                    print (
+                        "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % (
+                            video['url'], video['viewCount'], video['channelTitle'], video['publishedAt'], video['duration'], video['title']
+                        ))
                 else:
-                    print "%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title'])
+                    print ("%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title']))
         else:
-            print "No videos found based on the search query: %s" % (searchQuery)
+            print ("No videos found based on the search query: %s" % (searchQuery))
         sys.exit()
 
     ############################################################
@@ -330,8 +342,8 @@ def main(argv):
         result = ytApi.searchLiveStreams(searchQuery)
         
         if result['items']:
-            print "%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title')
-            print "%s" % ('-'*120)
+            print ("%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title'))
+            print ("%s" % ('-'*120))
             
             videosDict = dict()
             videoIds = []
@@ -353,9 +365,9 @@ def main(argv):
                     videoViewCount = video['viewCount'] 
                 except KeyError:
                     videoViewCount = 'N/A'
-                print "%-40s\t %-8s\t %s" % (video['url'], videoViewCount, video['title'])
+                print ("%-40s\t %-8s\t %s" % (video['url'], videoViewCount, video['title']))
         else:
-            print "No live streams found based on the search query: %s" % (searchQuery)
+            print ("No live streams found based on the search query: %s" % (searchQuery))
         sys.exit()
 
     ############################################################
@@ -366,16 +378,16 @@ def main(argv):
         result = ytApi.searchChannel(searchQuery)
         
         if result['items']:
-            print "%-32s\t%s" % ('Channel', 'RSS url')
-            print "%s" % ('-'*100)
+            print ("%-32s\t%s" % ('Channel', 'RSS url'))
+            print ("%s" % ('-'*100))
 
             for item in result['items']:
                 channelId = item['id']['channelId']
                 rssUrl = ''.join(["https://www.youtube.com/feeds/videos.xml?channel_id=", channelId])
-                print "%-32s\t%s" % (cmnHandler.uniStrip(item['snippet']['channelTitle']), rssUrl)
+                print ("%-32s\t%s" % (cmnHandler.uniStrip(item['snippet']['channelTitle']), rssUrl))
 
         else:
-            print "No channels found based on the search query: %s" % (searchQuery)
+            print ("No channels found based on the search query: %s" % (searchQuery))
         sys.exit()
 
     ############################################################
@@ -394,7 +406,7 @@ def main(argv):
                 pass
 
             if (args.silence != True):
-                print "Title: %s" % (cmnHandler.uniStrip(response['title']))
+                print ("Title: %s" % (cmnHandler.uniStrip(response['title'])))
 
             if args.extrainfo and (args.silence != True):
                 helpers.printVideoFormats(response['formats'])
@@ -404,16 +416,16 @@ def main(argv):
 
             if (uri):
                 if cfg.verbose and (args.silence != True):
-                    print "\n%s" % (uri)
+                    print ("\n%s" % (uri))
                 if cfg.autoplay:
                     if (isLive):
                         cmnHandler.videoAutoplay(uri, 'list')
                     else:
                         cmnHandler.videoAutoplay(uri, 'video')
             else:
-                print "Not valid video url found!"
+                print ("Not valid video url found!")
         else:
-            print "There is info available about this video!"
+            print ("There is info available about this video!")
 
         sys.exit()
 

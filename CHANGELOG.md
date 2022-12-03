@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.6] - 2022-12-03
+### Added
+- Added some extra info in the amigaguide file for the youtube script
+
+### Changed
+- Updated the scripts to work with python3
+- Now the -x argument in youtube and twitch script prints out the extra info but
+  doesn't start the video playback
+
 ## [1.7.5] - 2022-08-23
 ### Added
 - Added -sc argument to the youtube script which can be used to search for

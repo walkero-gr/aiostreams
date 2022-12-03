@@ -1,11 +1,21 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import urllib, urllib2, sys, argparse, re, string
+import sys, argparse, re, string
 import simplem3u8 as sm3u8
 import simplejson as json
-from urllib2 import Request, urlopen, URLError
 from random import random
+
+if sys.version_info[0] == 2:
+    import urllib
+    import urllib2
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+
+if sys.version_info[0] == 3:
+    import urllib.parse as urllib
+    import urllib3
+    from urllib.request import Request as urlReq, urlopen as urlOpn
+    from urllib.error import URLError as urlErr
 
 cmnHandler = cmn.cmnHandler()
 
@@ -38,15 +48,15 @@ class aiostreamsapiHandler:
         return None
 
     def getURL(self, url):
-        request = urllib2.Request(url)
+        request = urlReq(url)
 
         try:
-            response = urllib2.urlopen(request)
+            response = urlOpn(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -60,12 +70,16 @@ class aiostreamsapiHandler:
 
     def getStreams(self, categoryId):
         endpoint = "getstreams/live"
-        if categoryId > 0:
-            query = {
-                'gameid': categoryId
-            }
-        else:
-            query = {}
+        try:
+            if int(categoryId) > 0:
+                query = {
+                    'gameid': categoryId
+                }
+            else:
+                query = {}
+        except (TypeError, ValueError):
+            print ("The game ID should be a number and not a string. Please use -sg with the game title to get the ID")
+            sys.exit()
 
         responseData = self.call(endpoint, query)
         if responseData:
@@ -153,9 +167,12 @@ class helpersHandler:
         return None
     
     def printVideoFormats(self, data):
-        print "\nAvailable formats"
+        print ("\nAvailable formats")
+        print ("%-20s\t%-12s\t%-12s" % ('ID', 'VCodec', 'ACodec'))
+        print ("%s" % ('-'*52))
         for idx in data:
-            print "%-20s\t%s, %s" % (idx['format_id'], idx['vcodec'], idx['acodec'])
+            print ("%-20s\t%-12s\t%-12s" % (idx['format_id'], idx['vcodec'], idx['acodec']))
+        sys.exit()
     
     def getChannelInfoByName(self, data, name):
         for item in data:
@@ -172,7 +189,7 @@ def main(argv):
     video = {'type': ''}
 
     if len(argv) == 0:
-        print "No arguments given. Use twitch.py -h for more info.\nThe script must be used from the shell."
+        print ("No arguments given. Use twitch.py -h for more info.\nThe script must be used from the shell.")
         sys.exit()
         
     # Parse the arguments
@@ -201,40 +218,40 @@ def main(argv):
 
     if (args.topstreams):
         streamList = aioapi.getStreams(0)
-        print "%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title')
-        print "%s" % ('-'*200)
+        print ("%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title'))
+        print ("%s" % ('-'*200))
         for stream in streamList['data']:
-            print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (
+            print ("%-36s\t %-10d\t %-6s\t %-50s\t %s" % (
                 'https://twitch.tv/' + stream['user_login'], 
                 stream['viewer_count'], 
                 stream['language'], 
                 stream['game_name'], 
                 cmnHandler.uniStrip(stream['title'])
-            )
+            ))
 
         sys.exit()
 
     if (args.topgames):
         gamesList = aioapi.getTopGames()
-        print "%-12s\t%-50s" % ('ID', 'Game')
-        print "%s" % ('-'*100)
+        print ("%-12s\t%-50s" % ('ID', 'Game'))
+        print ("%s" % ('-'*100))
         for game in gamesList['data']:
-            print "%-12s\t%-50s" % (game['id'], cmnHandler.uniStrip(game['name']))
+            print ("%-12s\t%-50s" % (game['id'], cmnHandler.uniStrip(game['name'])))
 
         sys.exit()
 
     if (args.gamevideos):
         streamList = aioapi.getStreams(args.gamevideos)
-        print "%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title')
-        print "%s" % ('-'*200)
+        print ("%-36s\t %-10s\t %-6s\t %-50s\t %s" % ('URL', 'Viewers', "Lang", 'Game', 'Title'))
+        print ("%s" % ('-'*200))
         for stream in streamList['data']:
-            print "%-36s\t %-10d\t %-6s\t %-50s\t %s" % (
+            print ("%-36s\t %-10d\t %-6s\t %-50s\t %s" % (
                 'https://twitch.tv/' + stream['user_login'], 
                 stream['viewer_count'], 
                 stream['language'], 
                 stream['game_name'], 
                 cmnHandler.uniStrip(stream['title'])
-            )
+            ))
 
         sys.exit()
 
@@ -244,19 +261,19 @@ def main(argv):
 
         if channelInfo['id']:
             itemsList = aioapi.getVideosByChannelId(channelInfo['id'])
-            print "%-36s\t %-20s\t %-10s\t %s" % ('URL', 'Recorded at', 'Duration', 'Title')
-            print "%s" % ('-'*200)
+            print ("%-36s\t %-20s\t %-10s\t %s" % ('URL', 'Recorded at', 'Duration', 'Title'))
+            print ("%s" % ('-'*200))
             for item in itemsList['data']:
-                print "%-36s\t %-20s\t %-10s\t %s" % (item['url'], item['created_at'], item['duration'], cmnHandler.uniStrip(item['title']))
+                print ("%-36s\t %-20s\t %-10s\t %s" % (item['url'], item['created_at'], item['duration'], cmnHandler.uniStrip(item['title'])))
 
         sys.exit()
 
     if (args.searchgame):
         items = aioapi.searchByGameTitle(args.searchgame)
-        print "%-12s\t%-50s" % ('ID', 'Game')
-        print "%s" % ('-'*100)
+        print ("%-12s\t%-50s" % ('ID', 'Game'))
+        print ("%s" % ('-'*100))
         for item in items['data']:
-            print "%-12s\t%-50s" % (item['id'], cmnHandler.uniStrip(item['name']))
+            print ("%-12s\t%-50s" % (item['id'], cmnHandler.uniStrip(item['name'])))
         
         sys.exit()
 
@@ -271,13 +288,13 @@ def main(argv):
 
             if (uri):
                 if cfg.verbose and (args.silence != True):
-                    print "\n%s" % (uri)
+                    print ("\n%s" % (uri))
                 if cfg.autoplay:
                     cmnHandler.videoAutoplay(uri, video['type'])
             else:
-                print "Not valid stream found"
+                print ("Not valid stream found")
         else:
-            print "There is no Live stream for the channel: %s" % (channelName)
+            print ("There is no Live stream for the channel: %s" % (channelName))
 
         sys.exit()
 

@@ -219,7 +219,7 @@ def urlsplit(url, scheme='', allow_fragments=True):
     _parse_cache[key] = v
     return v
 
-def urlunparse((scheme, netloc, url, params, query, fragment)):
+def urlunparse(scheme, netloc, url, params, query, fragment):
     """Put a parsed URL back together again.  This may result in a
     slightly different, but equivalent URL, if the URL that was parsed
     originally had redundant delimiters, e.g. a ? with an empty query
@@ -228,7 +228,7 @@ def urlunparse((scheme, netloc, url, params, query, fragment)):
         url = "%s;%s" % (url, params)
     return urlunsplit((scheme, netloc, url, query, fragment))
 
-def urlunsplit((scheme, netloc, url, query, fragment)):
+def urlunsplit(scheme, netloc, url, query, fragment):
     if netloc or (scheme and scheme in uses_netloc and url[:2] != '//'):
         if url and url[:1] != '/': url = '/' + url
         url = '//' + (netloc or '') + url
@@ -378,7 +378,7 @@ def parse_qsl(qs, keep_blank_values=0, strict_parsing=0):
         nv = name_value.split('=', 1)
         if len(nv) != 2:
             if strict_parsing:
-                raise ValueError, "bad query field: %r" % (name_value,)
+                raise ValueError("bad query field: %r" % (name_value,))
             # Handle case of a control-name with no equal sign
             if keep_blank_values:
                 nv.append('')
@@ -449,15 +449,15 @@ def test():
             continue
         url = words[0]
         parts = urlparse(url)
-        print '%-10s : %s' % (url, parts)
+        print ('%-10s : %s' % (url, parts))
         abs = urljoin(base, url)
         if not base:
             base = abs
         wrapped = '<URL:%s>' % abs
-        print '%-10s = %s' % (url, wrapped)
+        print ('%-10s = %s' % (url, wrapped))
         if len(words) == 3 and words[1] == '=':
             if wrapped != words[2]:
-                print 'EXPECTED', words[2], '!!!!!!!!!!'
+                print ('EXPECTED', words[2], '!!!!!!!!!!')
 
 if __name__ == '__main__':
     test()
