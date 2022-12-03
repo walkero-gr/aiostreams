@@ -205,13 +205,13 @@ At the vqw.py file you can set the weighted sort of the preffered video qualitie
 @{lindent 3}
 @{u}Examples:@{uu}
 Watch a live channel streaming, like below
-@{b}twitch.py -u https://www.twitch.tv/channelname@{ub}
+@{b}twitch.py -u "https://www.twitch.tv/channelname"@{ub}
 
 Watch a recorded video, like below
-@{b}twitch.py -u https://www.twitch.tv/videos/1234567890@{ub}
+@{b}twitch.py -u "https://www.twitch.tv/videos/1234567890"@{ub}
 
 Watch a live channel streaming at specific video quality, if this is available, like below
-@{b}twitch.py -u https://www.twitch.tv/channelname -q 720p@{ub}
+@{b}twitch.py -u "https://www.twitch.tv/channelname" -q 720p@{ub}
 
 Search for a keyword or a game title. Include the value in double quotes, like below:
 @{b}twitch.py -sg "game title"@{ub}
@@ -220,13 +220,27 @@ Search for live streams for a specific game based on its ID. Use the @{b}-sg@{ub
 @{b}twitch.py -gv 123456789@{ub}
 
 List the latest videos of a channel, like below
-@{b}twitch.py -u https://www.twitch.tv/channelname -cv@{ub}
+@{b}twitch.py -u "https://www.twitch.tv/channelname" -cv@{ub}
 
 List the Top Games based on the viewers, like below
 @{b}twitch.py -tg@{ub}
 
-List the 50 Top Streams based on the viewers, like below
+List the Top 50 Streams based on the viewers, like below
 @{b}twitch.py -ts@{ub}
+
+Get the available video resolutions like below,
+@{b}youtube.py -u "https://www.twitch.tv/channelname" -x@{ub}
+This will return something like
+ID                      VCodec          ACodec      
+----------------------------------------------------
+audio_only              none            mp4a.40.2   
+160p                    avc1.4D401F     mp4a.40.2   
+360p                    avc1.4D401F     mp4a.40.2   
+480p                    avc1.4D401F     mp4a.40.2   
+720p60                  avc1.4D401F     mp4a.40.2   
+1080p60__source_        avc1.64002A     mp4a.40.2
+
+Use the ID number with the @{b}-q@{ub} argument when you request to watch a stream or video. Those ID's can be used at the vqw.py file to set the priorities for your system, in case you don't want to set it everytime on video playback.
 
 @{u}Privacy:@{uu}
 The script uses secure HTTPS URLs to access the AIO API and shares no personal information
@@ -307,19 +321,34 @@ Usually, the recorded videos are available only on 720p and 360p resolution.
 @{lindent 3}
 @{u}Examples:@{uu}
 Watch a recorded video, like below,
-@{b}youtube.py -u https://www.youtube.com/watch?v=1234567890@{ub}
+@{b}youtube.py -u "https://www.youtube.com/watch?v=1234567890"@{ub}
 
 Watch a recorded video at specific video quality, if this is available, like below,
-@{b}youtube.py -u https://www.YouTube.com/watch?v=1234567890 -q 22@{ub}
-
-Watch a live stream at specific video quality, if this is available, like below,
-@{b}youtube.py -u https://www.YouTube.com/watch?v=1234567890 -q 720@{ub}
+@{b}youtube.py -u "https://www.YouTube.com/watch?v=1234567890" -q 22@{ub}
 
 Search for recorded videos. Include the search string in double quotes, like below,
 @{b}youtube.py -sv "game title" @{ub}
 
 Search for live streams. Include the search string in double quotes, like below,
 @{b}youtube.py -ss "game title" @{ub}
+
+Get the available video resolutions like below,
+@{b}youtube.py -u "https://www.YouTube.com/watch?v=1234567890" -x@{ub}
+This will return something like
+ID      Height          VCodec          ACodec      
+----------------------------------------------------
+17      144             mp4v.20.3       mp4a.40.2   
+160     144             avc1.4d400c     none        
+278     144             vp9             none        
+133     240             avc1.4d4015     none        
+242     240             vp9             none        
+134     360             avc1.4d401e     none        
+18      360             avc1.42001E     mp4a.40.2 
+
+Use the ID number with the @{b}-q@{ub} argument when you request to watch a video. Those ID's can be used at the vqw.py file to set the priorities for your system, in case you don't want to set it everytime on video playback.
+
+Get channel RSS url
+@{b}youtube.py -sc "channel info or content" @{ub}
 
 @{u}Privacy:@{uu}
 The script uses secure HTTPS URLs to access the YouTube.com API and shares with the network the following personal info:
