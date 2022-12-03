@@ -1,11 +1,20 @@
 #!python
 # coding=utf-8
 import cfg, cmn, vqw
-import urllib, urllib2, sys, argparse, re, string
+import sys, argparse, re
 import simplem3u8 as sm3u8
 import simplejson as json
-from urllib2 import Request, urlopen, URLError
-from random import random
+
+if sys.version_info[0] == 2:
+    import urllib
+    import urllib2
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+
+if sys.version_info[0] == 3:
+    import urllib.parse as urllib
+    import urllib3
+    from urllib.request import Request as urlReq, urlopen as urlOpn
+    from urllib.error import URLError as urlErr
 
 cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
@@ -22,14 +31,14 @@ class dailymotionAPIHandler:
         return None
 
     def getURL(self, url):
-        request = urllib2.Request(url)
+        request = urlReq(url)
         try:
-            response = urllib2.urlopen(request)
+            response = urlOpn(request)
             retData = response.read()
             response.close()
             return retData
-        except URLError, e:
-            print e
+        except (urlErr, e):
+            print (e)
         
         return None
 
@@ -83,7 +92,7 @@ def main(argv):
     helpers = helpersHandler()
 
     if len(argv) == 0:
-        print "No arguments given. Use dailymotion.py -h for more info.\nThe script must be used from the shell."
+        print ("No arguments given. Use dailymotion.py -h for more info.\nThe script must be used from the shell.")
         sys.exit()
         
     # Parse the arguments
@@ -118,13 +127,13 @@ def main(argv):
                 uri = helpers.clearUri(uri)
                 if uri:
                     if cfg.verbose and (args.silence != True):
-                        print "%s" % (uri)
+                        print ("%s" % (uri))
                     if cfg.autoplay:
                         cmnHandler.videoAutoplay(uri, 'list')
                 else:
-                    print "Not valid video found"
+                    print ("Not valid video found")
         else:
-            print "There is no video available!"
+            print ("There is no video available!")
 
         sys.exit()
 
