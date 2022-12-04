@@ -64,13 +64,6 @@ ytVQW = [
     # 251,		# webm, audio only, 48000, medium
 ]
 
-dliveVQW = [
-    "480p",
-    "360p",
-    "720p",
-    "src"
-]
-
 peertubeVQW = [
     "480p",
     "360p",
@@ -89,10 +82,4 @@ wasdVQW = [
     "900",
     "1080",
     "1200"
-]
-
-skaiVQW = [
-    "2000K",
-    "1200K",
-    "600K"
 ]
