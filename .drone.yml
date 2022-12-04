@@ -6,8 +6,6 @@ name: test-release-aiostreams
 steps:
 - name: create-test-archive
   image: walkero/lha-on-docker:latest
-  environment:
-    DRONE_TAG: "TEST"
   commands:
     - cd /drone/src
     - mkdir aiostreams
@@ -19,17 +17,16 @@ steps:
     - mv ./*.md ./aiostreams/docs/
     - mv LICENSE ./aiostreams/docs/
     - sed -i "s/RELEASE_DATE/$(date +'%Y%m%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
-    - sed -i "s/VERSION_TAG/${DRONE_TAG}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
-    - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
+    - sed -i "s/VERSION_TAG/TEST/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
+    - lha -aq2o6 aiostreams-TEST.lha aiostreams/
 - name: Prepare test release
   image: walkero/lha-on-docker:latest
   environment:
-    DRONE_TAG: "TEST"
     OS4DEPOT_PASSPHRASE: 
         from_secret: OS4DEPOT_PASSPHRASE
   commands:
     - mkdir test-release
-    - cp aiostreams-${DRONE_TAG}.lha ./test-release/aiostreams.lha
+    - cp aiostreams-TEST.lha ./test-release/aiostreams.lha
     - cp os4depot.readme ./test-release/os4depot.readme
     - cp aminet.readme ./test-release/aminet.readme
 - name: Upload to TEST FTP
