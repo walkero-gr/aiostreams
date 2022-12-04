@@ -2,44 +2,40 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      1.7.5
+Version:      VERSION_TAG
 Architecture: generic
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
 Replaces:     util/batch/aiostreams.lha
 
-All In One streams (aiostreams) is a pack of scripts, written in Python, that
-can be used to stream and watch videos from different online networks, like
-Twitch.tv, YouTube and Vimeo.com. Also, there is a radio script that helps 
-you discover and play online radio stations from all around the world.
+"All In One streams" (aiostreams) is a pack of scripts, written in Python, 
+that can be used to stream and watch videos from different online networks,
+like Twitch.tv, YouTube and Vimeo.com.
 
-All the scripts should be used from the shell, as well as from any web browser
-that support execution of scripts. It is really easy to configure a link
-context menu and open the URL with the script. And if "Autoplay" is enabled,
-then the video will start automatically using the configured default players.
+All the scripts need to be used from the shell, as well as from any web 
+browser that supports the execution of scripts. It is really easy to 
+configure a link context menu and open the URL with the script. And if 
+"Autoplay" is enabled, then the video will start automatically using the 
+configured default players.
 
-Some of these networks have a search API, and you can use them to find
-available streams and videos, without the need to visit the website. This is a
-fast way to find what you want, without waiting huge amount of Javascript to
-be executed on your machine. Especially useful when your computer doesn't have
-the necessary horse power to support those websites.
+Some of these networks have a search API, and you can use them to find 
+available streams and videos, without the need to visit the website. 
+This is a fast way to find what you want, without waiting huge amount of 
+Javascript to be executed on your machine. Especially useful when your 
+computer doesn't have the necessary horsepower to support those websites.
 
-All the scripts are developed and fully tested under AmigaOS 4.1 FE and
-MorphOS 3.x. There will be support for other systems in the future, like
-AmigaOS 3 and AROS, as long as Python is supported. The scripts work just fine
-under Linux and MacOS X, but those systems are not the target of this project.
-There are other solutions that might do a better job.
+All the scripts are developed and fully tested under AmigaOS 4.1 FE and 
+MorphOS 3.x. The scripts work just fine under Linux and macOS X, but 
+those systems are not the target of this project. Other solutions do a 
+better job.
 
 Supported networks:
 * Twitch.tv
 * YouTube.com
 * Vimeo.com
 * Dailymotion.com
-* Skaitv.gr
-* Dlive.tv
 * Wasd.tv
 * Peertube
-* Lbry.tv
 
 Requirements:
 * Python 2.5
@@ -66,6 +62,15 @@ https://ko-fi.com/walkero
 
 Changelog
 -------------
+vVERSION_TAG
+* Added some extra info in the amigaguide file for the youtube script
+* Added pagination to youtube script with the new argument -p/--page
+* Updated the scripts to work with python3
+* Now the -x argument in youtube and twitch script prints out the extra info but
+  doesn't start the video playback
+* Removed the skaitv, lbry and dlive scripts as they are not working and they
+  need a rewrite
+
 v1.7.5
 * Added -sc argument to the youtube script which can be used to search for
   YouTube channels based on the given description. This returns a list of

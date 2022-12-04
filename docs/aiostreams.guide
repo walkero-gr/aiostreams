@@ -1,6 +1,6 @@
 @database "aiostreams.guide"
 @author "George (walkero) Sokianos"
-@$VER: 1.7.5 (2022-08-23)
+@$VER: VERSION_TAG (RELEASE_DATE)
 @wordwrap
 @node "MAIN" "aiostreams"
 @next "Requirements"
@@ -12,7 +12,7 @@
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
 
 @{b}All In One streams@{ub}
-@{i}v1.7.5 (2022-08-23)@{ui}
+@{i}vVERSION_TAG (RELEASE_DATE)@{ui}
 @{jleft}@{lindent 3}@{rindent 3}
 All In One streams (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv and lbry.tv. Also, there is a radio script that helps you discover and play online radio stations from all around the world.
 
@@ -29,11 +29,8 @@ Some of these networks have a search API, and you can use them to find available
 @{tab}@{"YouTube.com" LINK "YouTube.com"}
 @{tab}@{"Vimeo.com" LINK "Vimeo.com"}
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
-@{tab}@{"Skaitv.gr" LINK "Skaitv.gr"}
-@{tab}@{"Dlive.tv" LINK "Dlive.tv"}
 @{tab}@{"PeerTube" LINK "PeerTube"}
 @{tab}@{"Wasd.tv" LINK "Wasd.tv"}
-@{tab}@{"Lbry.tv" LINK "Lbry.tv"}
 @{tab}@{"Radio" LINK "Radio"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
@@ -130,7 +127,6 @@ You will also find a file named @{b}vqw.py@{ub}. There are the video qualities f
 * @{b}dailymotionVQW:@{ub} Set the preffered sort of video qualities for the Dailymotion.com network.
 * @{b}ytVQW:@{ub} Set the preffered sort of video qualities for the recorded videos from YouTube.com.
 * @{b}ytLiveVQW:@{ub} Set the preffered sort of video qualities for the Live videos from YouTube.com.
-* @{b}dliveVQW:@{ub} Set the preffered sort of video qualities for the Dlive.tv network.
 * @{b}peertubeVQW:@{ub} Set the preffered sort of video qualities for the PeerTube instances.
 * @{b}wasdVQW:@{ub} Set the preffered sort of video qualities for the Wasd.tv network.
 
@@ -149,16 +145,13 @@ You can find usage information in the following sections, separated by network.
 @{"Vimeo.com" LINK "Vimeo.com"}
 @{"YouTube.com" LINK "YouTube.com"}
 @{"Dailymotion.com" LINK "Dailymotion.com"}
-@{"Skaitv.gr" LINK "Skaitv.gr"}
-@{"Dlive.tv" LINK "Dlive.tv"}
 @{"PeerTube" LINK "PeerTube"}
 @{"Wasd.tv" LINK "Wasd.tv"}
-@{"Lbry.tv" LINK "Lbry.tv"}
 @{"Radio" LINK "Radio"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
 
-The problem right now is that the supported networks, like Twitch.tv and Lbry.tv, do not render right at the available browsers. That's why you can use @{"aiostreams website" SYSTEM "c:URLOpen https://aiostreams.amiga-projects.net"} where you can find the same content from Twitch, but it works on every browser like IBrowse 2.5 and Aweb PPC.
+The problem right now is that the supported networks, like Twitch.tv and Vimeo.com, do not render right at the available browsers. That's why you can use @{"aiostreams website" SYSTEM "c:URLOpen https://aiostreams.amiga-projects.net"} where you can find the same content from Twitch, but it works on every browser like IBrowse 2.5 and Aweb PPC.
 
 @endnode
 @node "Twitch.tv" "Twitch.tv"
@@ -312,6 +305,9 @@ With this script you can:
                         Search channels based on description
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
+  -p PAGE, --page PAGE  Set the page of search results, so to get more videos.
+                        This needs to be an integer greater than 0 and can be
+                        used with -sv and -ss
   -x, --extra-info      Show extra info in search results and video data
 
 @{u}Available video qualities:@{uu}
@@ -356,7 +352,7 @@ The script uses secure HTTPS URLs to access the YouTube.com API and shares with 
 
 @endnode
 @node "Dailymotion.com" "Dailymotion.com"
-@prev "Usage"
+@prev "Usage"dlive
 @{jleft}@{lindent 3}
 @{b}Dailymotion.com@{ub}
 
@@ -390,79 +386,6 @@ Watch a recorded video at specific video quality, if this is available, like bel
 
 @{u}Privacy:@{uu}
 No private info is sent by this script to dailymotion.com.
-
-@endnode
-@node "Skaitv.gr" "Skaitv.gr"
-@prev "Usage"
-@{jleft}@{lindent 3}
-@{b}Skaitv.gr@{ub}
-
-This script supports @{"Skaitv.gr" SYSTEM "c:URLOpen http://www.skaitv.gr"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
-
-With this script you can: 
-* watch recorded and archived videos
-* watch live stream. Currently no autoplay is supported, but a message to use the youtube script will show up
-* autoplay videos with ffplay, mplayer or other players
-
-@{u}Shell parameters:@{uu}
-  -h, --help         show this help message and exit
-  -u URL, --url URL  The video url from skaitv.gr
-  -shh, --silence    If this is set, the script will not output anything,
-                     except of errors.
-  -l, --live         Play the current live stream. If -u argument is set, this
-                     is ignored.
-
-@{u}Available video qualities:@{uu}
-Usually, the recorded videos are available only on 720p resolution and there is no way to choose a different one.
-
-@{u}Examples:@{uu}
-Watch a recorded video, like below
-@{b}skaitv.py -u http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23@{ub}
-@{b}skaitv.py -u http://www.skaitv.gr/episode/psuchagogia/radio-arbula/2019-05-20-23/radio-arbula-istories-agapis-20052019@{ub}
-
-Watch the live stream, like below
-@{b}skaitv.py -u http://www.skaitv.gr/live@{ub}
-@{b}skaitv.py -l@{ub}
-
-@{u}Privacy:@{uu}
-No private info is sent by this script to Skaitv.gr.
-
-@endnode
-@node "Dlive.tv" "Dlive.tv"
-@prev "Usage"
-@{jleft}@{lindent 3}
-@{b}Dlive.tv@{ub}
-
-This script supports @{"dlive.tv" SYSTEM "c:URLOpen https://dlive.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
-
-With this script you can: 
-* watch recorded videos
-* watch live stream
-* autoplay videos with ffplay, mplayer or other players
-
-@{u}Shell parameters:@{uu}
-  -h, --help            show this help message and exit
-  -u URL, --url URL     The video/channel url from dlive.tv
-  -q QUALITY, --quality QUALITY
-                        Set the preffered video quality. This is optional. If
-                        not set or if it is not available the default quality
-                        weight will be used.
-  -shh, --silence       If this is set, the script will not output anything,
-                        except of errors.
-
-@{u}Available video qualities:@{uu}
-At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
-
-@{lindent 3}
-@{u}Examples:@{uu}
-Watch a recorded video, like below
-@{b}dlive.py -u https://dlive.tv/p/channelvideo@{ub}
-
-Watch the live stream, like below
-@{b}dlive.py -u https://dlive.tv/channelname@{ub}
-
-@{u}Privacy:@{uu}
-No private info is sent by this script to dlive.tv.
 
 @endnode
 @node "PeerTube" "PeerTube"
@@ -541,49 +464,6 @@ No private info is sent by this script to wasd.tv.
 
 @endnode
 
-@node "lbry.tv" "lbry.tv"
-@prev "Usage"
-@{jleft}@{lindent 3}
-@{b}Lbry.tv@{ub}
-
-This script supports @{"lbry.tv" SYSTEM "c:URLOpen https://lbry.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. Lbry.tv doesn't provide other video qualities than 1080p, so for now you cannot set the video quality.
-
-With this script you can: 
-* watch recorded videos
-* autoplay videos with ffplay, mplayer or other players
-
-@{u}Shell parameters:@{uu}
-  -h, --help            show this help message and exit
-  -u URL, --url URL     The video/channel url
-  -cv, --channel-videos
-                        Request the recorded videos of a channel. The -u
-                        argument is mandatory.
-  -sv SEARCHVIDEO, --search-video SEARCHVIDEO
-                        Search recorded videos based on description
-  -sc SEARCHCHANNEL, --search-channel SEARCHCHANNEL
-                        Search channels based on description
-  -shh, --silence       If this is set, the script will not output anything,
-                        except of errors.
-
-@{lindent 3}
-@{u}Examples:@{uu}
-Watch a recorded video, like below
-@{b}lbrytv.py -u https://lbry.tv/@channelname/videoname@{ub}
-@{b}lbrytv.py -u https://lbry.tv/@janbeta:b/recreating-my-amiga-500-setup-episode-iv:8@{ub}
-
-Search for videos based on a string, like below
-@{b}lbrytv.py -sv "Amiga 500"@{ub}
-
-Search for channels based on a string, like below
-@{b}lbrytv.py -sc "keasigmadelta"@{ub}
-
-List channel videos, like below
-@{b}lbrytv.py -cv -u https://lbry.tv/@KeaSigmaDelta:9@{ub}
-
-@{u}Privacy:@{uu}
-No private info is sent by this script to lbry.tv.
-
-@endnode
 @node "Radio" "Radio"
 @prev "Usage"
 @{jleft}@{lindent 3}
@@ -666,6 +546,15 @@ If you have any websites that you would like to be supported, please contact me 
 @next "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
+
+vVERSION_TAG
+* Added some extra info in the amigaguide file for the youtube script
+* Added pagination to youtube script with the new argument -p/--page
+* Updated the scripts to work with python3
+* Now the -x argument in youtube and twitch script prints out the extra info but
+  doesn't start the video playback
+* Removed the skaitv, lbry and dlive scripts as they are not working and they
+  need a rewrite
 
 v1.7.5
 * Added -sc argument to the youtube script which can be used to search for
