@@ -8,13 +8,13 @@ import simplejson as json
 if sys.version_info[0] == 2:
     import urllib
     import urllib2
-    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError
 
 if sys.version_info[0] == 3:
     import urllib.parse as urllib
     import urllib3
     from urllib.request import Request as urlReq, urlopen as urlOpn
-    from urllib.error import URLError as urlErr
+    from urllib.error import URLError
 
 cmnHandler = cmn.cmnHandler()
 _url_re = re.compile(r"""
@@ -37,8 +37,8 @@ class dailymotionAPIHandler:
             retData = response.read()
             response.close()
             return retData
-        except (urlErr, e):
-            print (e)
+        except (URLError):
+            print (URLError["reason"])
         
         return None
 
