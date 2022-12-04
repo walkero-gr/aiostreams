@@ -9,13 +9,13 @@ from datetime import datetime
 if sys.version_info[0] == 2:
     import urllib
     import urllib2
-    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError as urlErr
+    from urllib2 import Request as urlReq, urlopen as urlOpn, URLError
 
 if sys.version_info[0] == 3:
     import urllib.parse as urllib
     import urllib3
     from urllib.request import Request as urlReq, urlopen as urlOpn
-    from urllib.error import URLError as urlErr
+    from urllib.error import URLError
 
 cmnHandler = cmn.cmnHandler()
 
@@ -64,8 +64,8 @@ class ytAPIHandler:
             retData = response.read()
             response.close()
             return retData
-        except (urlErr, e):
-            print (e)
+        except (URLError):
+            print (URLError["reason"])
         
         return None
 
@@ -111,7 +111,7 @@ class ytAPIHandler:
             return json.loads(responseData)
         return None
 
-    def searchVideo(self, title, limit = 50):
+    def searchVideo(self, title, minInfo = None, pageToken = None, limit = 50):
         endpoint = "search"
         query = {
             "order": "relevance",
@@ -120,16 +120,24 @@ class ytAPIHandler:
             "type": "video",
             "videoDefinition": "any",
             "videoEmbeddable": "true",
-            "fields": "items(id,snippet(channelTitle,liveBroadcastContent,title,publishedAt))",
+            "fields": "",
             "maxResults": limit
         }
-        
+
+        if (minInfo):
+            query["fields"] = "nextPageToken"
+        else:
+            query["fields"] = "items(id,snippet(channelTitle,liveBroadcastContent,title,publishedAt)),nextPageToken"
+
+        if (pageToken):
+            query["pageToken"] = pageToken
+
         responseData = self.call(endpoint, query, True)
         if responseData:
             return json.loads(responseData)
         return None
 
-    def searchLiveStreams(self, title, limit = 50):
+    def searchLiveStreams(self, title, minInfo = None, pageToken = None, limit = 50):
         endpoint = "search"
         query = {
             "order": "viewCount",
@@ -139,10 +147,17 @@ class ytAPIHandler:
             "videoDefinition": "any",
             "videoEmbeddable": "true",
             "eventType": "live",
-            "fields": "items(id,snippet(channelTitle,description,liveBroadcastContent,title))",
             "maxResults": limit
         }
         
+        if (minInfo):
+            query["fields"] = "nextPageToken"
+        else:
+            query["fields"] = "items(id,snippet(channelTitle,description,liveBroadcastContent,title)),nextPageToken,prevPageToken"
+
+        if (pageToken):
+            query["pageToken"] = pageToken
+
         responseData = self.call(endpoint, query, True)
         if responseData:
             return json.loads(responseData)
@@ -277,8 +292,11 @@ def main(argv):
     argParser.add_argument('-ss', '--search-streams', action='store', dest='searchstreams', help='Search live streams based on description')
     argParser.add_argument('-sc', '--search-channel', action='store', dest='searchchannel', help='Search channels based on description')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
+    argParser.add_argument('-p', '--page', action='store', dest='page', help='Set the page of search results, so to get more videos. This needs to be an integer greater than 0 and can be used with -sv and -ss')
     argParser.add_argument('-x', '--extra-info', action='store_true', default=False, dest='extrainfo', help='Show extra info in search results and video data')
     args = argParser.parse_args()
+
+    startPage = 1
 
     if (args.silence != True):
         cmnHandler.showIntroText()
@@ -287,13 +305,29 @@ def main(argv):
         videoId = video['video_id']
     if (args.quality):
         vqw.ytVQW.insert(0, int(args.quality))
+    if (args.page):
+        try:
+            if (int(args.page) > 0):
+                startPage = int(args.page)
+        except (TypeError, ValueError):
+            pass
 
     ############################################################
     # Search Videos By string
     # 
     if (args.searchvideo):
+        nextPageToken = None
         searchQuery = args.searchvideo
-        result = ytApi.searchVideo(searchQuery)
+
+        if (startPage > 0):
+            for i in range(startPage-1):
+                result = ytApi.searchVideo(searchQuery, True, nextPageToken)
+                try:
+                    nextPageToken = result['nextPageToken']
+                except (KeyError):
+                    pass
+
+        result = ytApi.searchVideo(searchQuery, None, nextPageToken)
         if result['items']:
             if args.extrainfo:
                 print ("%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % ('URL', 'Views', 'Channel', 'Date', 'Duration', 'Title'))
@@ -336,9 +370,18 @@ def main(argv):
     # Search Live Streams By string
     # 
     if (args.searchstreams):
+        nextPageToken = None
         searchQuery = args.searchstreams
-        result = ytApi.searchLiveStreams(searchQuery)
-        
+
+        if (startPage > 0):
+            for i in range(startPage-1):
+                result = ytApi.searchLiveStreams(searchQuery, True, nextPageToken)
+                try:
+                    nextPageToken = result['nextPageToken']
+                except (KeyError):
+                    pass
+
+        result = ytApi.searchLiveStreams(searchQuery, None, nextPageToken)
         if result['items']:
             print ("%-40s\t %-8s\t %s" % ('URL', 'Viewers', 'Title'))
             print ("%s" % ('-'*120))
@@ -356,7 +399,10 @@ def main(argv):
             videoStats = ytApi.getVideoStatistics(','.join(videoIds))
             for stats in videoStats['items']:
                 videoId = stats['id']
-                videosDict[videoId]['viewCount'] = stats['statistics']['viewCount']
+                try:
+                    videosDict[videoId]['viewCount'] = stats['statistics']['viewCount']
+                except (KeyError):
+                    videosDict[videoId]['viewCount'] = "n/a"
 
             for key, video in videosDict.items():
                 try:
