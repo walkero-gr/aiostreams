@@ -18,8 +18,8 @@ steps:
     - mv ./*.info ./aiostreams/
     - mv ./*.md ./aiostreams/docs/
     - mv LICENSE ./aiostreams/docs/
-    - sed -i "s/RELEASE_DATE/$(date +'%Y%m%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/CHANGELOG.md ./aiostreams/cmn.py
-    - sed -i "s/VERSION_TAG/${DRONE_TAG}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/aminet.readme ./aiostreams/CHANGELOG.md ./aiostreams/os4depot.readme ./aiostreams/cmn.py
+    - sed -i "s/RELEASE_DATE/$(date +'%Y%m%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
+    - sed -i "s/VERSION_TAG/${DRONE_TAG}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
     - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
 - name: Prepare test release
   image: walkero/lha-on-docker:latest
