@@ -190,8 +190,8 @@ class aiostreamsapiHandler:
             retData = response.read()
             response.close()
             return retData
-        except (urlErr, e):
-            print (e)
+        except (URLError):
+            print (URLError["reason"])
         
         return None
 
