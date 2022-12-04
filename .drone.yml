@@ -3,11 +3,13 @@ kind: pipeline
 type: docker
 name: test-release-aiostreams
 
+workspace:
+  path: /drone/src
+
 steps:
 - name: create-test-archive
   image: walkero/lha-on-docker:latest
   commands:
-    - cd /drone/src
     - mkdir aiostreams
     - mv ./docs ./aiostreams/
     - mv ./simplejson ./aiostreams/
@@ -16,32 +18,32 @@ steps:
     - mv ./*.info ./aiostreams/
     - mv ./*.md ./aiostreams/docs/
     - mv LICENSE ./aiostreams/docs/
-    - sed -i "s/RELEASE_DATE/$(date +'%Y%m%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
+    - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
     - sed -i "s/VERSION_TAG/TEST/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
     - lha -aq2o6 aiostreams-TEST.lha aiostreams/
-- name: Prepare test release
-  image: walkero/lha-on-docker:latest
-  environment:
-    OS4DEPOT_PASSPHRASE: 
-        from_secret: OS4DEPOT_PASSPHRASE
-  commands:
-    - mkdir test-release
-    - cp aiostreams-TEST.lha ./test-release/aiostreams.lha
-    - cp os4depot.readme ./test-release/os4depot.readme
-    - cp aminet.readme ./test-release/aminet.readme
-- name: Upload to TEST FTP
-  image: cschlosser/drone-ftps
-  environment:
-    FTP_USERNAME:
-      from_secret: MVBETAFTP_USERNAME
-    FTP_PASSWORD:
-      from_secret: MVBETAFTP_PASSWORD
-    PLUGIN_HOSTNAME: mediavault.amiga-projects.net:21
-    PLUGIN_SRC_DIR: /test-release
-    PLUGIN_DEST_DIR: ./web/betas
-    PLUGIN_SECURE: "false"
-    PLUGIN_VERIFY: "false"
-    PLUGIN_CLEAN_DIR: "false"
+# - name: Prepare test release
+#   image: walkero/lha-on-docker:latest
+#   environment:
+#     OS4DEPOT_PASSPHRASE: 
+#         from_secret: OS4DEPOT_PASSPHRASE
+#   commands:
+#     - mkdir test-release
+#     - cp aiostreams-TEST.lha ./test-release/aiostreams.lha
+#     - cp os4depot.readme ./test-release/os4depot.readme
+#     - cp aminet.readme ./test-release/aminet.readme
+# - name: Upload to TEST FTP
+#   image: cschlosser/drone-ftps
+#   environment:
+#     FTP_USERNAME:
+#       from_secret: MVBETAFTP_USERNAME
+#     FTP_PASSWORD:
+#       from_secret: MVBETAFTP_PASSWORD
+#     PLUGIN_HOSTNAME: mediavault.amiga-projects.net:21
+#     PLUGIN_SRC_DIR: /test-release
+#     PLUGIN_DEST_DIR: ./web/betas
+#     PLUGIN_SECURE: "false"
+#     PLUGIN_VERIFY: "false"
+#     PLUGIN_CLEAN_DIR: "false"
 
 trigger:
   branch:
@@ -56,11 +58,13 @@ kind: pipeline
 type: docker
 name: release-aiostreams
 
+workspace:
+  path: /drone/src
+
 steps:
 - name: create-release-archive
-  image: walkero/docker4amigavbcc:latest-base
+  image: walkero/lha-on-docker:latest
   commands:
-    - cd /drone/src
     - mkdir aiostreams
     - mv ./docs ./aiostreams/
     - mv ./simplejson ./aiostreams/
@@ -69,7 +73,8 @@ steps:
     - mv ./*.info ./aiostreams/
     - mv ./*.md ./aiostreams/docs/
     - mv LICENSE ./aiostreams/docs/
-    - mkdir release
+    - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
+    - sed -i "s/VERSION_TAG/${DRONE_TAG}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
     - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
 - name: deploy-on-repo
   image: plugins/github-release
@@ -80,7 +85,7 @@ steps:
       - "./aiostreams-*.lha"
     title: "${DRONE_TAG} release"
 - name: Prepare Aminet release
-  image: walkero/docker4amigavbcc:latest-base
+  image: walkero/lha-on-docker:latest
   commands:
     - mkdir aminet-release
     - cp aiostreams-${DRONE_TAG}.lha ./aminet-release/aiostreams.lha
@@ -97,7 +102,7 @@ steps:
     PLUGIN_VERIFY: "false"
     PLUGIN_CHMOD: "false"
 - name: Prepare OS4Depot release
-  image: walkero/docker4amigavbcc:latest-base
+  image: walkero/lha-on-docker:latest
   environment:
       OS4DEPOT_PASSPHRASE: 
           from_secret: OS4DEPOT_PASSPHRASE
