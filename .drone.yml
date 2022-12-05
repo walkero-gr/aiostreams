@@ -149,7 +149,7 @@ steps:
   image: appleboy/drone-git-push
   settings:
     branch: ci-cd2
-    remote: ssh://git@github.com:walkero-gr/aiostreams.git
+    remote: ssh://git@github.com/walkero-gr/aiostreams.git
     force: false
     commit: true
     commit_message: "This is a test commit from Drone CI/CD"
