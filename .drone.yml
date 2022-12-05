@@ -130,3 +130,37 @@ trigger:
   event:
     include:
     - tag
+
+---
+kind: pipeline
+type: docker
+name: git-push-changes
+
+workspace:
+  path: /drone/src
+
+steps:
+- name: create-test-archive
+  image: walkero/lha-on-docker:latest
+  commands:
+    - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./CHANGELOG.md
+    - sed -i "s/VERSION_TAG/TEST/" ./CHANGELOG.md
+- name: git push
+  image: appleboy/drone-git-push
+  settings:
+    branch: ci-cd2
+    remote: git@github.com:walkero-gr/aiostreams.git
+    force: false
+    commit: true
+    commit_message: "This is a test commit from Drone CI/CD"
+    author_name: "Drone CI/CD"
+    ssh_key:
+      from_secret: WALKERO_GITHUB_SSHKEY
+
+trigger:
+  branch:
+    include:
+    - ci-cd2
+  event:
+    include:
+    - push
