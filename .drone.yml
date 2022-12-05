@@ -147,6 +147,9 @@ steps:
     - sed -i "s/VERSION_TAG/TEST/" ./CHANGELOG.md
 - name: git push
   image: appleboy/drone-git-push
+  environment:
+    PLUGIN_SSH_KEY:
+      from_secret: WALKERO_GITHUB_SSHKEY
   settings:
     branch: ci-cd2
     remote: git@github.com:walkero-gr/aiostreams.git
@@ -154,8 +157,6 @@ steps:
     commit: true
     commit_message: "This is a test commit from Drone CI/CD"
     author_name: "Drone CI/CD"
-    ssh_key:
-      from_secret: WALKERO_GITHUB_SSHKEY
 
 trigger:
   branch:
