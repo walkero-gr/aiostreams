@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [VERSION_TAG] - RELEASE_DATE
+## [TEST] - 2022-12-06
 
 ### Added
 - Added some extra info in the amigaguide file for the youtube script
