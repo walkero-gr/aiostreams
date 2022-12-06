@@ -149,7 +149,7 @@ steps:
   image: appleboy/drone-git-push
   environment:
     GIT_PUSH_SSH_KEY:
-      from_secret: git_push_ssh_key
+      from_secret: GITHUB_PUSH_SSH_KEY
   settings:
     branch: ci-cd2
     remote: ssh://git@github.com/walkero-gr/aiostreams.git
@@ -157,6 +157,7 @@ steps:
     commit: true
     commit_message: "This is a test commit from Drone CI/CD [SKIP CI]"
     author_name: "Drone CI/CD"
+    author_email: "walkero@gmail.com"
     # ssh_key:
     #   from_secret: GITHUB_PUSH_SSH_KEY
 
