@@ -145,10 +145,12 @@ steps:
   commands:
     - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./CHANGELOG.md
     - sed -i "s/VERSION_TAG/TEST/" ./CHANGELOG.md
-    - sed -i "4 i \#\# [VERSION_TAG] - RELEASE_DATE\n" ./CHANGELOG.md
+    - sed -i "4 i \#\# [VERSION_TAG] - RELEASE_DATE\n\n" ./CHANGELOG.md
 - name: git push
   image: appleboy/drone-git-push
   environment:
+    DRONE_COMMIT_AUTHOR_EMAIL: "noreply@walkero.gr"
+    DRONE_COMMIT_AUTHOR: "Drone CI/CD"
     PLUGIN_SSH_KEY:
       from_secret: GITHUB_PUSH_SSH_KEY
   settings:
@@ -158,7 +160,7 @@ steps:
     commit: true
     commit_message: "This is a test commit from Drone CI/CD [SKIP CI]"
     author_name: "Drone CI/CD"
-    # author_email: "walkero@gmail.com"
+    author_email: "noreply@walkero.gr"
 
 trigger:
   branch:
