@@ -145,7 +145,7 @@ steps:
   commands:
     - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./CHANGELOG.md
     - sed -i "s/VERSION_TAG/TEST/" ./CHANGELOG.md
-    - sed -i "4 i ## [VERSION_TAG] - RELEASE_DATE\n" ./CHANGELOG.md
+    - sed -i "4 i \#\# [VERSION_TAG] - RELEASE_DATE\n" ./CHANGELOG.md
 - name: git push
   image: appleboy/drone-git-push
   environment:
