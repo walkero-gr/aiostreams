@@ -142,10 +142,12 @@ workspace:
 steps:
 - name: create-test-archive
   image: walkero/lha-on-docker:latest
+  settings:
+    purge: true
   commands:
     - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./CHANGELOG.md
     - sed -i "s/VERSION_TAG/TEST/" ./CHANGELOG.md
-    - sed -i "4 i \#\# [VERSION_TAG] - RELEASE_DATE\n\n" ./CHANGELOG.md
+    - sed -i "4 i \#\# [VERSION_TAG] - RELEASE_DATE\n" ./CHANGELOG.md
 - name: git push
   image: appleboy/drone-git-push
   environment:
@@ -154,6 +156,7 @@ steps:
     PLUGIN_SSH_KEY:
       from_secret: DRONEBOT_SSH_KEY
   settings:
+    purge: true
     branch: ci-cd2
     remote: ssh://git@github.com/walkero-gr/aiostreams.git
     force: false
