@@ -122,6 +122,27 @@ steps:
     PLUGIN_SECURE: "false"
     PLUGIN_VERIFY: "false"
     PLUGIN_CHMOD: "false"
+- name: update-changelog-versions
+  image: walkero/lha-on-docker:latest
+  commands:
+    - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./CHANGELOG.md
+    - sed -i "s/VERSION_TAG/${DRONE_TAG}/" ./CHANGELOG.md
+    - sed -i "4 i \#\# [VERSION_TAG] - RELEASE_DATE\n" ./CHANGELOG.md
+- name: commit-changelog-versions
+  image: appleboy/drone-git-push
+  environment:
+    DRONE_COMMIT_AUTHOR_EMAIL: "noreply@walkero.gr"
+    DRONE_COMMIT_AUTHOR: "dronebot"
+    PLUGIN_SSH_KEY:
+      from_secret: DRONEBOT_SSH_KEY
+  settings:
+    branch: master
+    remote: ssh://git@github.com/walkero-gr/aiostreams.git
+    force: false
+    commit: true
+    commit_message: "Updating version in Changelog from Drone CI/CD [SKIP CI]"
+    author_name: "dronebot"
+    author_email: "noreply@walkero.gr"
 
 trigger:
   branch:
@@ -130,3 +151,42 @@ trigger:
   event:
     include:
     - tag
+
+# ---
+# kind: pipeline
+# type: docker
+# name: git-push-changes
+
+# workspace:
+#   path: /drone/src
+
+# steps:
+# - name: create-test-archive
+#   image: walkero/lha-on-docker:latest
+#   commands:
+#     - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./CHANGELOG.md
+#     - sed -i "s/VERSION_TAG/TEST/" ./CHANGELOG.md
+#     - sed -i "4 i \#\# [VERSION_TAG] - RELEASE_DATE\n" ./CHANGELOG.md
+# - name: git push
+#   image: appleboy/drone-git-push
+#   environment:
+#     DRONE_COMMIT_AUTHOR_EMAIL: "noreply@walkero.gr"
+#     DRONE_COMMIT_AUTHOR: "dronebot"
+#     PLUGIN_SSH_KEY:
+#       from_secret: DRONEBOT_SSH_KEY
+#   settings:
+#     branch: ci-cd2
+#     remote: ssh://git@github.com/walkero-gr/aiostreams.git
+#     force: false
+#     commit: true
+#     commit_message: "Updating Changelog from Drone CI/CD [SKIP CI]"
+#     author_name: "dronebot"
+#     author_email: "noreply@walkero.gr"
+
+# trigger:
+#   branch:
+#     include:
+#     - ci-cd2
+#   event:
+#     include:
+#     - push
