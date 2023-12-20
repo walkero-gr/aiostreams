@@ -2,7 +2,7 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      VERSION_TAG
+Version:      v1.7.8
 Architecture: generic
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
@@ -62,7 +62,7 @@ https://ko-fi.com/walkero
 
 Changelog
 -------------
-vVERSION_TAG
+vv1.7.8
 * Added some extra info in the amigaguide file for the youtube script
 * Added pagination to youtube script with the new argument -p/--page
 * Updated the scripts to work with python3

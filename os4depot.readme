@@ -1,6 +1,6 @@
 name: aiostreams
 description: Stream video from major online platforms
-version: VERSION_TAG
+version: v1.7.8
 author: George Sokianos
 submitter: George Sokianos
 email: walkero@gmail.com
@@ -67,7 +67,7 @@ https://ko-fi.com/walkero
 
 Changelog
 -------------
-vVERSION_TAG
+vv1.7.8
 * Added some extra info in the amigaguide file for the youtube script
 * Added pagination to youtube script with the new argument -p/--page
 * Updated the scripts to work with python3
