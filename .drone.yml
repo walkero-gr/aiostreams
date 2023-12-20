@@ -76,14 +76,14 @@ steps:
     - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
     - sed -i "s/VERSION_TAG/${DRONE_TAG}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
     - lha -aq2o6 aiostreams-${DRONE_TAG}.lha aiostreams/
-- name: deploy-on-repo
-  image: plugins/github-release
-  settings:
-    api_key:
-      from_secret: GITHUB_RELEASE_API_KEY
-    files:
-      - "./aiostreams-*.lha"
-    title: "${DRONE_TAG} release"
+# - name: deploy-on-repo
+#   image: plugins/github-release
+#   settings:
+#     api_key:
+#       from_secret: GITHUB_RELEASE_API_KEY
+#     files:
+#       - "./aiostreams-*.lha"
+#     title: "${DRONE_TAG} release"
 - name: Prepare Aminet release
   image: walkero/lha-on-docker:latest
   commands:
