@@ -1,7 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [VERSION_TAG] - RELEASE_DATE
 ## [v1.7.8] - 2023-12-20
 
 ### Added
