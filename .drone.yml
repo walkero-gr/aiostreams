@@ -71,7 +71,7 @@ steps:
     - mv ./*.py ./aiostreams/
     - mv ./*.py.examples ./aiostreams/
     - mv ./*.info ./aiostreams/
-    - mv ./*.md ./aiostreams/docs/
+    - cp ./*.md ./aiostreams/docs/
     - mv LICENSE ./aiostreams/docs/
     - sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
     - sed -i "s/VERSION_TAG/${DRONE_TAG}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
@@ -84,44 +84,44 @@ steps:
 #     files:
 #       - "./aiostreams-*.lha"
 #     title: "${DRONE_TAG} release"
-- name: Prepare Aminet release
-  image: walkero/lha-on-docker:latest
-  commands:
-    - mkdir aminet-release
-    - cp aiostreams-${DRONE_TAG}.lha ./aminet-release/aiostreams.lha
-    - cp aminet.readme ./aminet-release/aiostreams.readme
-- name: Upload to Aminet
-  image: cschlosser/drone-ftps
-  environment:
-    FTP_USERNAME: "anonymous"
-    FTP_PASSWORD: "walkero@gmail.com"
-    PLUGIN_HOSTNAME: main.aminet.net:21
-    PLUGIN_SRC_DIR: /aminet-release
-    PLUGIN_DEST_DIR: ./new
-    PLUGIN_SECURE: "false"
-    PLUGIN_VERIFY: "false"
-    PLUGIN_CHMOD: "false"
-- name: Prepare OS4Depot release
-  image: walkero/lha-on-docker:latest
-  environment:
-      OS4DEPOT_PASSPHRASE: 
-          from_secret: OS4DEPOT_PASSPHRASE
-  commands:
-    - mkdir os4depot-release
-    - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
-    - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
-    - sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
-- name: Upload to OS4Depot
-  image: cschlosser/drone-ftps
-  environment:
-    FTP_USERNAME: "ftp"
-    FTP_PASSWORD: ""
-    PLUGIN_HOSTNAME: os4depot.net:21
-    PLUGIN_SRC_DIR: /os4depot-release
-    PLUGIN_DEST_DIR: ./upload
-    PLUGIN_SECURE: "false"
-    PLUGIN_VERIFY: "false"
-    PLUGIN_CHMOD: "false"
+# - name: Prepare Aminet release
+#   image: walkero/lha-on-docker:latest
+#   commands:
+#     - mkdir aminet-release
+#     - cp aiostreams-${DRONE_TAG}.lha ./aminet-release/aiostreams.lha
+#     - cp aminet.readme ./aminet-release/aiostreams.readme
+# - name: Upload to Aminet
+#   image: cschlosser/drone-ftps
+#   environment:
+#     FTP_USERNAME: "anonymous"
+#     FTP_PASSWORD: "walkero@gmail.com"
+#     PLUGIN_HOSTNAME: main.aminet.net:21
+#     PLUGIN_SRC_DIR: /aminet-release
+#     PLUGIN_DEST_DIR: ./new
+#     PLUGIN_SECURE: "false"
+#     PLUGIN_VERIFY: "false"
+#     PLUGIN_CHMOD: "false"
+# - name: Prepare OS4Depot release
+#   image: walkero/lha-on-docker:latest
+#   environment:
+#       OS4DEPOT_PASSPHRASE: 
+#           from_secret: OS4DEPOT_PASSPHRASE
+#   commands:
+#     - mkdir os4depot-release
+#     - cp aiostreams-${DRONE_TAG}.lha ./os4depot-release/aiostreams.lha
+#     - cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
+#     - sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
+# - name: Upload to OS4Depot
+#   image: cschlosser/drone-ftps
+#   environment:
+#     FTP_USERNAME: "ftp"
+#     FTP_PASSWORD: ""
+#     PLUGIN_HOSTNAME: os4depot.net:21
+#     PLUGIN_SRC_DIR: /os4depot-release
+#     PLUGIN_DEST_DIR: ./upload
+#     PLUGIN_SECURE: "false"
+#     PLUGIN_VERIFY: "false"
+#     PLUGIN_CHMOD: "false"
 - name: update-changelog-versions
   image: walkero/lha-on-docker:latest
   commands:
