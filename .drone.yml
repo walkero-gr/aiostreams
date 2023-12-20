@@ -122,6 +122,25 @@ steps:
 #     PLUGIN_SECURE: "false"
 #     PLUGIN_VERIFY: "false"
 #     PLUGIN_CHMOD: "false"
+
+trigger:
+  branch:
+    include:
+    - master
+  event:
+    include:
+    - tag
+
+
+---
+kind: pipeline
+type: docker
+name: commit-version-changes
+
+workspace:
+  path: /drone/src
+
+steps:
 - name: update-changelog-versions
   image: walkero/lha-on-docker:latest
   commands:
@@ -151,6 +170,13 @@ trigger:
   event:
     include:
     - tag
+
+depends_on:
+  - release-aiostreams
+
+
+
+
 
 # ---
 # kind: pipeline
