@@ -1,7 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [v1.7.8] - 2023-12-20
+## [VERSION_TAG] - RELEASE_DATE
+
+## [v1.7.7] - 2023-12-20
 
 ### Added
 - The youtube script supports now the urls of shorts videos
