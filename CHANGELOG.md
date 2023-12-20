@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 ## [VERSION_TAG] - RELEASE_DATE
 
 ### Added
+- The youtube script supports now the urls of shorts videos
+- Added video resolutions at the youtube script, when the `-x` argument is used
+- Added more resolutions selection in the `vqw.py` for Vimeo and twitch
+
+### Changed
+- The youtube script supports more urls, to cover more Invidious servers
+
+## [1.7.6] - 2022-12-04
+
+### Added
 - Added some extra info in the amigaguide file for the youtube script
 - Added pagination to youtube script with the new argument -p/--page
 

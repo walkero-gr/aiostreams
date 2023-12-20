@@ -5,11 +5,13 @@
 # aiostreams
 "All In One streams" (aiostreams) is a pack of scripts, written in Python, that can be used to stream and watch videos from different online networks, like Twitch.tv, YouTube and Vimeo.com.
 
-All the scripts need to be used from the shell, as well as from any web browser that supports the execution of scripts. It is really easy to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
+All the scripts need to be used from the shell, as well as from any web browser that supports the execution of scripts. It is straightforward to configure a link context menu and open the URL with the script. And if "Autoplay" is enabled, then the video will start automatically using the configured default players.
 
-Some of these networks have a search API, and you can use them to find available streams and videos, without the need to visit the website. This is a fast way to find what you want, without waiting huge amount of Javascript to be executed on your machine. Especially useful when your computer doesn't have the necessary horsepower to support those websites.
+Some of these networks have a search API, and you can use them to find available streams and videos, without the need to visit the website. This is a fast way to find what you want, without waiting for a huge amount of Javascript to be executed on your machine. Especially useful when your computer doesn't have the necessary horsepower to support those websites.
 
 All the scripts are developed and fully tested under AmigaOS 4.1 FE and MorphOS 3.x. The scripts work just fine under Linux and macOS X, but those systems are not the target of this project. Other solutions do a better job.
+
+As a companion to these scripts, I created the website [https://aiostreams.amiga-projects.net](https://aiostreams.amiga-projects.net) which can be a fast way to discover Twitch and YouTube videos. It is really fast and can be used on older browsers that do not support Javascript and CSS. This is a proxy website. No data is stored in any database, there is no tracking and no authentication is required.
 
 ### Supported networks:
 * [Twitch.tv](https://www.twitch.tv/)

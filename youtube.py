@@ -19,7 +19,7 @@ if sys.version_info[0] == 3:
 
 cmnHandler = cmn.cmnHandler()
 
-_url_re = re.compile(r"""(?x)https?://(?:\w+\.)?(youtube|yewtu)\.(com|be)
+_url_re = re.compile(r"""(?x)https?://(?:\w+\.)?\w+\.\w+
     (?:
         (?:
             /(?:
@@ -28,6 +28,8 @@ _url_re = re.compile(r"""(?x)https?://(?:\w+\.)?(youtube|yewtu)\.(com|be)
                 embed/(?!live_stream)
                 |
                 v/
+                |
+                shorts/
             )(?P<video_id>[0-9A-z_-]{11})
         )
         |
@@ -253,7 +255,16 @@ class helpersHandler:
         print ("%-4s\t%-8s\t%-12s\t%-12s" % ('ID', 'Height', 'VCodec', 'ACodec'))
         print ("%s" % ('-'*52))
         for idx in data:
-            print ("%-4s\t%-8s\t%-12s\t%-12s" % (idx['format_id'], idx['height'], idx['vcodec'], idx['acodec']))
+            vHeight = "na"
+            vCodec = "na"
+            aCodec = "na"
+            try:
+                vHeight = idx['height']
+                vCodec = idx['vcodec']
+                aCodec = idx['acodec']
+            except (ValueError, KeyError):
+                pass
+            print ("%-4s\t%-8s\t%-12s\t%-12s" % (idx['format_id'], vHeight, vCodec, aCodec))
         sys.exit()
 
     def getURLFromCipher(self, cipher):
@@ -452,10 +463,10 @@ def main(argv):
             if (args.silence != True):
                 print ("Title: %s" % (cmnHandler.uniStrip(response['title'])))
 
-            if args.extrainfo and (args.silence != True):
-                helpers.printVideoFormats(response['formats'])
-
             videoFormats = response['formats']
+            if args.extrainfo and (args.silence != True):
+                helpers.printVideoFormats(videoFormats)
+
             uri = helpers.getPrefferedVideoURL(videoFormats, isLive)
 
             if (uri):
