@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [VERSION_TAG] - RELEASE_DATE
 
+### Changed
+- Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
+- Changed the youtube script to return an error message when the url is not compatible
+
+### Fixed
+- Fixed the version string removing the double "vv"
+
 ## [v1.7.7] - 2023-12-20
 
 ### Added

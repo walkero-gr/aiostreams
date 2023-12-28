@@ -13,7 +13,7 @@ userOS = sys.platform
 
 class cmnHandler:
     def getIntroVersionText(self):
-        return "aiostreams v%s (%s) - Developed by George Sokianos\n" % (aioVer, aioReleaseDate)
+        return "aiostreams %s (%s) - Developed by George Sokianos\n" % (aioVer, aioReleaseDate)
 
     def showIntroText(self):
         print (self.getIntroVersionText())

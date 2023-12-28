@@ -19,17 +19,30 @@ if sys.version_info[0] == 3:
 
 cmnHandler = cmn.cmnHandler()
 
-_url_re = re.compile(r"""(?x)https?://(?:\w+\.)?\w+\.\w+
+_url_re = re.compile(r"""(?x)https?://
+    (?:
+        (?:
+            (?:\w+\.)?\w+\.\w+
+        )
+        |
+        (?:
+            youtu\.be
+        )
+    )
     (?:
         (?:
             /(?:
-                watch.+v=
+                (?:
+                    watch.+v=
+                    |
+                    embed/(?!live_stream)
+                    |
+                    v/
+                    |
+                    shorts/
+                )
                 |
-                embed/(?!live_stream)
-                |
-                v/
-                |
-                shorts/
+                (?:)
             )(?P<video_id>[0-9A-z_-]{11})
         )
         |
@@ -226,7 +239,12 @@ class aiostreamsapiHandler:
 
 class helpersHandler:
     def parseURL(self, url):
-        return _url_re.match(url).groupdict()
+        try:
+            return _url_re.match(url).groupdict()
+        except AttributeError:
+            print ('The provided url is not valid')
+            sys.exit()
+        
 
     def getVideoType(self, url):
         types = self.parseURL(url)
