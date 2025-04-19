@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fixed the version string removing the double "vv"
+- Fixed the youtube script when searching for videos to not crash when the results
+  do not have a videoid
 
 ## [v1.7.7] - 2023-12-20
 
