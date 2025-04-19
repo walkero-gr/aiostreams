@@ -368,6 +368,9 @@ def main(argv):
             videosDict = dict()
             videoIds = []
             for video in result['items']:
+                if video['id']['kind'] != "youtube#video":
+                    continue;
+                
                 videoId = video['id']['videoId']
                 videosDict[videoId] = dict()
                 videosDict[videoId]['url'] = ''.join(["https://www.youtube.com/watch?v=", videoId])
