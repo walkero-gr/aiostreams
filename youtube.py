@@ -4,7 +4,8 @@ import cfg, cmn, vqw
 import sys, argparse, re, os
 import myurlparse as urlparse
 import simplejson as json
-from datetime import datetime
+import aiotube as aiotube
+from datetime import datetime, timedelta
 
 if sys.version_info[0] == 2:
     import urllib
@@ -290,15 +291,11 @@ class helpersHandler:
         return cipherParsed['url'][0]
         
     def parseDate(self, dtime):
-        result = datetime.strptime(dtime, '%Y-%m-%dT%H:%M:%SZ')
+        result = datetime.strptime(dtime, '%Y-%m-%dT%H:%M:%S%z')
         return result
         
     def parseDuration(self, dtime):
-        result = dtime.replace("PT", '')
-        result = result.replace("H", 'h ')
-        result = result.replace("M", 'm ')
-        result = result.replace("S", 's')
-        return result
+        return str(timedelta(seconds=int(dtime)))
 
 def main(argv):
     global aiostreamsapi
@@ -345,55 +342,41 @@ def main(argv):
     # Search Videos By string
     # 
     if (args.searchvideo):
-        nextPageToken = None
         searchQuery = args.searchvideo
 
-        if (startPage > 0):
-            for i in range(startPage-1):
-                result = ytApi.searchVideo(searchQuery, True, nextPageToken)
-                try:
-                    nextPageToken = result['nextPageToken']
-                except (KeyError):
-                    pass
-
-        result = ytApi.searchVideo(searchQuery, None, nextPageToken)
-        if result['items']:
+        result = aiotube.Search.videos(searchQuery)
+        if len(result) > 0:
             if args.extrainfo:
                 print ("%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % ('URL', 'Views', 'Channel', 'Date', 'Duration', 'Title'))
                 print ("%s" % ('-'*200))
             else:
-                print ("%-40s\t %-8s\t %s" % ('URL', 'Views', 'Title'))
+                print ("%-40s\t %-8s\t %s" % ('URL', 'Duration', 'Title'))
                 print ("%s" % ('-'*120))
                 
             videosDict = dict()
             videoIds = []
-            for video in result['items']:
-                if video['id']['kind'] != "youtube#video":
-                    continue;
-                
-                videoId = video['id']['videoId']
+            for id in result:
+                video = aiotube.Video(id)
+                channel = aiotube.Channel(video.metadata['author_id'])
+
+                videoId = id
                 videosDict[videoId] = dict()
-                videosDict[videoId]['url'] = ''.join(["https://www.youtube.com/watch?v=", videoId])
-                videosDict[videoId]['title'] = cmnHandler.uniStrip(video['snippet']['title'])
-                videosDict[videoId]['channelTitle'] = cmnHandler.uniStrip(video['snippet']['channelTitle'])
-                videosDict[videoId]['publishedAt'] = helpers.parseDate(video['snippet']['publishedAt'])
+                videosDict[videoId]['url'] = video.metadata['url']
+                videosDict[videoId]['title'] = video.metadata['title']
+                videosDict[videoId]['channelTitle'] = cmnHandler.uniStrip(channel.metadata['name'])
+                videosDict[videoId]['publishedAt'] = helpers.parseDate(video.metadata['upload_date'])
+                videosDict[videoId]['viewCount'] = video.metadata['views']
+                videosDict[videoId]['duration'] = helpers.parseDuration(video.metadata['duration'])
                 videoIds.append(videoId)
-            
-            # Get video statistics in one call
-            videoStats = ytApi.getVideoStatistics(','.join(videoIds))
-            for stats in videoStats['items']:
-                videoId = stats['id']
-                videosDict[videoId]['viewCount'] = stats['statistics']['viewCount']
-                videosDict[videoId]['duration'] = helpers.parseDuration(stats['contentDetails']['duration'])
 
             for key, video in videosDict.items():
                 if args.extrainfo:
                     print (
                         "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % (
-                            video['url'], video['viewCount'], video['channelTitle'], video['publishedAt'], video['duration'], video['title']
+                            video['url'], video['viewCount'], video['channelTitle'], video['publishedAt'].date(), video['duration'], video['title']
                         ))
                 else:
-                    print ("%-40s\t %-8s\t %s" % (video['url'], video['viewCount'], video['title']))
+                    print ("%-40s\t %-8s\t %s" % (video['url'], video['duration'], video['title']))
         else:
             print ("No videos found based on the search query: %s" % (searchQuery))
         sys.exit()
