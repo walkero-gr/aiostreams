@@ -123,7 +123,7 @@ def main(argv):
             params.update({'language': args.stationLanguage})
 
         if len(params) == 0:
-            print ("Use at least on of the available filters on station search (name, language, country, genre)")
+            print ("Use at least one of the available filters on station search (name, language, country, genre)")
             sys.exit()
 
         stations = radioApi.getStations(params)
