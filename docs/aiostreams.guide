@@ -547,6 +547,11 @@ If you have any websites that you would like to be supported, please contact me 
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
 
+v1.8.0
+* Added dns lookup in the radio script to find the active servers urls
+* Added aiotube library, that is used to search for videos using the
+  YouTube Public Data without YouTubeAPI
+
 v1.7.8
 * Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
 * Changed the youtube script to return an error message when the url is not compatible
