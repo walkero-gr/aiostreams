@@ -27,7 +27,7 @@ def request(url):
     try:
         resp = urlopen(req)
         return resp.read().decode('utf-8')
-    except HTTPError as e:
+    except HTTPError:
         _, e, _ = sys.exc_info()
         if hasattr(e, 'code'):
             if e.code == 404:
@@ -35,7 +35,7 @@ def request(url):
             if e.code == 429:
                 raise TooManyRequests('you are being rate-limited for sending too many requests')
         raise RequestError('%r' % e)
-    except Exception as e:
+    except Exception:
         _, e, _ = sys.exc_info()
         raise RequestError('%r' % e)
 

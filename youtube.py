@@ -388,16 +388,18 @@ def main(argv):
                 videosDict[videoId]['publishedAt'] = helpers.parseDate(video.metadata['upload_date'])
                 videosDict[videoId]['viewCount'] = video.metadata['views']
                 videosDict[videoId]['duration'] = helpers.parseDuration(video.metadata['duration'])
-                videoIds.append(videoId)
-
-            for key, video in videosDict.items():
                 if args.extrainfo:
                     print (
                         "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % (
-                            video['url'], video['viewCount'], video['channelTitle'], video['publishedAt'].date(), video['duration'], video['title']
+                            videosDict[videoId]['url'],
+                            videosDict[videoId]['viewCount'],
+                            videosDict[videoId]['channelTitle'],
+                            videosDict[videoId]['publishedAt'].date(),
+                            videosDict[videoId]['duration'],
+                            videosDict[videoId]['title']
                         ))
                 else:
-                    print ("%-40s\t %-8s\t %s" % (video['url'], video['duration'], video['title']))
+                    print ("%-40s\t %-8s\t %s" % (videosDict[videoId]['url'], videosDict[videoId]['duration'], videosDict[videoId]['title']))
         else:
             print ("No videos found based on the search query: %s" % (searchQuery))
         sys.exit()
