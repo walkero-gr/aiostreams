@@ -1,6 +1,6 @@
 #!python
 # coding=utf-8
-import cfg, cmn, vqw
+import cfg, cmn, vqw, socket
 import sys, argparse, re
 import simplejson as json
 
@@ -19,7 +19,8 @@ cmnHandler = cmn.cmnHandler()
 
 class radioAPIHandler:
     def __init__(self):
-        self.baseurl = 'http://de1.api.radio-browser.info/json'
+        self.baseurl = ''
+        self.dnsurl = 'all.api.radio-browser.info'
 
         return None
 
@@ -76,6 +77,24 @@ class radioAPIHandler:
             return json.loads(responseData)
         return None
 
+    def get_radiobrowser_base_urls(self):
+        hosts = []
+        # get all hosts from DNS
+        ips = socket.getaddrinfo(self.dnsurl, 80, 0, 0, socket.IPPROTO_TCP)
+        for ip_tupple in ips:
+            ip = ip_tupple[4][0]
+
+            # do a reverse lookup on every one of the ips to have a nice name for it
+            host_addr = socket.gethostbyaddr(ip)
+            # add the name to a list if not already in there
+            if host_addr[0] not in hosts:
+                hosts.append(host_addr[0])
+
+        # sort list of names
+        hosts.sort()
+        self.baseurl = "http://" + hosts[0] + "/json"
+
+        return None
 
 def main(argv):
     radioApi = radioAPIHandler()
@@ -97,6 +116,8 @@ def main(argv):
     argParser.add_argument('-id', '--uuid', action='store', dest='stationUUID', help='Autoplay the station based on the UUID. This is used with --play argument.')
     argParser.add_argument('-shh', '--silence', action='store_true', default=False, dest='silence', help='If this is set, the script will not output anything, except of errors.')
     args = argParser.parse_args()
+
+    radioApi.get_radiobrowser_base_urls()
 
     if (args.silence != True):
         cmnHandler.showIntroText()
