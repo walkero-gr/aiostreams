@@ -291,7 +291,28 @@ class helpersHandler:
         return cipherParsed['url'][0]
         
     def parseDate(self, dtime):
-        result = datetime.strptime(dtime, '%Y-%m-%dT%H:%M:%S%z')
+        # Support both Python 2.5+ and Python 3 for parsing ISO 8601 datetime strings
+        # Python 2.5's datetime.strptime does not support %z, so we handle timezone manually
+        dt_re = re.compile(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})([+-]\d{2}:?\d{2}|Z)?')
+        m = dt_re.match(dtime)
+        if not m:
+            raise ValueError("Invalid date format: %s" % dtime)
+        dt_str, tz_str = m.groups()
+        # Remove colon in timezone if present (for Python 2.5 compatibility)
+        if tz_str and tz_str != 'Z':
+            tz_str = tz_str.replace(':', '')
+        dt_fmt = '%Y-%m-%dT%H:%M:%S'
+        if tz_str and tz_str != 'Z':
+            dt_fmt += '%z'
+            dtime_fixed = dt_str + tz_str
+        else:
+            dtime_fixed = dt_str
+        try:
+            # Python 3.2+ supports %z, Python 2.5 does not
+            result = datetime.strptime(dtime_fixed, dt_fmt)
+        except Exception:
+            # Fallback for Python 2.5: ignore timezone
+            result = datetime.strptime(dt_str, '%Y-%m-%dT%H:%M:%S')
         return result
         
     def parseDuration(self, dtime):

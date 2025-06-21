@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Any
+# from typing import Dict, Any
 
 from .pool import collect
 from .utils import dup_filter
@@ -9,7 +9,7 @@ from .patterns import _PlaylistPatterns as Patterns
 
 class Playlist:
 
-    def __init__(self, playlist_id: str):
+    def __init__(self, playlist_id):
         """
         Represents a YouTube Playlist
 
@@ -21,7 +21,7 @@ class Playlist:
         pattern = re.compile('=(.+?)$|^PL(.+?)$')
         match = pattern.search(playlist_id)
         if not match:
-            raise ValueError(f'Invalid playlist id: {playlist_id}')
+            raise ValueError('Invalid playlist id: {playlist_id}')
         if match.group(1):
             self.id = match.group(1)
         elif match.group(2):
@@ -29,10 +29,10 @@ class Playlist:
         self._playlist_data = playlist_data(self.id)
 
     def __repr__(self):
-        return f'<Playlist {self.id}>'
+        return '<Playlist {self.id}>'
 
     @property
-    def metadata(self) -> Dict[str, Any]:
+    def metadata(self):
         """
         Fetches playlist metadata in a dict format
 

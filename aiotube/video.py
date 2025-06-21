@@ -60,7 +60,7 @@ class Video:
             'duration': metadata['lengthSeconds'],
             'author_id': metadata['channelId'],
             'upload_date': upload_date,
-            'url': "https://www.youtube.com/watch?v={}".format(metadata['videoId']),
+            'url': "https://www.youtube.com/watch?v=%s" % (metadata['videoId']),
             'thumbnails': metadata.get('thumbnail', {}).get('thumbnails'),
             'tags': metadata.get('keywords'),
             'description': metadata.get('shortDescription'),

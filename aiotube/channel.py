@@ -1,5 +1,13 @@
-import simplejson as json
+import sys
 import re
+import simplejson as json
+
+if sys.version_info[0] == 2:
+    import urllib
+    import urllib2
+    unquote = urllib.unquote
+else:
+    from urllib.parse import unquote
 
 from .https import (
     channel_about,
@@ -11,26 +19,15 @@ from .https import (
 from .video import Video
 from .pool import collect
 from .utils import dup_filter
-from urllib.parse import unquote
-from typing import List, Optional, Dict
 from .patterns import _ChannelPatterns as Patterns
 
-
-class Channel:
+class Channel(object):
 
     _HEAD = 'https://www.youtube.com/channel/'
     _CUSTOM = 'https://www.youtube.com/c/'
     _USER = 'https://www.youtube.com/'
 
-    def __init__(self, channel_id: str):
-        """
-        Represents a YouTube channel
-
-        Parameters
-        ----------
-        channel_id : str
-            The id or url or custom url or user id of the channel
-        """
+    def __init__(self, channel_id):
         pattern = re.compile("UC(.+)|c/(.+)|@(.+)")
         results = pattern.findall(channel_id)
         if not results:
@@ -66,18 +63,9 @@ class Channel:
             setattr(self, k, v)
 
     def __repr__(self):
-        return f'<Channel `{self._target_url}`>'
+        return '<Channel `{}`>'.format(self._target_url)
 
-    def __prepare_metadata(self) -> Optional[Dict[str, any]]:
-        """
-        Returns channel metadata in a dict format
-
-        Returns
-        -------
-        Dict
-            Channel metadata containing the following keys:
-            id, name, subscribers, views, country, custom_url, avatar, banner, url, description, socials
-        """
+    def __prepare_metadata(self):
         patterns = [
             Patterns.name,
             Patterns.avatar,
@@ -87,28 +75,32 @@ class Channel:
         ]
         extracted = collect(lambda x: x.findall(self._about_page) or None, patterns)
         name, avatar, banner, verified, socials = [e[0] if e else None for e in extracted]
-        info = re.compile("\\[{\"aboutChannelRenderer\":(.*?)],").search(self._about_page).group(1) + "]}}}}"
+        info_match = re.compile("\\[{\"aboutChannelRenderer\":(.*?)],").search(self._about_page)
+        if info_match:
+            info = info_match.group(1) + "]}}}}"
+        else:
+            info = ""
         try:
             info = json.loads(info)["metadata"]["aboutChannelViewModel"]
-        except json.decoder.JSONDecodeError:
+        except Exception:
             try:
                 info = re.compile("\\[{\"aboutChannelRenderer\":(.*?)],").search(self._about_page).group(1) + "]}}}"
                 info = json.loads(info)["metadata"]["aboutChannelViewModel"]
-            except json.decoder.JSONDecodeError:
+            except Exception:
                 info = re.compile("\\[{\"aboutChannelRenderer\":(.*?)],").search(self._about_page).group(1)
                 info = json.loads(info[:len(info)-1])["metadata"]["aboutChannelViewModel"]
 
         return {
-            "id": info["channelId"],
+            "id": info.get("channelId", ""),
             "name": name,
-            "url": "https://www.youtube.com/channel/" + info["channelId"],
-            "description": info["description"] if "description" in info else "",
-            "country": info["country"] if "country" in info else "",
-            "custom_url": info["canonicalChannelUrl"] if "canonicalChannelUrl" else "",
-            "subscribers": info["subscriberCountText"].split(' ')[0] if "subscriberCountText" in info else "",
-            "views": info["viewCountText"].replace(' views', '') if "viewCountText" in info else "",
-            "created_at": info["joinedDateText"]["content"].replace('Joined ', '') if "joinedDateText" in info else "",
-            "video_count": info["videoCountText"].split(' ')[0] if "videoCountText" in info else "",
+            "url": "https://www.youtube.com/channel/" + info.get("channelId", ""),
+            "description": info.get("description", ""),
+            "country": info.get("country", ""),
+            "custom_url": info.get("canonicalChannelUrl", ""),
+            "subscribers": info.get("subscriberCountText", "").split(' ')[0] if info.get("subscriberCountText") else "",
+            "views": info.get("viewCountText", "").replace(' views', '') if info.get("viewCountText") else "",
+            "created_at": info.get("joinedDateText", {}).get("content", "").replace('Joined ', "") if info.get("joinedDateText") else "",
+            "video_count": info.get("videoCountText", "").split(' ')[0] if info.get("videoCountText") else "",
             "avatar": avatar,
             "banner": banner,
             "verified": bool(verified),
@@ -116,127 +108,49 @@ class Channel:
         }
 
     @property
-    def metadata(self) -> Optional[Dict[str, any]]:
-        """
-        Returns channel metadata in a dict format
-
-        Returns
-        -------
-        Dict
-            Channel metadata containing the following keys:
-            id, name, subscribers, views, country, custom_url, avatar, banner, url, description, socials etc.
-        """
+    def metadata(self):
         return self.__meta
 
     @property
-    def live(self) -> bool:
-        """
-        Checks if the channel is live
-
-        Returns
-        -------
-        bool
-            True if the channel is live
-        """
+    def live(self):
         return bool(self.current_streams)
 
     @property
-    def streaming_now(self) -> Optional[str]:
-        """
-        Fetches the id of currently streaming video
-
-        Returns
-        -------
-        str | None
-            The id of the currently streaming video or None
-        """
+    def streaming_now(self):
         streams = self.current_streams
         return streams[0] if streams else None
 
     @property
-    def current_streams(self) -> Optional[List[str]]:
-        """
-        Fetches the ids of all ongoing streams
-
-        Returns
-        -------
-        List[str] | None
-            The ids of all ongoing streams or None
-        """
+    def current_streams(self):
         raw = streams_data(self._target_url)
         filtered_ids = dup_filter(Patterns.stream_ids.findall(raw))
         if not filtered_ids:
             return None
-        return [id_ for id_ in filtered_ids if f"vi/{id_}/hqdefault_live.jpg" in raw]
+        return [id_ for id_ in filtered_ids if "vi/{}/hqdefault_live.jpg".format(id_) in raw]
 
     @property
-    def old_streams(self) -> Optional[List[str]]:
-        """
-        Fetches the ids of all old or completed streams
-
-        Returns
-        -------
-        List[str] | None
-            The ids of all old or completed streams or None
-        """
+    def old_streams(self):
         raw = streams_data(self._target_url)
         filtered_ids = dup_filter(Patterns.stream_ids.findall(raw))
         if not filtered_ids:
             return None
-        return [id_ for id_ in filtered_ids if f"vi/{id_}/hqdefault_live.jpg" not in raw]
+        return [id_ for id_ in filtered_ids if "vi/{}/hqdefault_live.jpg".format(id_) not in raw]
 
     @property
-    def last_streamed(self) -> Optional[str]:
-        """
-        Fetches the id of the last completed livestream
-
-        Returns
-        -------
-        str | None
-            The id of the last livestreamed video or None
-        """
+    def last_streamed(self):
         ids = self.old_streams
         return ids[0] if ids else None
-    
-    def uploads(self, limit: int = 20) -> Optional[List[str]]:
-        """
-        Fetches the ids of all uploaded videos
 
-        Parameters
-        ----------
-        limit : int
-            The number of videos to fetch, defaults to 20
-
-        Returns
-        -------
-        List[str] | None
-            The ids of uploaded videos or None
-        """
+    def uploads(self, limit=20):
         return dup_filter(Patterns.upload_ids.findall(uploads_data(self._target_url)), limit)
 
     @property
-    def last_uploaded(self) -> Optional[str]:
-        """
-        Fetches the id of the last uploaded video
-
-        Returns
-        -------
-        str | None
-            The id of the last uploaded video or None
-        """
+    def last_uploaded(self):
         ids = self.uploads()
         return ids[0] if ids else None
 
     @property
-    def upcoming(self) -> Optional[Video]:
-        """
-        Fetches the upcoming video
-
-        Returns
-        -------
-        Video | None
-            The upcoming video or None
-        """
+    def upcoming(self):
         raw = upcoming_videos(self._target_url)
         if not Patterns.upcoming_check.search(raw):
             return None
@@ -244,15 +158,7 @@ class Channel:
         return Video(upcoming[0]) if upcoming else None
 
     @property
-    def upcomings(self) -> Optional[List[str]]:
-        """
-        Fetches the upcoming videos
-
-        Returns
-        -------
-        List[str] | None
-            The ids of upcoming videos or None
-        """
+    def upcomings(self):
         raw = upcoming_videos(self._target_url)
         if not Patterns.upcoming_check.search(raw):
             return None
@@ -260,13 +166,5 @@ class Channel:
         return video_ids
 
     @property
-    def playlists(self) -> Optional[List[str]]:
-        """
-        Fetches the ids of all playlists
-
-        Returns
-        -------
-        List[str] | None
-            The ids of all playlists or None
-        """
+    def playlists(self):
         return dup_filter(Patterns.playlists.findall(channel_playlists(self._target_url)))
