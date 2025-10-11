@@ -92,7 +92,17 @@ class radioAPIHandler:
 
         # sort list of names
         hosts.sort()
-        self.baseurl = "http://" + hosts[0] + "/json"
+        for host in hosts:
+            self.baseurl = "https://" + host + "/json"
+            try:
+                request = urlReq(self.baseurl)
+                request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
+                response = urlOpn(request)
+                response.read()
+                response.close()
+                break
+            except Exception:
+                continue
 
         return None
 
