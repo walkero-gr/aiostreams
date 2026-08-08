@@ -21,3 +21,22 @@ vPlayerArgs = "-quiet -really-quiet -forceidx -framedrop -cache 8192"
 sPlayer = "APPDIR:ffplay"
 # Set the arguments that are going to be used with your preffered streaming player.
 sPlayerArgs = "-loglevel quiet -infbuf -skip_loop_filter all -skip_frame noref"
+
+
+vPlayer = "/usr/bin/mpv"
+vPlayerArgs = ""
+
+sPlayer = vPlayer
+sPlayerArgs = vPlayerArgs
+
+aPlayer = vPlayer
+aPlayerArgs = "--no-video"
+
+
+
+vPlayer = "/usr/bin/vlc"
+vPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+sPlayer = "/usr/bin/vlc"
+sPlayerArgs = "-f --no-video-title-show 2> /dev/null"
+aPlayer = "/usr/bin/vlc"
+aPlayerArgs = "-f --no-video-title-show 2> /dev/null"

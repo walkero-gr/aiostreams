@@ -7,22 +7,6 @@ pipeline {
 	}
 	
 	stages {
-		stage('check-workspace') {
-			steps {
-				script {
-					sh '''
-						echo "=== Workspace location and contents ==="
-						pwd
-						ls -la
-						echo ""
-						echo "=== Git info ==="
-						git status
-						git log --oneline -5
-					'''
-				}
-			}
-		}
-
 		stage('test-release-aiostreams') {
 			when {
 				allOf {
@@ -33,7 +17,10 @@ pipeline {
 			steps {
 				script {
 					sh '''
+						echo "Creating aiostreams directory..."
 						mkdir -p aiostreams
+						
+						echo "Moving files..."
 						mv ./docs ./aiostreams/
 						mv ./simplejson ./aiostreams/
 						mv ./opentube ./aiostreams/
@@ -42,10 +29,19 @@ pipeline {
 						mv ./*.info ./aiostreams/
 						mv ./*.md ./aiostreams/docs/
 						mv LICENSE ./aiostreams/docs/
-						sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
+						
+						echo "Running sed commands..."
+						sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
 						sed -i "s/VERSION_TAG/TEST/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
-						lha -aq2o6 aiostreams-TEST.lha aiostreams/
+						
+						echo "Creating LHA archive with Docker..."
+						docker run --rm -v ${WORKSPACE}/aiostreams:/aiostreams -v ${WORKSPACE}:/output -w /output ${DOCKER_IMAGE} bash -c "lha -aq2o6 aiostreams-TEST.lha /aiostreams/"
+						
+						echo "Setting permissions..."
 						chmod 777 aiostreams-TEST.lha
+						
+						echo "Archive created successfully!"
+						ls -lh aiostreams-TEST.lha
 					'''
 				}
 			}
@@ -64,7 +60,10 @@ pipeline {
 				script {
 					echo "Creating release archive for tag: ${TAG_NAME}"
 					sh '''
+						echo "Creating aiostreams directory..."
 						mkdir -p aiostreams
+						
+						echo "Moving files..."
 						mv ./docs ./aiostreams/
 						mv ./simplejson ./aiostreams/
 						mv ./opentube ./aiostreams/
@@ -73,10 +72,19 @@ pipeline {
 						mv ./*.info ./aiostreams/
 						cp ./*.md ./aiostreams/docs/
 						mv LICENSE ./aiostreams/docs/
-						sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
+						
+						echo "Running sed commands..."
+						sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
 						sed -i "s/VERSION_TAG/${TAG_NAME}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
-						lha -aq2o6 aiostreams-${TAG_NAME}.lha aiostreams/
+						
+						echo "Creating LHA archive with Docker..."
+						docker run --rm -v ${WORKSPACE}/aiostreams:/aiostreams -v ${WORKSPACE}:/output -w /output ${DOCKER_IMAGE} bash -c "lha -aq2o6 aiostreams-${TAG_NAME}.lha /aiostreams/"
+						
+						echo "Setting permissions..."
 						chmod 777 aiostreams-${TAG_NAME}.lha
+						
+						echo "Archive created successfully!"
+						ls -lh aiostreams-${TAG_NAME}.lha
 					'''
 				}
 			}
