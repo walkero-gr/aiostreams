@@ -9,8 +9,9 @@ pipeline {
 	stages {
 		stage('test-release-aiostreams') {
 			when {
-				expression {
-					return env.BRANCH_NAME == 'master' && !env.TAG_NAME
+				allOf {
+					branch 'master'
+					not { buildingTag() }
 				}
 			}
 			steps {
