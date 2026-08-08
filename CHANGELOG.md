@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 - Added dns lookup in the radio script to find the active servers urls
 - Added opentube library, that is used to search for videos using the YouTube Public Data without YouTubeAPI
 
+### Fixed
+- Fixed the dailymotion script
+
 ## [v1.7.8] - 2025-04-19
 
 ### Changed
