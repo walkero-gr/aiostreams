@@ -4,19 +4,53 @@ import cfg, cmn, vqw
 import sys, argparse, re, os
 import myurlparse as urlparse
 import simplejson as json
-import aiotube as aiotube
+import opentube as opentube
 from datetime import datetime, timedelta
+import threading
+
+if sys.version_info[0] == 2:
+    from Queue import Queue
+else:
+    from queue import Queue
 
 if sys.version_info[0] == 2:
     import urllib
     import urllib2
     from urllib2 import Request as urlReq, urlopen as urlOpn, URLError
+    
+    def safe_unicode(s):
+        """Safely convert to unicode for Python 2"""
+        if isinstance(s, str):
+            try:
+                return s.decode('utf-8')
+            except (UnicodeDecodeError, AttributeError):
+                return s
+        return unicode(s) if not isinstance(s, unicode) else s
+    
+    def safe_print(s):
+        """Safely print unicode strings in Python 2"""
+        if isinstance(s, unicode):
+            try:
+                # Python 2.6+ supports errors parameter
+                s = s.encode('utf-8', 'replace')
+            except TypeError:
+                # Python 2.5 doesn't support errors as keyword argument
+                s = s.encode('utf-8')
+        return s
 
 if sys.version_info[0] == 3:
     import urllib.parse as urllib
     import urllib3
     from urllib.request import Request as urlReq, urlopen as urlOpn
     from urllib.error import URLError
+    
+    def safe_unicode(s):
+        """Python 3: just convert to string"""
+        return str(s)
+    
+    def safe_print(s):
+        """Python 3: just convert to string"""
+        return str(s)
 
 cmnHandler = cmn.cmnHandler()
 
@@ -238,6 +272,102 @@ class aiostreamsapiHandler:
             print ('Key error: Please contact the developer.')
             sys.exit()
 
+def _thread_is_alive(thread):
+    """Compatibility function for thread.isAlive() / thread.is_alive()"""
+    if hasattr(thread, 'is_alive'):
+        return thread.is_alive()
+    else:
+        return thread.isAlive()
+
+class VideoMetadataFetcher:
+    """Parallel fetcher for video metadata using threading pool"""
+    def __init__(self, max_workers=4):
+        self.max_workers = max_workers
+        self.results = {}
+        self.lock = threading.Lock()
+        self.completed_count = 0
+        self.total_count = 0
+    
+    def fetch_video_data(self, video_id, include_channel=True):
+        """Fetch video metadata (and optionally channel info) for a single video"""
+        try:
+            video = opentube.Video(video_id)
+            data = {
+                'id': video_id,
+                'url': safe_unicode(video.url),
+                'title': safe_unicode(video.title),
+                'views': safe_unicode(video.views),
+                'published': safe_unicode(video.published),
+                'duration_ms': video.duration_ms,
+                'channelTitle': None
+            }
+            
+            # Fetch channel info only if requested
+            if include_channel:
+                try:
+                    channel = opentube.Channel(video.owner['id'])
+                    data['channelTitle'] = safe_unicode(channel.metadata['name'])
+                except Exception:
+                    data['channelTitle'] = 'Unknown'
+            
+            sys.stdout.flush()
+            
+            self.lock.acquire()
+            try:
+                self.results[video_id] = data
+                self.completed_count += 1
+                # Show progress
+                sys.stdout.write('.')
+                sys.stdout.flush()
+            finally:
+                self.lock.release()
+            return data
+        except Exception:
+            _, e, _ = sys.exc_info()
+            self.lock.acquire()
+            try:
+                self.results[video_id] = {'error': str(e), 'id': video_id}
+                self.completed_count += 1
+                # Show progress (X for error)
+                sys.stdout.write('X')
+                sys.stdout.flush()
+            finally:
+                self.lock.release()
+            return None
+    
+    def fetch_all(self, video_ids, include_channel=True):
+        """Fetch metadata for multiple videos in parallel"""
+        self.completed_count = 0
+        self.total_count = len(video_ids)
+        sys.stdout.write('Fetching video data: ')
+        sys.stdout.flush()
+        threads = []
+        # Limit number of concurrent threads
+        for i, video_id in enumerate(video_ids):
+            # Wait for a slot if we're at max workers
+            while len([t for t in threads if _thread_is_alive(t)]) >= self.max_workers:
+                for t in threads:
+                    if _thread_is_alive(t):
+                        t.join(timeout=0.1)
+            
+            t = threading.Thread(
+                target=self.fetch_video_data,
+                args=(video_id, include_channel)
+            )
+            t.daemon = True
+            t.start()
+            threads.append(t)
+        
+        # Wait for all threads to complete
+        for t in threads:
+            t.join()
+        
+        sys.stdout.write(' Done!\n')
+        sys.stdout.flush()
+        
+        # Return results in original order
+        return [self.results.get(vid) for vid in video_ids if vid in self.results]
+
 class helpersHandler:
     def parseURL(self, url):
         try:
@@ -365,43 +495,48 @@ def main(argv):
     if (args.searchvideo):
         searchQuery = args.searchvideo
 
-        result = aiotube.Search.videos(searchQuery)
+        result = opentube.Search.videos(searchQuery)
         if len(result) > 0:
             if args.extrainfo:
-                print ("%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % ('URL', 'Views', 'Channel', 'Date', 'Duration', 'Title'))
+                print (safe_print("%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % ('URL', 'Views', 'Channel', 'Date', 'Duration', 'Title')))
                 print ("%s" % ('-'*200))
             else:
-                print ("%-40s\t %-8s\t %s" % ('URL', 'Duration', 'Title'))
+                print (safe_print("%-40s\t %-8s\t %s" % ('URL', 'Duration', 'Title')))
                 print ("%s" % ('-'*120))
-                
-            videosDict = dict()
-            videoIds = []
-            for id in result:
-                video = aiotube.Video(id)
-                channel = aiotube.Channel(video.metadata['author_id'])
-
-                videoId = id
-                videosDict[videoId] = dict()
-                videosDict[videoId]['url'] = video.metadata['url']
-                videosDict[videoId]['title'] = video.metadata['title']
-                videosDict[videoId]['channelTitle'] = cmnHandler.uniStrip(channel.metadata['name'])
-                videosDict[videoId]['publishedAt'] = helpers.parseDate(video.metadata['upload_date'])
-                videosDict[videoId]['viewCount'] = video.metadata['views']
-                videosDict[videoId]['duration'] = helpers.parseDuration(video.metadata['duration'])
-                if args.extrainfo:
-                    print (
-                        "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % (
-                            videosDict[videoId]['url'],
-                            videosDict[videoId]['viewCount'],
-                            videosDict[videoId]['channelTitle'],
-                            videosDict[videoId]['publishedAt'].date(),
-                            videosDict[videoId]['duration'],
-                            videosDict[videoId]['title']
-                        ))
-                else:
-                    print ("%-40s\t %-8s\t %s" % (videosDict[videoId]['url'], videosDict[videoId]['duration'], videosDict[videoId]['title']))
+            
+            # Use parallel fetcher for better performance
+            fetcher = VideoMetadataFetcher(max_workers=4)
+            # Only fetch channel info if extra info is requested
+            videos_data = fetcher.fetch_all(result, include_channel=args.extrainfo)
+            
+            for video_data in videos_data:
+                if video_data is None or 'error' in video_data:
+                    continue
+                try:
+                    duration_str = helpers.parseDuration(video_data['duration_ms'] / 1000.0)
+                    
+                    if args.extrainfo:
+                        channel_title = video_data.get('channelTitle', 'Unknown')
+                        output = "%-40s\t %-8s\t %-24s\t %-16s\t %-8s\t %s" % (
+                            video_data['url'],
+                            video_data['views'],
+                            channel_title[:24],  # Truncate to fit
+                            video_data['published'][:16],  # Truncate to fit
+                            duration_str,
+                            video_data['title'][:100]  # Truncate long titles
+                        )
+                    else:
+                        output = "%-40s\t %-8s\t %s" % (
+                            video_data['url'],
+                            duration_str,
+                            video_data['title'][:100]
+                        )
+                    
+                    print (safe_print(output))
+                except Exception, e:
+                    continue
         else:
-            print ("No videos found based on the search query: %s" % (searchQuery))
+            print (safe_print("No videos found based on the search query: %s" % (searchQuery)))
         sys.exit()
 
     ############################################################

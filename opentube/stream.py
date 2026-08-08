@@ -1,5 +1,4 @@
 import re
-from typing import Any, Dict
 
 from .https import video_data
 from .patterns import _VideoPatterns as Patterns
@@ -10,8 +9,8 @@ class Video:
 
     _HEAD = "https://www.youtube.com/watch?v="
 
-    def __init__(self, video_id: str):
-        pattern = re.compile(".be/(.*?)$|=(.*?)$|^(\w{11})$")  # noqa
+    def __init__(self, video_id):
+        pattern = re.compile(r".be/(.*?)$|=(.*?)$|^(\w{11})$")  # noqa
         self._matched_id = (
             pattern.search(video_id).group(1)
             or pattern.search(video_id).group(2)
@@ -24,10 +23,10 @@ class Video:
             raise ValueError("invalid video id or url")
 
     def __repr__(self):
-        return f"<Video {self._url}>"
+        return '<Video %s>' % self._url
 
     @property
-    def metadata(self) -> Dict[str, Any]:
+    def metadata(self):
         patterns = [
             Patterns.title,
             Patterns.views,

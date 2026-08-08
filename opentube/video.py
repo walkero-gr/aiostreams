@@ -1,6 +1,8 @@
-import json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 import re
-from typing import Any, Dict, List, Optional
 
 from .https import video_data
 from .utils import extract_initial_data
@@ -11,7 +13,7 @@ class Video:
 
     _HEAD = "https://www.youtube.com/watch?v="
 
-    def __init__(self, id: str):
+    def __init__(self, id):
         """
         Represents a YouTube video.
 
@@ -45,10 +47,10 @@ class Video:
             raise ValueError("Invalid video id or url.")
 
     def __repr__(self):
-        return f"<Video {self._url}>"
+        return '<Video %s>' % self._url
 
     @property
-    def url(self) -> str:
+    def url(self):
         """
         Returns the url of the video.
 
@@ -58,7 +60,7 @@ class Video:
         return self._url
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self):
         """
         Returns the title of the video.
 
@@ -72,7 +74,7 @@ class Video:
         return None
 
     @property
-    def description(self) -> Optional[str]:
+    def description(self):
         """
         Returns the description of the video.
 
@@ -84,17 +86,17 @@ class Video:
         return None
 
     @property
-    def thumbnail(self) -> str:
+    def thumbnail(self):
         """
         Returns the thumbnail of the video.
 
         Returns:
             str: Thumbnail of the video.
         """
-        return f"https://i.ytimg.com/vi/{self._matched_id}/maxresdefault.jpg"
+        return 'https://i.ytimg.com/vi/%s/maxresdefault.jpg' % self._matched_id
 
     @property
-    def views(self) -> str:
+    def views(self):
         """
         Returns the view count of the video.
 
@@ -113,7 +115,7 @@ class Video:
         )
 
     @property
-    def published(self) -> str:
+    def published(self):
         """
         Returns the date of publication of the video.
 
@@ -123,7 +125,7 @@ class Video:
         return self._primary_info["dateText"]["simpleText"]
 
     @property
-    def likes(self) -> Optional[str]:
+    def likes(self):
         """
         Returns the likes count of the video.
 
@@ -142,7 +144,7 @@ class Video:
         return None
 
     @property
-    def owner(self) -> Optional[Dict[str, Any]]:
+    def owner(self):
         """
         Returns the details such as, id, title, avatars, subscribers of the owner of the video.
 
@@ -165,7 +167,7 @@ class Video:
         }
 
     @property
-    def duration_ms(self) -> int:
+    def duration_ms(self):
         """
         Returns the approximate duration of the video in milliseconds.
 
@@ -176,7 +178,7 @@ class Video:
         return int(matched.group(1).strip('"'))  # noqa
 
     @property
-    def genre(self) -> Optional[str]:
+    def genre(self):
         """
         Returns the genre of the video.
 
@@ -189,7 +191,7 @@ class Video:
         return None
 
     @property
-    def keywords(self) -> Optional[List[str]]:
+    def keywords(self):
         """
         Returns the keywords of the video.
 
@@ -202,7 +204,7 @@ class Video:
         return None
 
     @property
-    def livestream(self) -> bool:
+    def livestream(self):
         """
         Returns whether the video is a livestream or not.
 
@@ -215,7 +217,7 @@ class Video:
         return False
 
     @property
-    def watermark(self) -> Optional[str]:
+    def watermark(self):
         """
         Returns the watermark image url of the video.
 

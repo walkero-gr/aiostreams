@@ -10,7 +10,7 @@ __version__ = "1.7.4"
 __url__ = "https://github.com/jnsougata/opentube"
 
 from .channel import Channel
-from .errors import *
+from .errors import TooManyRequests, InvalidURL, RequestError
 from .extras import Extras
 from .playlist import Playlist
 from .query import Search

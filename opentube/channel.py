@@ -1,6 +1,4 @@
 import re
-from typing import Any, Dict, List, Optional
-
 from .https import (
     channel_about,
     channel_playlists,
@@ -19,7 +17,7 @@ class Channel:
     _CUSTOM = "https://www.youtube.com/c/"
     _USER = "https://www.youtube.com/"
 
-    def __init__(self, channel_id: str):
+    def __init__(self, channel_id):
         """
         Represents a YouTube channel.
 
@@ -66,7 +64,7 @@ class Channel:
         ]
 
     @property
-    def id(self) -> str:
+    def id(self):
         """
         Returns the unique id of the channel.
 
@@ -76,7 +74,7 @@ class Channel:
         return self.__meta["externalId"]
 
     @property
-    def name(self) -> str:
+    def name(self):
         """
         Returns the name of the channel.
 
@@ -86,7 +84,7 @@ class Channel:
         return self.__meta["title"]
 
     @property
-    def description(self) -> str:
+    def description(self):
         """
         Returns the description of the channel.
 
@@ -96,7 +94,7 @@ class Channel:
         return self.__detailed_meta["description"]
 
     @property
-    def subscribers(self) -> str:
+    def subscribers(self):
         """
         Returns the subscriber count of the channel.
 
@@ -106,7 +104,7 @@ class Channel:
         return self.__detailed_meta["subscriberCountText"].split(" ")[0]
 
     @property
-    def views(self) -> str:
+    def views(self):
         """
         Returns the total number of views the channel got across all videos.
 
@@ -118,7 +116,7 @@ class Channel:
         )
 
     @property
-    def country(self) -> Optional[str]:
+    def country(self):
         """
         Returns the country of the channel if available.
 
@@ -128,7 +126,7 @@ class Channel:
         return self.__detailed_meta.get("country")
 
     @property
-    def url(self) -> str:
+    def url(self):
         """
         Returns the url of the channel.
 
@@ -138,7 +136,7 @@ class Channel:
         return "https://www.youtube.com/channel/" + self.__meta["externalId"]
 
     @property
-    def avatars(self) -> List[Dict[str, Any]]:
+    def avatars(self):
         """
         Returns the avatars of the channel in different resolutions.
 
@@ -167,7 +165,7 @@ class Channel:
         ]
 
     @property
-    def banners(self) -> List[Dict[str, Any]]:
+    def banners(self):
         """
         Returns the banners of the channel in different resolutions.
 
@@ -185,7 +183,7 @@ class Channel:
         ]
 
     @property
-    def rss_url(self) -> str:
+    def rss_url(self):
         """
         Returns the rss url of the channel.
 
@@ -195,7 +193,7 @@ class Channel:
         return self.__meta["rssUrl"]
 
     @property
-    def video_count(self) -> int:
+    def video_count(self):
         """
         Returns the total number of videos uploaded in the channel.
 
@@ -207,7 +205,7 @@ class Channel:
         )
 
     @property
-    def custom_url(self) -> str:
+    def custom_url(self):
         """
         Returns the user created custom url of the channel.
 
@@ -217,7 +215,7 @@ class Channel:
         return self.__detailed_meta["canonicalChannelUrl"]
 
     @property
-    def creation_date(self) -> str:
+    def creation_date(self):
         """
         Returns the date of creation of the channel.
 
@@ -227,7 +225,7 @@ class Channel:
         return self.__detailed_meta["joinedDateText"]["content"].replace("Joined ", "")
 
     @property
-    def socials(self) -> List[str]:
+    def socials(self):
         """
         Returns the socials of the channel.
 
@@ -240,7 +238,7 @@ class Channel:
         ]
 
     @property
-    def keywords(self) -> List[str]:
+    def keywords(self):
         """
         Returns the keywords of the channel.
 
@@ -250,7 +248,7 @@ class Channel:
         return self.__obj["microformat"]["microformatDataRenderer"]["tags"]
 
     @property
-    def family_safe(self) -> bool:
+    def family_safe(self):
         """
         Returns whether the channel is marked as family safe.
 
@@ -260,7 +258,7 @@ class Channel:
         return self.__meta["isFamilySafe"]
 
     @property
-    def available_country_codes(self) -> List[str]:
+    def available_country_codes(self):
         """
         Returns the list of country codes where the channel is available.
 
@@ -270,7 +268,7 @@ class Channel:
         return self.__meta["availableCountryCodes"]
 
     @property
-    def verified(self) -> bool:
+    def verified(self):
         """
         Returns whether the channel is verified by YouTube.
 
@@ -283,7 +281,7 @@ class Channel:
         )
 
     @property
-    def live(self) -> bool:
+    def live(self):
         """
         Returns whether the channel is currently livestreaming.
 
@@ -315,7 +313,7 @@ class Channel:
         return "'text': {'runs': [{'text': 'LIVE'}]" in str(self.__obj)
 
     @property
-    def metadata(self) -> Dict[str, Any]:
+    def metadata(self):
         """
         Returns channel metadata in a python dictionary format.
 
@@ -345,7 +343,7 @@ class Channel:
         }
 
     @property
-    def streaming_now(self) -> Optional[List[str]]:
+    def streaming_now(self):
         """
         Fetches the ids of all ongoing livestreams.
 
@@ -359,11 +357,11 @@ class Channel:
         return [
             id_
             for id_ in filtered_ids
-            if f"vi/{id_}/hqdefault_live.jpg" in streams_data(raw)
+            if 'vi/%s/hqdefault_live.jpg' % id_ in streams_data(raw)
         ]
 
     @property
-    def old_streams(self) -> Optional[List[str]]:
+    def old_streams(self):
         """
         Fetches the ids of all old or completed livestreams.
 
@@ -375,11 +373,11 @@ class Channel:
         if not filtered_ids:
             return None
         return [
-            id_ for id_ in filtered_ids if f"vi/{id_}/hqdefault_live.jpg" not in raw
+            id_ for id_ in filtered_ids if 'vi/%s/hqdefault_live.jpg' % id_ not in raw
         ]
 
     @property
-    def last_streamed(self) -> Optional[str]:
+    def last_streamed(self):
         """
         Fetches the id of the last completed livestream.
 
@@ -389,7 +387,7 @@ class Channel:
         ids = self.old_streams
         return ids[0] if ids else None
 
-    def shorts(self) -> Optional[Dict[str, Any]]:
+    def shorts(self):
         """
         Fetches uploaded shorts and their basic metadata.
 
@@ -423,7 +421,7 @@ class Channel:
             }
         return data
 
-    def videos(self) -> Optional[Dict[str, Any]]:
+    def videos(self):
         """
         Fetches upto 30 uploaded videos and their basic metadata.
 
@@ -462,7 +460,7 @@ class Channel:
         return data
 
     @property
-    def last_uploaded(self) -> Optional[Dict[str, Any]]:
+    def last_uploaded(self):
         """
         Fetches the id of the last uploaded video.
 
@@ -474,7 +472,7 @@ class Channel:
         return list(videos.values())[0] if videos else None
 
     @property
-    def upcoming(self) -> Optional[List[str]]:
+    def upcoming(self):
         """
         Fetches the upcoming scheduled videos.
 
@@ -488,7 +486,7 @@ class Channel:
         return video_ids
 
     @staticmethod
-    def __format_playlist_data(raw: Dict[str, Any]):
+    def __format_playlist_data(raw):
         """
         Internal method to format the playlist data from the raw response.
         """
@@ -520,7 +518,7 @@ class Channel:
             "url": "https://www.youtube.com/playlist?list=" + model["contentId"],
         }
 
-    def playlists(self) -> Optional[List[Dict[str, Any]]]:
+    def playlists(self):
         """
         Fetches the basic metadata of some public playlists.
 

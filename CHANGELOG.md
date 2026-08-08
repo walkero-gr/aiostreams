@@ -4,8 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [VERSION_TAG] - RELEASE_DATE
 ### Added
 - Added dns lookup in the radio script to find the active servers urls
-- Added aiotube library, that is used to search for videos using the
-  YouTube Public Data without YouTubeAPI
+- Added opentube library, that is used to search for videos using the YouTube Public Data without YouTubeAPI
 
 ## [v1.7.8] - 2025-04-19
 

@@ -1,16 +1,17 @@
 import re
-from typing import List
 
 from .https import request
 
 
-def _extract_og(prop: str, source: str):
-    matched = re.search(rf'<meta property="og:{prop}" content="(.*?)">', source)
+def _extract_og(prop, source):
+    matched = re.search('<meta property="og:%s" content="(.*?)">'
+                       % prop, source)
     return matched.group(1) if matched else None
 
 
-def _extract_itemprop(prop: str, source: str, tag: str = "meta"):
-    matched = re.search(rf'<{tag} itemprop="{prop}" content="(.*?)">', source)
+def _extract_itemprop(prop, source, tag='meta'):
+    matched = re.search('<%s itemprop="%s" content="(.*?)">'
+                       % (tag, prop), source)
     return matched.group(1) if matched else None
 
 
@@ -18,7 +19,7 @@ class Short:
     """
     Represents a YouTube Short video and provides methods to extract its metadata.
     """
-    def __init__(self, url: str):
+    def __init__(self, url):
         self.url = url
         self._html = request(self.url)
 
@@ -42,7 +43,7 @@ class Short:
         }
 
     @property
-    def title(self) -> str:
+    def title(self):
         """
         Returns the title of the short video.
 
@@ -52,7 +53,7 @@ class Short:
         return _extract_og("title", self._html)
 
     @property
-    def description(self) -> str:
+    def description(self):
         """
         Returns the description of the short video.
 
@@ -62,7 +63,7 @@ class Short:
         return _extract_og("description", self._html)
 
     @property
-    def thumbnail(self) -> str:
+    def thumbnail(self):
         """
         Returns the thumbnail of the short video.
 
@@ -72,7 +73,7 @@ class Short:
         return _extract_og("image", self._html)
 
     @property
-    def date(self) -> str:
+    def date(self):
         """
         Returns the date of publishing of the short video.
 
@@ -82,7 +83,7 @@ class Short:
         return _extract_itemprop("datePublished", self._html)
 
     @property
-    def regions_allowed(self) -> List[str]:
+    def regions_allowed(self):
         """
         Returns the regions allowed for the short video.
 
@@ -92,7 +93,7 @@ class Short:
         return _extract_itemprop("regionsAllowed", self._html).split(",")
 
     @property
-    def genre(self) -> str:
+    def genre(self):
         """
         Returns the genre of the short video.
 
@@ -102,7 +103,7 @@ class Short:
         return _extract_itemprop("genre", self._html)
 
     @property
-    def views(self) -> int:
+    def views(self):
         """
         Returns the view count of the short video.
 
@@ -113,7 +114,7 @@ class Short:
         return int(matched.group(1).replace(",", ""))
 
     @property
-    def likes(self) -> str:
+    def likes(self):
         """
         Returns the likes count of the short video.
 
