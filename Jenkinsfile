@@ -7,6 +7,22 @@ pipeline {
 	}
 	
 	stages {
+		stage('check-workspace') {
+			steps {
+				script {
+					sh '''
+						echo "=== Workspace location and contents ==="
+						pwd
+						ls -la
+						echo ""
+						echo "=== Git info ==="
+						git status
+						git log --oneline -5
+					'''
+				}
+			}
+		}
+
 		stage('test-release-aiostreams') {
 			when {
 				allOf {
@@ -17,23 +33,20 @@ pipeline {
 			steps {
 				script {
 					sh '''
-						docker run --rm -v ${WORKSPACE}:/workspace -w /workspace ${DOCKER_IMAGE} bash -c '
-							mkdir -p aiostreams
-							mv ./docs ./aiostreams/
-							mv ./simplejson ./aiostreams/
-							mv ./opentube ./aiostreams/
-							mv ./*.py ./aiostreams/
-							mv ./*.py.examples ./aiostreams/
-							mv ./*.info ./aiostreams/
-							mv ./*.md ./aiostreams/docs/
-							mv LICENSE ./aiostreams/docs/
-							sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
-							sed -i "s/VERSION_TAG/TEST/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
-							lha -aq2o6 aiostreams-TEST.lha aiostreams/
-							chmod 777 aiostreams-TEST.lha
-						'
+						mkdir -p aiostreams
+						mv ./docs ./aiostreams/
+						mv ./simplejson ./aiostreams/
+						mv ./opentube ./aiostreams/
+						mv ./*.py ./aiostreams/
+						mv ./*.py.examples ./aiostreams/
+						mv ./*.info ./aiostreams/
+						mv ./*.md ./aiostreams/docs/
+						mv LICENSE ./aiostreams/docs/
+						sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
+						sed -i "s/VERSION_TAG/TEST/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
+						lha -aq2o6 aiostreams-TEST.lha aiostreams/
+						chmod 777 aiostreams-TEST.lha
 					'''
-					sh 'ls -la ${WORKSPACE}/aiostreams-TEST.lha'
 				}
 			}
 			post {
@@ -51,23 +64,20 @@ pipeline {
 				script {
 					echo "Creating release archive for tag: ${TAG_NAME}"
 					sh '''
-						docker run --rm -v ${WORKSPACE}:/workspace -w /workspace ${DOCKER_IMAGE} bash -c '
-							mkdir -p aiostreams
-							mv ./docs ./aiostreams/
-							mv ./simplejson ./aiostreams/
-							mv ./opentube ./aiostreams/
-							mv ./*.py ./aiostreams/
-							mv ./*.py.examples ./aiostreams/
-							mv ./*.info ./aiostreams/
-							cp ./*.md ./aiostreams/docs/
-							mv LICENSE ./aiostreams/docs/
-							sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
-							sed -i "s/VERSION_TAG/${TAG_NAME}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
-							lha -aq2o6 aiostreams-${TAG_NAME}.lha aiostreams/
-							chmod 777 aiostreams-${TAG_NAME}.lha
-						'
+						mkdir -p aiostreams
+						mv ./docs ./aiostreams/
+						mv ./simplejson ./aiostreams/
+						mv ./opentube ./aiostreams/
+						mv ./*.py ./aiostreams/
+						mv ./*.py.examples ./aiostreams/
+						mv ./*.info ./aiostreams/
+						cp ./*.md ./aiostreams/docs/
+						mv LICENSE ./aiostreams/docs/
+						sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
+						sed -i "s/VERSION_TAG/${TAG_NAME}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
+						lha -aq2o6 aiostreams-${TAG_NAME}.lha aiostreams/
+						chmod 777 aiostreams-${TAG_NAME}.lha
 					'''
-					sh 'ls -la ${WORKSPACE}/aiostreams-${TAG_NAME}.lha'
 				}
 			}
 		}
@@ -102,12 +112,10 @@ pipeline {
 				script {
 					echo "Preparing and uploading to Aminet"
 					sh '''
-						docker run --rm -v ${WORKSPACE}:/workspace -w /workspace ${DOCKER_IMAGE} bash -c '
-							mkdir -p aminet-release
-							cp aiostreams-${TAG_NAME}.lha ./aminet-release/aiostreams.lha
-							cp aminet.readme ./aminet-release/aiostreams.readme
-							chmod 777 -R aminet-release/
-						'
+						mkdir -p aminet-release
+						cp aiostreams-${TAG_NAME}.lha ./aminet-release/aiostreams.lha
+						cp aminet.readme ./aminet-release/aiostreams.readme
+						chmod 777 -R aminet-release/
 					'''
 					ftpPublisher(
 						continueOnError: false,
@@ -146,15 +154,11 @@ pipeline {
 				script {
 					echo "Preparing and uploading to OS4Depot"
 					sh '''
-						docker run --rm -v ${WORKSPACE}:/workspace -w /workspace \
-							-e OS4DEPOT_PASSPHRASE=${OS4DEPOT_PASSPHRASE} \
-							${DOCKER_IMAGE} bash -c '
-							mkdir -p os4depot-release
-							cp aiostreams-${TAG_NAME}.lha ./os4depot-release/aiostreams.lha
-							cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
-							sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
-							chmod 777 -R os4depot-release/
-						'
+						mkdir -p os4depot-release
+						cp aiostreams-${TAG_NAME}.lha ./os4depot-release/aiostreams.lha
+						cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
+						sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
+						chmod 777 -R os4depot-release/
 					'''
 					ftpPublisher(
 						continueOnError: false,
