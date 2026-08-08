@@ -7,16 +7,6 @@ pipeline {
 	}
 	
 	stages {
-		stage('debug-info') {
-			steps {
-				script {
-					echo "BRANCH_NAME: ${env.BRANCH_NAME}"
-					echo "TAG_NAME: ${env.TAG_NAME}"
-					echo "BUILD_NUMBER: ${env.BUILD_NUMBER}"
-				}
-			}
-		}
-
 		stage('test-release-aiostreams') {
 			when {
 				allOf {
@@ -40,8 +30,10 @@ pipeline {
 							sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
 							sed -i "s/VERSION_TAG/TEST/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
 							lha -aq2o6 aiostreams-TEST.lha aiostreams/
+							chmod 777 aiostreams-TEST.lha
 						'
 					'''
+					sh 'ls -la ${WORKSPACE}/aiostreams-TEST.lha'
 				}
 			}
 			post {
@@ -72,8 +64,10 @@ pipeline {
 							sed -i "s/RELEASE_DATE/$(date +'"'"'%Y-%m-%d'"'"')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
 							sed -i "s/VERSION_TAG/${TAG_NAME}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
 							lha -aq2o6 aiostreams-${TAG_NAME}.lha aiostreams/
+							chmod 777 aiostreams-${TAG_NAME}.lha
 						'
 					'''
+					sh 'ls -la ${WORKSPACE}/aiostreams-${TAG_NAME}.lha'
 				}
 			}
 		}
@@ -112,6 +106,7 @@ pipeline {
 							mkdir -p aminet-release
 							cp aiostreams-${TAG_NAME}.lha ./aminet-release/aiostreams.lha
 							cp aminet.readme ./aminet-release/aiostreams.readme
+							chmod 777 -R aminet-release/
 						'
 					'''
 					ftpPublisher(
@@ -158,6 +153,7 @@ pipeline {
 							cp aiostreams-${TAG_NAME}.lha ./os4depot-release/aiostreams.lha
 							cp os4depot.readme ./os4depot-release/aiostreams_lha.readme
 							sed -i "s/OS4DEPOT_PASSPHRASE/$OS4DEPOT_PASSPHRASE/" ./os4depot-release/aiostreams_lha.readme
+							chmod 777 -R os4depot-release/
 						'
 					'''
 					ftpPublisher(
