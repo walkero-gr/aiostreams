@@ -125,13 +125,9 @@ pipeline {
                                     [
                                         sourceFiles: 'aminet-release/**',
                                         removePrefix: 'aminet-release/',
-                                        remoteDirectory: './new',
+                                        remoteDirectory: '/new',
                                         noDefaultExcludes: false,
-                                        makeNeeded: true,
-                                        patternsToExclude: '',
-                                        cleanRemote: false,
-                                        transferSet: true,
-                                        asciiMode: false
+                                        flatten: false
                                     ]
                                 ],
                                 usePromotionTimestamp: false,
@@ -168,13 +164,9 @@ pipeline {
                                     [
                                         sourceFiles: 'os4depot-release/**',
                                         removePrefix: 'os4depot-release/',
-                                        remoteDirectory: './upload',
+                                        remoteDirectory: '/upload',
                                         noDefaultExcludes: false,
-                                        makeNeeded: true,
-                                        patternsToExclude: '',
-                                        cleanRemote: false,
-                                        transferSet: true,
-                                        asciiMode: false
+                                        flatten: false
                                     ]
                                 ],
                                 usePromotionTimestamp: false,
