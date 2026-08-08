@@ -205,7 +205,7 @@ def main(argv):
                         )
                     
                     print (output)
-                except Exception as e:
+                except Exception, e:
                     continue
         else:
             print ("No videos found based on the search query: %s" % (searchQuery))
