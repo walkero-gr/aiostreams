@@ -13,6 +13,7 @@ steps:
     - mkdir aiostreams
     - mv ./docs ./aiostreams/
     - mv ./simplejson ./aiostreams/
+    - mv ./opentube ./aiostreams/
     - mv ./*.py ./aiostreams/
     - mv ./*.py.examples ./aiostreams/
     - mv ./*.info ./aiostreams/
@@ -68,6 +69,7 @@ steps:
     - mkdir aiostreams
     - mv ./docs ./aiostreams/
     - mv ./simplejson ./aiostreams/
+    - mv ./opentube ./aiostreams/
     - mv ./*.py ./aiostreams/
     - mv ./*.py.examples ./aiostreams/
     - mv ./*.info ./aiostreams/
