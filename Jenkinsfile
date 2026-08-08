@@ -7,6 +7,16 @@ pipeline {
 	}
 	
 	stages {
+		stage('debug-info') {
+			steps {
+				script {
+					echo "BRANCH_NAME: ${env.BRANCH_NAME}"
+					echo "TAG_NAME: ${env.TAG_NAME}"
+					echo "BUILD_NUMBER: ${env.BUILD_NUMBER}"
+				}
+			}
+		}
+
 		stage('test-release-aiostreams') {
 			when {
 				allOf {
