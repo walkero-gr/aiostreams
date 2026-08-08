@@ -1,46 +1,40 @@
 import sys
-from .utils import request
 
 if sys.version_info[0] == 2:
-    import urllib
-    import urllib2
-    quote = urllib.quote
-else:
+    from urllib import quote
+
+if sys.version_info[0] == 3:
     from urllib.parse import quote
 
+from .utils import request
+
+
 def channel_about(head):
-    return request(head + '/about')
-
-
-def video_count(channel_id):
-    head = 'https://www.youtube.com/results?search_query='
-    tail = '&sp=EgIQAg%253D%253D'
-    return request(head + channel_id + tail)
+    return request('%s/about' % head)
 
 
 def uploads_data(head):
-    url = head + '/videos'
-    return request(url)
+    return request('%s/videos' % head)
+
+
+def shorts_data(head):
+    return request('%s/shorts' % head)
 
 
 def streams_data(head):
-    url = head + '/streams'
-    return request(url)
+    return request('%s/streams' % head)
 
 
 def channel_playlists(head):
-    url = head + '/playlists'
-    return request(url)
+    return request('%s/playlists' % head)
 
 
 def upcoming_videos(head):
-    url = head + '/videos?view=2&live_view=502'
-    return request(url)
+    return request('%s/videos?view=2&live_view=502' % head)
 
 
 def video_data(video_id):
-    url = 'https://www.youtube.com/watch?v=' + video_id
-    return request(url)
+    return request('https://www.youtube.com/watch?v=%s' % video_id)
 
 
 def playlist_data(playlist_id):

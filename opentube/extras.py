@@ -1,14 +1,15 @@
 from .https import (
-    trending_videos,
-    trending_songs,
-    trending_games,
-    trending_feeds,
-    trending_streams,
     _get_trending_learning_videos,
-    trending_sports
+    trending_feeds,
+    trending_games,
+    trending_songs,
+    trending_sports,
+    trending_streams,
+    trending_videos,
 )
-from .utils import dup_filter
 from .patterns import _ExtraPatterns as Patterns
+from .utils import dup_filter
+
 
 class Extras:
 

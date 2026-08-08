@@ -1,10 +1,9 @@
 import re
-# from typing import Dict, Any
 
-from .pool import collect
-from .utils import dup_filter
 from .https import playlist_data
 from .patterns import _PlaylistPatterns as Patterns
+from .pool import collect
+from .utils import dup_filter
 
 
 class Playlist:
@@ -21,7 +20,7 @@ class Playlist:
         pattern = re.compile('=(.+?)$|^PL(.+?)$')
         match = pattern.search(playlist_id)
         if not match:
-            raise ValueError('Invalid playlist id: {playlist_id}')
+            raise ValueError('Invalid playlist id: %s' % playlist_id)
         if match.group(1):
             self.id = match.group(1)
         elif match.group(2):
@@ -29,7 +28,7 @@ class Playlist:
         self._playlist_data = playlist_data(self.id)
 
     def __repr__(self):
-        return '<Playlist {self.id}>'
+        return '<Playlist %s>' % self.id
 
     @property
     def metadata(self):
@@ -55,5 +54,5 @@ class Playlist:
             'name': data[0] if data else None,
             'video_count': data[1] if data else None,
             'thumbnail': data[2] if data else None,
-            'videos': dup_filter(ext[3])
+            'videos': dup_filter(ext[3]),
         }

@@ -1,19 +1,31 @@
 import sys
-from .errors import TooManyRequests, InvalidURL, RequestError
+import re
 
 if sys.version_info[0] == 2:
-    import urllib
     import urllib2
     from urllib2 import Request, urlopen, HTTPError
+    try:
+        import simplejson as json
+    except ImportError:
+        import json
 
 if sys.version_info[0] == 3:
-    import urllib.parse as urllib
-    import urllib3
+    import json
     from urllib.request import Request, urlopen
     from urllib.error import HTTPError
-    __all__ = ['dup_filter', 'request']
+
+from .errors import InvalidURL, RequestError, TooManyRequests
+
+__all__ = ['dup_filter', 'request', 'extract_initial_data']
+
 
 def request(url):
+    """
+    The base function for making a request with proper headers.
+
+    Args:
+        url (str): The url to make a request.
+    """
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -39,7 +51,15 @@ def request(url):
         _, e, _ = sys.exc_info()
         raise RequestError('%r' % e)
 
+
 def dup_filter(iterable, limit=None):
+    """
+    Utility function for filtering out duplicate items.
+
+    Args:
+        iterable (list): The list of items to filter.
+        limit (Optional[int]): The maximum number of items to return.
+    """
     if not iterable:
         return []
     lim = limit if limit else len(iterable)
@@ -56,3 +76,19 @@ def dup_filter(iterable, limit=None):
         return converted[:-len(converted) + lim]
     else:
         return converted
+
+
+def extract_initial_data(html):
+    """
+    Utility function for extracting the initial data from the HTML of a YouTube page.
+
+    Args:
+        html (str): The HTML of the YouTube page.
+    """
+    pattern = re.compile('ytInitialData = {(.+?)};')
+    results = pattern.finditer(html)
+    try:
+        item = next(results)
+    except (NameError, StopIteration):
+        item = results.next()
+    return json.loads('{' + item.group(1) + '}')
