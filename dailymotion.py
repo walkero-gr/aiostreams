@@ -32,6 +32,7 @@ class dailymotionAPIHandler:
 
     def getURL(self, url):
         request = urlReq(url)
+        request.add_header('User-Agent', cmnHandler.spoofAs('CHROME'))
         try:
             response = urlOpn(request)
             retData = response.read()
@@ -114,7 +115,6 @@ def main(argv):
         videoId = video['id']
         streams = dailymotionApi.getVideoInfoByID(videoId)
         qualities = streams['qualities']
-
         if (qualities):
             for idx in qualities:
                 if (idx == 'auto'):

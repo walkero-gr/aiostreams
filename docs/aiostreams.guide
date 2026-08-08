@@ -30,7 +30,6 @@ Some of these networks have a search API, and you can use them to find available
 @{tab}@{"Vimeo.com" LINK "Vimeo.com"}
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
 @{tab}@{"PeerTube" LINK "PeerTube"}
-@{tab}@{"Wasd.tv" LINK "Wasd.tv"}
 @{tab}@{"Radio" LINK "Radio"}
 @{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
@@ -128,7 +127,6 @@ You will also find a file named @{b}vqw.py@{ub}. There are the video qualities f
 * @{b}ytVQW:@{ub} Set the preffered sort of video qualities for the recorded videos from YouTube.com.
 * @{b}ytLiveVQW:@{ub} Set the preffered sort of video qualities for the Live videos from YouTube.com.
 * @{b}peertubeVQW:@{ub} Set the preffered sort of video qualities for the PeerTube instances.
-* @{b}wasdVQW:@{ub} Set the preffered sort of video qualities for the Wasd.tv network.
 
 @endnode
 @node "Usage" "Shell usage"
@@ -146,7 +144,6 @@ You can find usage information in the following sections, separated by network.
 @{"YouTube.com" LINK "YouTube.com"}
 @{"Dailymotion.com" LINK "Dailymotion.com"}
 @{"PeerTube" LINK "PeerTube"}
-@{"Wasd.tv" LINK "Wasd.tv"}
 @{"Radio" LINK "Radio"}
 @{lindent 3}
 The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
@@ -393,10 +390,11 @@ No private info is sent by this script to dailymotion.com.
 @{jleft}@{lindent 3}
 @{b}PeerTube@{ub}
 
-This script supports different @{"PeerTube" SYSTEM "c:URLOpen https://joinpeertube.org/"} instances websites. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports different @{"PeerTube" SYSTEM "c:URLOpen https://joinpeertube.org/"} instances websites. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. It also allows you to search for videos across multiple PeerTube instances using the @{"PeerSeek" SYSTEM "c:URLOpen https://peerseek.video"} search API.
 
 With this script you can: 
 * watch recorded videos
+* search for videos across multiple PeerTube instances
 * autoplay videos with ffplay, mplayer or other video players
 
 @{u}Shell parameters:@{uu}
@@ -406,8 +404,12 @@ With this script you can:
                         Set the preffered video quality. This is optional. If
                         not set or if it is not available the default quality
                         weight will be used.
+  -sv SEARCHVIDEO, --search-video SEARCHVIDEO
+                        Search videos based on description across multiple
+                        PeerTube instances using PeerSeek API
   -shh, --silence       If this is set, the script will not output anything,
                         except of errors.
+  -x, --extra-info      Show extra info in search results and video data
 
 @{u}Available video qualities:@{uu}
 At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
@@ -417,50 +419,17 @@ At the vqw.py file you can set the weighted sort of the preffered video qualitie
 Watch a recorded video, like below
 @{b}peertube.py -u https://peertube.co.uk/videos/watch/c9eefbff-4207-4947-8000-000f9856af11@{ub}
 
-@{u}Privacy:@{uu}
-No private info is sent by this script to PeerTube instances.
+Search for videos across multiple PeerTube instances. Include the search string in double quotes, like below:
+@{b}peertube.py -sv "blender"@{ub}
 
-@endnode
+Search for videos with extra information (date, channel, instance), like below:
+@{b}peertube.py -sv "python tutorial" -x@{ub}
 
-@node "wasd.tv" "wasd.tv"
-@prev "Usage"
-@{jleft}@{lindent 3}
-@{b}Wasd.tv@{ub}
-
-This script supports @{"wasd.tv" SYSTEM "c:URLOpen https://wasd.tv"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
-
-With this script you can: 
-* watch recorded videos
-* watch live stream
-* autoplay videos with ffplay, mplayer or other players
-
-@{u}Shell parameters:@{uu}
-  -h, --help            show this help message and exit
-  -u URL, --url URL     The video/channel url
-  -q QUALITY, --quality QUALITY
-                        Set the preffered video quality. This is optional. If
-                        not set or if it is not available the default quality
-                        weight will be used.
-  -tg, --top-games      Get a list of the current Top Games with live streams
-                        available, based on the number of viewers
-  -sg SEARCHGAME, --search-game SEARCHGAME
-                        Search for available streams based on game title/id
-  -shh, --silence       If this is set, the script will not output anything,
-                        except of errors.
-
-@{u}Available video qualities:@{uu}
-At the vqw.py file you can set the weighted sort of the preffered video qualities. This means that the first available will be served. You can override the first one with the parameter @{b}-q, --quality@{ub}, even if it exists in an other position in the list.
-
-@{lindent 3}
-@{u}Examples:@{uu}
-Watch a recorded video, like below
-@{b}wasd.py -u https://wasd.tv/channel/123456/videos/123456@{ub}
-
-Watch the live stream, like below
-@{b}wasd.py -u https://wasd.tv/channel/123456@{ub}
+Search for videos with silence mode (only output results), like below:
+@{b}peertube.py -sv "music" -shh@{ub}
 
 @{u}Privacy:@{uu}
-No private info is sent by this script to wasd.tv.
+No private info is sent by this script to PeerTube instances. When using the search feature, queries are sent to the PeerSeek API at https://peerseek.video, which is a federated search service for PeerTube videos.
 
 @endnode
 
@@ -547,10 +516,19 @@ If you have any websites that you would like to be supported, please contact me 
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
 
+v1.8.1
+* Added search functionality to PeerTube script using PeerSeek API
+* PeerTube script now allows searching videos across multiple instances
+* Added -sv/--search-video argument to PeerTube script
+* Added -x/--extra-info argument to PeerTube script to show additional metadata
+* Removed commented out debugging code from YouTube script
+
 v1.8.0
 * Added dns lookup in the radio script to find the active servers urls
 * Added opentube library, that is used to search for videos using the
   YouTube Public Data without YouTubeAPI
+* Removed the Wasd.tv script
+* Fixed the dailymotion script
 
 v1.7.8
 * Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
