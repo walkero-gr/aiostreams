@@ -73,6 +73,12 @@ class helpersHandler:
         return None
 
     def getPrefferedVideoURL(self, data):
+        print ("Available video qualities:")
+        print ("--------------------------")
+        for idx in data:
+            print ("- %s" % (idx['resolution']['label']))
+        print ("--------------------------")
+        
         for quality in vqw.peertubeVQW:
             for idx in data:
                 if (quality == idx['resolution']['label']):
@@ -115,7 +121,7 @@ def main(argv):
         peertubeApi.baseurl = helpers.getInstanceUrl(args.url)
         videoUuid = video['uuid']
         streams = peertubeApi.getVideoInfoByID(videoUuid)
-
+        print ("Video title: %s" % (streams['name']))
         if (streams):
             streamFiles = streams['files']
             if len(streamFiles) == 0:
@@ -123,7 +129,6 @@ def main(argv):
 
             if streamFiles:
                 uri = helpers.getPrefferedVideoURL(streamFiles)
-
                 if (uri):
                     if uri:
                         if cfg.verbose and (args.silence != True):
@@ -131,7 +136,9 @@ def main(argv):
                         if cfg.autoplay:
                             cmnHandler.videoAutoplay(uri, 'video')
                     else:
-                        print ("Not valid video found")
+                        print ("No valid video found")
+                else:
+                    print ("No valid video found")
             else:
                 print ("There is no video files available!")
 
