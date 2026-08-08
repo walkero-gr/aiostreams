@@ -4,6 +4,7 @@ pipeline {
     environment {
         OS4DEPOT_PASSPHRASE = credentials('AIOSTREAMS-OS4DEPOT-PASSPHRASE')
         DOCKER_IMAGE = "walkero/lha-on-docker"
+        GITHUB_TOKEN = credentials('github-access-token')
     }
     
     stages {
@@ -88,18 +89,15 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Deploying to GitHub Releases"
-                    step([
-                        $class: 'GitHubReleaseNotifier',
-                        repositoryOwner: 'walkero-gr',
-                        repositoryName: 'aiostreams',
-                        tagName: env.TAG_NAME,
-                        releaseName: env.TAG_NAME,
-                        releaseBody: "${TAG_NAME} release",
-                        draft: false,
-                        prerelease: false,
-                        asset: "aiostreams-${TAG_NAME}.lha"
-                    ])
+                    echo "Uploading to GitHub Release"
+                    sh '''
+                        echo "Uploading aiostreams-${TAG_NAME}.lha to release ${TAG_NAME}..."
+                        export GH_TOKEN="${GITHUB_TOKEN_PSW}"
+                        gh release upload ${TAG_NAME} ./aiostreams-${TAG_NAME}.lha \
+                            --repo walkero-gr/aiostreams \
+                            --clobber
+                        echo "File uploaded successfully!"
+                    '''
                 }
             }
         }
