@@ -1,5 +1,4 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/49a7aee132994189b80edd92e78db58b)](https://www.codacy.com/gh/walkero-gr/aiostreams/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=walkero-gr/aiostreams&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://drone-gh.intercube.gr/api/badges/walkero-gr/aiostreams/status.svg)](https://drone-gh.intercube.gr/walkero-gr/aiostreams)
 [![ko-fi](https://img.shields.io/badge/Buy%20me%20a%20Ko--fi-F16061?style=flat&logo=ko-fi&logoColor=white)](https://ko-fi.com/walkero)
 
 # aiostreams
