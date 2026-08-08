@@ -57,27 +57,26 @@ pipeline {
                     echo "Creating release archive for tag: ${TAG_NAME}"
                     sh '''
                         echo "Creating aiostreams directory..."
-                        mkdir -p aiostreams
-
+                        mkdir -p release/aiostreams
+                        
                         echo "Moving files..."
-                        mv ./docs ./aiostreams/
-                        mv ./simplejson ./aiostreams/
-                        mv ./opentube ./aiostreams/
-                        mv ./*.py ./aiostreams/
-                        mv ./*.py.examples ./aiostreams/
-                        mv ./*.info ./aiostreams/
-                        cp ./*.md ./aiostreams/docs/
-                        mv LICENSE ./aiostreams/docs/
-
+                        mv ./docs ./release/aiostreams/
+                        mv ./simplejson ./release/aiostreams/
+                        mv ./opentube ./release/aiostreams/
+                        mv ./*.py ./release/aiostreams/
+                        mv ./*.py.examples ./release/aiostreams/
+                        mv ./*.info ./release/aiostreams/
+                        cp ./*.md ./release/aiostreams/docs/
+                        mv LICENSE ./release/aiostreams/docs/
+                        
                         echo "Running sed commands..."
-                        sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py
-                        sed -i "s/VERSION_TAG/${TAG_NAME}/" ./aiostreams/docs/aiostreams.guide ./aiostreams/docs/CHANGELOG.md ./aiostreams/cmn.py ./aminet.readme ./os4depot.readme
+                        sed -i "s/RELEASE_DATE/$(date +'%Y-%m-%d')/" ./release/aiostreams/docs/aiostreams.guide ./release/aiostreams/docs/CHANGELOG.md ./release/aiostreams/cmn.py
+                        sed -i "s/VERSION_TAG/${TAG_NAME}/" ./release/aiostreams/docs/aiostreams.guide ./release/aiostreams/docs/CHANGELOG.md ./release/aiostreams/cmn.py ./aminet.readme ./os4depot.readme
 
-                        echo "Creating LHA archive with Docker..."
-                        docker run --rm -v ${WORKSPACE}/aiostreams:/aiostreams -v ${WORKSPACE}:/output -w /output ${DOCKER_IMAGE} bash -c "lha -aq2o6 aiostreams-${TAG_NAME}.lha /aiostreams/"
-
+                        echo "Creating LHA archive..."
+                        cd ./release && lha aq ../aiostreams-${TAG_NAME}.lha ./*
+                        
                         echo "Archive created successfully!"
-                        ls -lh aiostreams-${TAG_NAME}.lha
                     '''
                 }
             }
