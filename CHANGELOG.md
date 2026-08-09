@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [VERSION_TAG] - RELEASE_DATE
+
+### Fixed
+- Fixed the peertube script to play videos which seemed to have only audio files
+
+
+## [v1.8.0] - 2026-08-08
+
 ### Added
 - Added dns lookup in the radio script to find the active servers urls
 - Added opentube library, that is used to search for videos using the YouTube Public Data without YouTubeAPI
@@ -13,8 +20,6 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fixed the dailymotion script
-
-## [v1.7.8] - 2025-04-19
 
 ### Changed
 - Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk

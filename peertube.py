@@ -222,9 +222,7 @@ def main(argv):
         streams = peertubeApi.getVideoInfoByID(videoUuid)
         print ("Video title: %s" % (streams['name']))
         if (streams):
-            streamFiles = streams['files']
-            if len(streamFiles) == 0:
-                streamFiles = streams['streamingPlaylists'][0]['files']
+            streamFiles = streams['streamingPlaylists'][0]['files'] + streams['files']
 
             if streamFiles:
                 uri = helpers.getPrefferedVideoURL(streamFiles)
