@@ -15,20 +15,18 @@ All notable changes to this project will be documented in this file.
 - Added -sv/--search-video argument to PeerTube script
 - Added -x/--extra-info argument to PeerTube script to show additional metadata
 
-### Removed
-- Removed the Wasd.tv script
-
-### Fixed
-- Fixed the dailymotion script
-
 ### Changed
 - Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
 - Changed the youtube script to return an error message when the url is not compatible
 
 ### Fixed
+- Fixed the dailymotion script
 - Fixed the version string removing the double "vv"
 - Fixed the youtube script when searching for videos to not crash when the results
   do not have a videoid
+
+### Removed
+- Removed the Wasd.tv script
 
 ## [v1.7.7] - 2023-12-20
 

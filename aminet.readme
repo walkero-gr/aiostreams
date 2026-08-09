@@ -2,7 +2,7 @@ Short:        Stream video from major online platforms
 Uploader:     walkero@gmail.com (George Sokianos)
 Author:       walkero@gmail.com (George Sokianos)
 Type:         util/batch
-Version:      v1.7.8
+Version:      VERSION_TAG
 Architecture: generic
 Distribution: Aminet
 Requires:     dev/lang/Python_2.lha
@@ -34,7 +34,6 @@ Supported networks:
 * YouTube.com
 * Vimeo.com
 * Dailymotion.com
-* Wasd.tv
 * Peertube
 
 Requirements:
@@ -53,56 +52,29 @@ If you have any requests or you would like to report any problems you found,
 you can do that at:
 https://github.com/walkero-gr/aiostreams/issues
 
-You can find the todo list and the status of them at:
-https://github.com/walkero-gr/aiostreams/projects/1
-
 Help me persuade my wife that what I am doing matters
 -----------------------------------------------------------
 https://ko-fi.com/walkero
 
 Changelog
 -------------
-vv1.7.8
-* Added some extra info in the amigaguide file for the youtube script
-* Added pagination to youtube script with the new argument -p/--page
-* Updated the scripts to work with python3
-* Now the -x argument in youtube and twitch script prints out the extra info but
-  doesn't start the video playback
-* Removed the skaitv, lbry and dlive scripts as they are not working and they
-  need a rewrite
+VERSION_TAG
+* Fixed the peertube script to play videos which seemed to have only audio
+  files
 
-v1.7.5
-* Added -sc argument to the youtube script which can be used to search for
-  YouTube channels based on the given description. This returns a list of
-  channels titles and their feed URLs
-* Added support for https://yewtu.be invidious server in YouTube script
-* Fixed dlive script
-* Fixed peertube script
-* Fixed lbrytv script to support odysee.com videos as well
-* Fixed vimeo script
-
-v1.7.4
-* Did a fix in YouTube script to avoid SB videos. This was breaking the video
-  selection.
-* Fixed the video throttle in YouTube videos. So now the videos seem to play
-  smoothly.
-
-v1.7.3
-* Added a new argument on Youtube script, the -x, that enables extra info
-  on search results and videos
-* Updated the Twitch script to use AIO API to get all the data. AIO API
-  works with the latest Twitch API
-
-v1.7.2
-* A lot of changes to make YouTube work again. There were changes to vqw.py 
-  file, so first backup the one you use
-
-v1.7.1
-* Changes on skaitv script to use aiostreams api site
-* Added new radio script
-
-v1.7
-* Fixed skaitv live script
-* Removed Mixer.com script as it shut down
+v1.8.0
+* Added dns lookup in the radio script to find the active servers urls
+* Added opentube library, that is used to search for videos using the YouTube 
+  Public Data without YouTubeAPI
+* Added -sv/--search-video argument to PeerTube script
+* Added -x/--extra-info argument to PeerTube script to show additional metadata
+* Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
+* Changed the youtube script to return an error message when the url is not 
+  compatible
+* Fixed the dailymotion script
+* Fixed the version string removing the double "vv"
+* Fixed the youtube script when searching for videos to not crash when the
+  results do not have a videoid
+* Removed the Wasd.tv script
 
 Full changelog is included in the archive.

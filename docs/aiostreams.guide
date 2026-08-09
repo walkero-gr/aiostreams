@@ -31,7 +31,6 @@ Some of these networks have a search API, and you can use them to find available
 @{tab}@{"Dailymotion.com" LINK "Dailymotion.com"}
 @{tab}@{"PeerTube" LINK "PeerTube"}
 @{tab}@{"Radio" LINK "Radio"}
-@{"Todo List" LINK "Todo"}
 @{"Changelog" LINK "Changelog"}
 @{"Troubleshooting" LINK "Troubleshooting"}
 @{"Author" LINK "Author"}
@@ -493,42 +492,30 @@ No private info is sent by this script.
 
 @endnode
 
-@node "Todo" "Todo"
-@prev "Usage"
-@next "Changelog"
-@{jleft}@{lindent 3}
-@{b}Todo list@{ub}
-
-The todo list is something that might change a lot between the version releases. You can find the up to date todo list and the status of things I am working on, at:
-https://github.com/walkero-gr/aiostreams/projects/1 @{"open" SYSTEM "c:URLOpen https://github.com/walkero-gr/aiostreams/projects/1"}
-
-Many things, like:
-* AmigaOS 3 and AROS support.
-* Workbench notifications, wherever it is possible.
-* A way to get a notification on which of your favorite channels are currently streaming.
-
-If you have any websites that you would like to be supported, please contact me and I will check if this is possible. Please, don't ask for Amazon Prime, HBO, Netflix etc.. They do not provide the necessary APIs to be used outside their websites.
-
-@endnode
 @node "Changelog" "Changelog"
-@prev "Todo"
+@prev "Usage"
 @next "Troubleshooting"
 @{jleft}@{lindent 3}
 @{b}Changelog@{ub}
 
-v1.8.1
-* Added search functionality to PeerTube script using PeerSeek API
-* PeerTube script now allows searching videos across multiple instances
-* Added -sv/--search-video argument to PeerTube script
-* Added -x/--extra-info argument to PeerTube script to show additional metadata
-* Removed commented out debugging code from YouTube script
+VERSION_TAG
+* Fixed the peertube script to play videos which seemed to have only audio
+  files
 
 v1.8.0
 * Added dns lookup in the radio script to find the active servers urls
-* Added opentube library, that is used to search for videos using the
-  YouTube Public Data without YouTubeAPI
-* Removed the Wasd.tv script
+* Added opentube library, that is used to search for videos using the YouTube 
+  Public Data without YouTubeAPI
+* Added -sv/--search-video argument to PeerTube script
+* Added -x/--extra-info argument to PeerTube script to show additional metadata
+* Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
+* Changed the youtube script to return an error message when the url is not 
+  compatible
 * Fixed the dailymotion script
+* Fixed the version string removing the double "vv"
+* Fixed the youtube script when searching for videos to not crash when the
+  results do not have a videoid
+* Removed the Wasd.tv script
 
 v1.7.8
 * Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
@@ -650,6 +637,7 @@ v1.0
 * Simple m3u8 parser created
 
 @endnode
+
 @node "Troubleshooting" "Troubleshooting"
 @prev "Changelog"
 @next "Author"
@@ -681,14 +669,11 @@ https://github.com/walkero-gr/aiostreams/issues @{"issues" SYSTEM "c:URLOpen htt
 You can read my blog at:
 https://walkero.gr @{"open" SYSTEM "c:URLOpen https://walkero.gr"}
 
-My Twitter account is:
-https://twitter.com/gsokianos @{"open" SYSTEM "c:URLOpen https://twitter.com/gsokianos"}
-
 aiostreams is DONATIONWARE. If you find this project useful, you can support it by donating at:
 https://ko-fi.com/walkero @{"Donate" SYSTEM "c:URLOpen https://ko-fi.com/walkero"}
 
-My PeerTube channels:
-https://peertube.co.uk/accounts/walkero/video-channels @{"open" SYSTEM "c:URLOpen https://peertube.co.uk/accounts/walkero/video-channels"}
+My PeerTube Amiga channel:
+https://makertube.net/c/amiga/videos @{"open" SYSTEM "c:URLOpen https://makertube.net/c/amiga/videos"}
 
 @endnode
 
