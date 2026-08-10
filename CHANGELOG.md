@@ -3,11 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [VERSION_TAG] - RELEASE_DATE
 
+WARNING: For AmigaOS 4.1FE users, please update pythonssl with the latest version from OS4Depot
+
 ### Fixed
 - Fixed the peertube script to play videos which seemed to have only audio files
 
 
 ## [v1.8.0] - 2026-08-08
+
+WARNING: For AmigaOS 4.1FE users, please update pythonssl with the latest version from OS4Depot
 
 ### Added
 - Added dns lookup in the radio script to find the active servers urls
@@ -66,7 +70,7 @@ All notable changes to this project will be documented in this file.
 - Fixed peertube script
 - Fixed lbrytv script to support odysee.com videos as well
 - Fixed vimeo script
-  
+
 ## [1.7.4] - 2022-07-26
 
 ### Fixed

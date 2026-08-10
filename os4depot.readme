@@ -13,25 +13,25 @@ minosversion: 4.1
 distribute: yes
 passphrase: OS4DEPOT_PASSPHRASE
 hend:
-"All In One streams" (aiostreams) is a pack of scripts, written in Python, 
+"All In One streams" (aiostreams) is a pack of scripts, written in Python,
 that can be used to stream and watch videos from different online networks,
 like Twitch.tv, YouTube and Vimeo.com.
 
-All the scripts need to be used from the shell, as well as from any web 
-browser that supports the execution of scripts. It is really easy to 
-configure a link context menu and open the URL with the script. And if 
-"Autoplay" is enabled, then the video will start automatically using the 
+All the scripts need to be used from the shell, as well as from any web
+browser that supports the execution of scripts. It is really easy to
+configure a link context menu and open the URL with the script. And if
+"Autoplay" is enabled, then the video will start automatically using the
 configured default players.
 
-Some of these networks have a search API, and you can use them to find 
-available streams and videos, without the need to visit the website. 
-This is a fast way to find what you want, without waiting huge amount of 
-Javascript to be executed on your machine. Especially useful when your 
+Some of these networks have a search API, and you can use them to find
+available streams and videos, without the need to visit the website.
+This is a fast way to find what you want, without waiting huge amount of
+Javascript to be executed on your machine. Especially useful when your
 computer doesn't have the necessary horsepower to support those websites.
 
-All the scripts are developed and fully tested under AmigaOS 4.1 FE and 
-MorphOS 3.x. The scripts work just fine under Linux and macOS X, but 
-those systems are not the target of this project. Other solutions do a 
+All the scripts are developed and fully tested under AmigaOS 4.1 FE and
+MorphOS 3.x. The scripts work just fine under Linux and macOS X, but
+those systems are not the target of this project. Other solutions do a
 better job.
 
 Supported networks:
@@ -64,17 +64,25 @@ https://ko-fi.com/walkero
 Changelog
 -------------
 VERSION_TAG
+
+WARNING: For AmigaOS 4.1FE users, please update pythonssl with the latest
+version from OS4Depot
+
 * Fixed the peertube script to play videos which seemed to have only audio
   files
 
 v1.8.0
+
+WARNING: For AmigaOS 4.1FE users, please update pythonssl with the latest
+version from OS4Depot
+
 * Added dns lookup in the radio script to find the active servers urls
-* Added opentube library, that is used to search for videos using the YouTube 
+* Added opentube library, that is used to search for videos using the YouTube
   Public Data without YouTubeAPI
 * Added -sv/--search-video argument to PeerTube script
 * Added -x/--extra-info argument to PeerTube script to show additional metadata
 * Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
-* Changed the youtube script to return an error message when the url is not 
+* Changed the youtube script to return an error message when the url is not
   compatible
 * Fixed the dailymotion script
 * Fixed the version string removing the double "vv"

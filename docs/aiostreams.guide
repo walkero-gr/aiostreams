@@ -5,8 +5,8 @@
 @node "MAIN" "aiostreams"
 @next "Requirements"
 @{jcenter}
-    _    ___ ___      _                                
-   / \\  |_ _/ _ \\ ___| |_ _ __ ___  __ _ _ __ ___  ___ 
+    _    ___ ___      _
+   / \\  |_ _/ _ \\ ___| |_ _ __ ___  __ _ _ __ ___  ___
   / _ \\  | | | | / __| __| '__/ _ \\/ _` | '_ ` _ \\/ __|
  / ___ \\ | | |_| \\__ \\ |_| | |  __/ (_| | | | | | \\__ \\
 /_/   \\_\\___\\___/|___/\\__|_|  \\___|\\__,_|_| |_| |_|___/
@@ -44,7 +44,7 @@ Some of these networks have a search API, and you can use them to find available
 
 The scripts are based on Python v2.5, so this is absolutely necessary to be installed at your system.
 
-All the scripts are developed and fully tested under AmigaOS 4.1 FE and MorphOs 3.11. There will be support for other systems in the future, like AmigaOS 3 and AROS, as long as Python is supported. 
+All the scripts are developed and fully tested under AmigaOS 4.1 FE and MorphOs 3.11. There will be support for other systems in the future, like AmigaOS 3 and AROS, as long as Python is supported.
 
 The scripts work just fine under Linux and MacOS X, but those systems are not the target of this project. There are other solutions that might do a better job.
 
@@ -80,11 +80,11 @@ Links
 * Download and install @{"pythonssl_amissl5" SYSTEM "c:URLOpen https://os4depot.net/?function=showfile&file=library/misc/pythonssl_amissl5.lha"} on your system.
 * Download and install @{"ffmpeg" SYSTEM "c:URLOpen http://os4depot.net/?function=showfile&file=video/convert/ffmpeg.lha"} package on your system.
 * Download and install @{"mplayer" SYSTEM "c:URLOpen http://os4depot.net/index.php?function=search&tool=simple&f_fields=mplayer"} package on your system.
-* Unarchive the aiostreams file wherever you want. 
+* Unarchive the aiostreams file wherever you want.
 
 @{u}MorphOS@{uu}
 * Download and install Python using @{"Grunch" SYSTEM "c:openurl URL='http://geit.de/eng_grunch.html'"} (http://geit.de/eng_grunch.html)
-* Unarchive the aiostreams file wherever you want. 
+* Unarchive the aiostreams file wherever you want.
 
 @{u}Assign@{uu}
 For your convenience I suggest to create an assign to the folder where you extracted aiostreams. This can be done with the following added in your user-startup
@@ -134,7 +134,7 @@ You will also find a file named @{b}vqw.py@{ub}. There are the video qualities f
 @{jleft}@{lindent 3}
 @{b}Shell usage@{ub}
 
-All the scripts have a common way of usage, and I am trying to keep it that way, so there can be a consistency. But scripts might have different features depending the suported network. 
+All the scripts have a common way of usage, and I am trying to keep it that way, so there can be a consistency. But scripts might have different features depending the suported network.
 
 You can find usage information in the following sections, separated by network.
 @{lindent 10}
@@ -145,7 +145,7 @@ You can find usage information in the following sections, separated by network.
 @{"PeerTube" LINK "PeerTube"}
 @{"Radio" LINK "Radio"}
 @{lindent 3}
-The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL. 
+The scripts are developed to be used in shell, but some of their feature can be used inside a browser by adding actions to link menus that would use those scripts with the link URL.
 
 The problem right now is that the supported networks, like Twitch.tv and Vimeo.com, do not render right at the available browsers. That's why you can use @{"aiostreams website" SYSTEM "c:URLOpen https://aiostreams.amiga-projects.net"} where you can find the same content from Twitch, but it works on every browser like IBrowse 2.5 and Aweb PPC.
 
@@ -155,10 +155,10 @@ The problem right now is that the supported networks, like Twitch.tv and Vimeo.c
 @{jleft}@{lindent 3}
 @{b}Twitch.tv@{ub}
 
-This script supports @{"Twitch.tv" SYSTEM "c:URLOpen https://www.twitch.tv"} website and it's available API. 
+This script supports @{"Twitch.tv" SYSTEM "c:URLOpen https://www.twitch.tv"} website and it's available API.
 If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. If not you can search for available streams with the parameter @{b}-sg, --search-game@{ub}.
 
-With this script you can: 
+With this script you can:
 * watch live streams
 * watch channels' recorded videos
 * search channels by game title that are live and streaming
@@ -220,13 +220,13 @@ List the Top 50 Streams based on the viewers, like below
 Get the available video resolutions like below,
 @{b}youtube.py -u "https://www.twitch.tv/channelname" -x@{ub}
 This will return something like
-ID                      VCodec          ACodec      
+ID                      VCodec          ACodec
 ----------------------------------------------------
-audio_only              none            mp4a.40.2   
-160p                    avc1.4D401F     mp4a.40.2   
-360p                    avc1.4D401F     mp4a.40.2   
-480p                    avc1.4D401F     mp4a.40.2   
-720p60                  avc1.4D401F     mp4a.40.2   
+audio_only              none            mp4a.40.2
+160p                    avc1.4D401F     mp4a.40.2
+360p                    avc1.4D401F     mp4a.40.2
+480p                    avc1.4D401F     mp4a.40.2
+720p60                  avc1.4D401F     mp4a.40.2
 1080p60__source_        avc1.64002A     mp4a.40.2
 
 Use the ID number with the @{b}-q@{ub} argument when you request to watch a stream or video. Those ID's can be used at the vqw.py file to set the priorities for your system, in case you don't want to set it everytime on video playback.
@@ -240,9 +240,9 @@ The script uses secure HTTPS URLs to access the AIO API and shares no personal i
 @{jleft}@{lindent 3}
 @{b}Vimeo.com@{ub}
 
-This script supports @{"Vimeo.com" SYSTEM "c:URLOpen https://vimeo.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports @{"Vimeo.com" SYSTEM "c:URLOpen https://vimeo.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}.
 
-With this script you can: 
+With this script you can:
 * watch recorded videos
 * autoplay videos with ffplay, mplayer or other players
 
@@ -278,9 +278,9 @@ No private info is sent by this script to Vimeo.com.
 @{jleft}@{lindent 3}
 @{b}YouTube.com@{ub}
 
-This script supports @{"YouTube.com" SYSTEM "c:URLOpen https://youtube.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports @{"YouTube.com" SYSTEM "c:URLOpen https://youtube.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}.
 
-With this script you can: 
+With this script you can:
 * watch live streams
 * watch recorded videos. The protected videos are not supported yet
 * search recorded videos and live streams based on given description
@@ -327,15 +327,15 @@ Search for live streams. Include the search string in double quotes, like below,
 Get the available video resolutions like below,
 @{b}youtube.py -u "https://www.YouTube.com/watch?v=1234567890" -x@{ub}
 This will return something like
-ID      Height          VCodec          ACodec      
+ID      Height          VCodec          ACodec
 ----------------------------------------------------
-17      144             mp4v.20.3       mp4a.40.2   
-160     144             avc1.4d400c     none        
-278     144             vp9             none        
-133     240             avc1.4d4015     none        
-242     240             vp9             none        
-134     360             avc1.4d401e     none        
-18      360             avc1.42001E     mp4a.40.2 
+17      144             mp4v.20.3       mp4a.40.2
+160     144             avc1.4d400c     none
+278     144             vp9             none
+133     240             avc1.4d4015     none
+242     240             vp9             none
+134     360             avc1.4d401e     none
+18      360             avc1.42001E     mp4a.40.2
 
 Use the ID number with the @{b}-q@{ub} argument when you request to watch a video. Those ID's can be used at the vqw.py file to set the priorities for your system, in case you don't want to set it everytime on video playback.
 
@@ -352,9 +352,9 @@ The script uses secure HTTPS URLs to access the YouTube.com API and shares with 
 @{jleft}@{lindent 3}
 @{b}Dailymotion.com@{ub}
 
-This script supports @{"Dailymotion.com" SYSTEM "c:URLOpen https://www.dailymotion.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. 
+This script supports @{"Dailymotion.com" SYSTEM "c:URLOpen https://www.dailymotion.com"} website. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}.
 
-With this script you can: 
+With this script you can:
 * watch recorded videos
 * autoplay videos with ffplay, mplayer or other players
 
@@ -391,7 +391,7 @@ No private info is sent by this script to dailymotion.com.
 
 This script supports different @{"PeerTube" SYSTEM "c:URLOpen https://joinpeertube.org/"} instances websites. If you know the URL you can use it with the parameter @{b}-u, --url@{ub}. It also allows you to search for videos across multiple PeerTube instances using the @{"PeerSeek" SYSTEM "c:URLOpen https://peerseek.video"} search API.
 
-With this script you can: 
+With this script you can:
 * watch recorded videos
 * search for videos across multiple PeerTube instances
 * autoplay videos with ffplay, mplayer or other video players
@@ -439,7 +439,7 @@ No private info is sent by this script to PeerTube instances. When using the sea
 
 This script provides information and plays automatically online radio stations. You can search for radio stations based on Country, Language, Genre and name.
 
-With this script you can: 
+With this script you can:
 * search for radio stations based on Country, Language, Genre and name
 * autoplay radio stations
 * get information for a radio station
@@ -499,17 +499,25 @@ No private info is sent by this script.
 @{b}Changelog@{ub}
 
 VERSION_TAG
+
+@{b}WARNING:@{ub} For AmigaOS 4.1FE users, please update pythonssl with the latest
+version from OS4Depot
+
 * Fixed the peertube script to play videos which seemed to have only audio
   files
 
 v1.8.0
+
+@{b}WARNING:@{ub} For AmigaOS 4.1FE users, please update pythonssl with the latest
+version from OS4Depot
+
 * Added dns lookup in the radio script to find the active servers urls
-* Added opentube library, that is used to search for videos using the YouTube 
+* Added opentube library, that is used to search for videos using the YouTube
   Public Data without YouTubeAPI
 * Added -sv/--search-video argument to PeerTube script
 * Added -x/--extra-info argument to PeerTube script to show additional metadata
 * Changed the youtube script to support urls like https://youtu.be/AbcdefghiJk
-* Changed the youtube script to return an error message when the url is not 
+* Changed the youtube script to return an error message when the url is not
   compatible
 * Fixed the dailymotion script
 * Fixed the version string removing the double "vv"
@@ -561,7 +569,7 @@ v1.7.3
   works with the latest Twitch API
 
 v1.7.2
-* A lot of changes to make YouTube work again. There were changes to vqw.py 
+* A lot of changes to make YouTube work again. There were changes to vqw.py
   file, so first backup the one you use
 
 v1.7.1
